@@ -28,8 +28,10 @@
     "electron-log": "^2.2.14",
     "electron-updater": "^2.19.1",
     "node-notifier": "^5.2.1",
+    "os": "^0.1.1",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "sudo-prompt": "^8.2.0"
   },
   "devDependencies": {
     "concurrently": "3.5.1",
