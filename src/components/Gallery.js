@@ -2,6 +2,7 @@ import React from 'react';
 
 const sudo = window.require('sudo-prompt');
 const os = window.require("os");
+const addFont = "C:\\Users\\Sachintha\\Desktop\\new\\fontcase-explorer\\src\\lib\\addFont.bat";
 
 const fonts = [
   {
@@ -28,8 +29,35 @@ function installFont(url) {
   const fontFilePath = "/Users/jarvis/Dev/apps/fontcase-apps/fontcase-explorer/_tmp/Athena.ttf";
   const localFontsDirPath = "~/Library/Fonts/";
 
+
   // TODO:
   // Here, based on the O/S do run the terminal commands in `sudo.exec(______)`
+
+  if(os.type() == "Windows_NT"){
+    console.log("codes goes");
+
+
+    function test(){
+              console.log("its working")
+              var spawn = window.require('child_process').spawn,
+        ls    = spawn('cmd.exe', ['/c', addFont]);
+
+        ls.stdout.on('data', function (data) {
+        console.log('stdout: ' + data);
+        });
+
+        ls.stderr.on('data', function (data) {
+        console.log('stderr: ' + data);
+        });
+
+        ls.on('exit', function (code) {
+        console.log('child process exited with code ' + code);
+        });
+
+    }
+
+    test();
+  }
 
   const options = {
     name: 'fontcase'
