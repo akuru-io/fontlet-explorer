@@ -1,8 +1,19 @@
 import React from 'react';
 
+
+//const app = window.require('electron');
+
+//const app = windows.electron.app;
+
 const sudo = window.require('sudo-prompt');
 const os = window.require("os");
 const addFont = "C:\\Users\\Sachintha\\Desktop\\new\\fontcase-explorer\\src\\lib\\addFont.bat";
+
+// used to get the userData path according to os
+const remote = window.require('electron').remote;
+const app = remote.app;
+
+
 
 const fonts = [
   {
@@ -21,19 +32,26 @@ const fonts = [
   }
 ];
 
+//Todo write function to download font to local
+
 function installFont(url) {
   // Detect O/S
   console.log(os.type(), os.platform());
+
+  
 
   // Directory/File paths
   const fontFilePath = "/Users/jarvis/Dev/apps/fontcase-apps/fontcase-explorer/_tmp/Athena.ttf";
   const localFontsDirPath = "~/Library/Fonts/";
 
+  // used to get the userData path according to os
+  console.log(3333,app.getPath('userData') )
+
 
   // TODO:
   // Here, based on the O/S do run the terminal commands in `sudo.exec(______)`
 
-  if(os.type() == "Windows_NT"){
+  if(os.type() === "Windows_NT"){
     console.log("windows font installer started");
     const fileNameOrfolder  = "..\\..\\_tmp\\Roboto-Black.ttf"
 
