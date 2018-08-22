@@ -34,13 +34,13 @@ function installFont(url) {
   // Here, based on the O/S do run the terminal commands in `sudo.exec(______)`
 
   if(os.type() == "Windows_NT"){
-    console.log("codes goes");
+    console.log("windows font installer started");
+    const fileNameOrfolder  = "..\\..\\_tmp\\Roboto-Black.ttf"
 
-
-    function test(){
-              console.log("its working")
-              var spawn = window.require('child_process').spawn,
-        ls    = spawn('cmd.exe', ['/c', addFont]);
+    function windowsFontInstaller(){
+        console.log("its working")
+        var spawn = window.require('child_process').spawn,
+        ls    = spawn('cmd.exe', ['/c', addFont,fileNameOrfolder]);
 
         ls.stdout.on('data', function (data) {
         console.log('stdout: ' + data);
@@ -56,9 +56,13 @@ function installFont(url) {
 
     }
 
-    test();
-  }
+    windowsFontInstaller();
 
+    
+  }else{
+
+ // for unix   
+    
   const options = {
     name: 'fontcase'
   };
@@ -68,6 +72,11 @@ function installFont(url) {
       console.log('stdout: ' + stdout);
     }
   );
+
+  }
+
+  
+
 }
 
 const FontItem = ({ id, name, version, publisher, url}) => (
