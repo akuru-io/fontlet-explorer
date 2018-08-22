@@ -7,6 +7,8 @@ const url = require('url');
 const isDev = require('electron-is-dev');
 const notifier = require('node-notifier');
 
+require('update-electron-app')();
+
 let mainWindow;
 
 const autoUpdater = require('electron-updater').autoUpdater;
