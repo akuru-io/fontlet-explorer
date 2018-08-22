@@ -18,7 +18,7 @@
     "eject": "react-scripts eject",
     "dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "prod": "build --em.main=build/electron.js",
-    "release": "build --em.main=build/electron.js --publish=always",
+    "release": "GH_TOKEN=<put the token here> build --em.main=build/electron.js --publish=always",
     "preprod": "npm run build",
     "prerelease": "npm run build"
   },
