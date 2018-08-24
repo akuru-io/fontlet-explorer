@@ -106,8 +106,15 @@ async function installFont(url) {
 
     
   }else{
+console.log(typeof fontUrl);
 
-    // download font file to user app directory
+ // Directory/File paths
+ const fontFilePath = pathToBeDownload = appUserFolder+'/'+fileName;
+ const localFontsDirPath = "~/Library/Fonts/";
+
+ 
+
+ // download font file to user app directory
   await new Promise(resolve =>
      request(fontUrl)
         .pipe(fs.createWriteStream(pathToBeDownload))
@@ -115,9 +122,7 @@ async function installFont(url) {
 
   // for unix  
   let pathToBeDownload = appUserFolder+'/'+fileName;
-  // Directory/File paths
-  const fontFilePath = pathToBeDownload;
-  const localFontsDirPath = "~/Library/Fonts/";
+ 
     
   const options = {
     name: 'fontcase'
