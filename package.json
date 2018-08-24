@@ -55,6 +55,9 @@
     "directories": {
       "buildResources": "assets"
     },
+    "extraFiles": [
+      "src/lib/**"
+    ],
     "publish": {
       "provider": "github"
     }

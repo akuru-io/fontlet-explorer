@@ -1,47 +1,42 @@
 import React from 'react';
-
-
-//const app = window.require('electron');
-
-//const app = windows.electron.app;
-
 const sudo = window.require('sudo-prompt');
 const os = window.require("os");
-const addFont = "C:\\Users\\Sachintha\\Desktop\\new\\fontcase-explorer\\src\\lib\\addFont.bat";
-var http = window.require('http');
+
 var fs = window.require('fs');
-const Path = window.require('path') ; 
-const Axios = window.require('axios');
 const request = window.require('request');
 
-
-
-
-
-// used to get the userData path according to os
+// get the userData path according to os
 const remote = window.require('electron').remote;
 const app = remote.app;
+
+
 
 
 
 const fonts = [
   {
     id: 1,
-    name: "Abhaya Libre",
+    name: "ManameInformal-Regular",
     version: "1.0.1",
     publisher: "mooniak",
-    url: "url goes here"
+    url: "https://cdn.rawgit.com/mooniak/maname-fonts/gh-pages/fonts/otf/ManameInformal-Regular.otf"
   },
   {
     id: 2,
-    name: "Malithi Web",
+    name: "GemunuLibre-Bold.otf",
     version: "1.0.2",
     publisher: "Pushpananda Ekanayake",
-    url: "url goes here"
+    url: "http://cdn.rawgit.com/mooniak/gemunu-libre-font/gh-pages/tests/fonts/GemunuLibre-Bold.otf"
   }
 ];
 
-//Todo write function to download font to local
+
+// get the user folder of application
+
+const appRoot = app.getAppPath();
+console.log("app root",appRoot); 
+const appUserFolder = app.getPath('userData');
+console.log("user app file path => ", appUserFolder)
 
 
 
@@ -49,86 +44,49 @@ async function installFont(url) {
   // Detect O/S
   console.log(os.type(), os.platform());
 
-  const urlParam = "http://cdn.rawgit.com/mooniak/gemunu-libre-font/gh-pages/tests/fonts/GemunuLibre-Bold.otf"
-
-  const userFileStorePath = app.getPath('userData');
-  const fileName = urlParam.substr(urlParam.lastIndexOf('/') + 1);
-  const pathToBeDownload = userFileStorePath+'\\fonts\\' +fileName;
-
-  //check if File Exist
-
-  
-  
-
-  //await download(urlParam);
-
-  // async function download(urlParam){
-  //   const fileName = urlParam.substr(urlParam.lastIndexOf('/') + 1);
-
-  //   var file = fs.createWriteStream(pathToBeDownload);
-  //   var request = await http.get(urlParam, function(response) {
-  //     response.pipe(file);
-  //   });
-
-  // }
-
-  // async function downloadImage () {
-
-  //   const url = 'https://cdn.rawgit.com/mooniak/gemunu-libre-font/gh-pages/tests/fonts/GemunuLibre-Bold.otf'
-  //   const path =await  Path.resolve(pathToBeDownload )
-  
-  //   // axios image download with response type "stream"
-  //   const response = await Axios({
-  //     method: 'GET',
-  //     url: url,
-  //     responseType: 'stream'
-  //   })
-  
-  //   // pipe the result stream into a file on disc
-  //   response.data.pipe(Fs.createWriteStream(pathToBeDownload))
-  
-  //   // return a promise and resolve when download finishes
-  //   return new Promise((resolve, reject) => {
-  //     response.data.on('end', () => {
-  //       resolve()
-  //     })
-  
-  //     response.data.on('error', () => {
-  //       reject()
-  //     })
-  //   })
-  
-  // }
-
-  // await downloadImage();
-  
-
-  await new Promise(resolve =>
-    request("http://cdn.rawgit.com/mooniak/gemunu-libre-font/gh-pages/tests/fonts/GemunuLibre-Bold.otf")
-      .pipe(fs.createWriteStream(pathToBeDownload))
-      .on('finish', resolve));
-
-
-  
-
-  
-
-  // Directory/File paths
-  const fontFilePath = pathToBeDownload;
-  const localFontsDirPath = "~/Library/Fonts/";
+  //replac this with url
+  const fontUrl = url;
+ 
+  //get filename
+  const fileName = fontUrl.substr(fontUrl.lastIndexOf('/') + 1); 
 
 
 
-  // Here, based on the O/S do run the terminal commands in `sudo.exec(______)`
-
+  //based os install font
   if(os.type() === "Windows_NT"){
-    console.log("windows font installer started");
-    const fileNameOrfolder  = "C:\\Users\\Sachintha\\AppData\\Roaming\\fontcase-explorer\\fonts\\BodoniFLF-Bold.ttf"
+
+  
+  let pathToBeDownload = appUserFolder+'\\'+fileName; // TODO add folde name font to save downloaded fonts
+  // download font file to user app directory
+  await new Promise(resolve =>
+    request(fontUrl)
+      .pipe(fs.createWriteStream(pathToBeDownload))
+      .on('finish', resolve));  
+
+
+   
+    //script for install font in windows
+    let resolveAppRoot = appRoot;
+    let addFont = appRoot+'\\src\\lib\\addFont.bat';
+    //resolve for build
+    console.log(444,resolveAppRoot.substr((resolveAppRoot.lastIndexOf('\\') + 1)));
+    if(resolveAppRoot.substr((resolveAppRoot.lastIndexOf('\\') + 1)) === "app.asar"){
+      resolveAppRoot =   RemoveLastDirectoryPartOf(resolveAppRoot);
+      resolveAppRoot =   RemoveLastDirectoryPartOf(resolveAppRoot.slice(0, -1));
+      addFont = resolveAppRoot+'\\src\\lib\\addFont.bat';
+      console.log(222,addFont);
+    }
+
+    console.log(111,addFont);
+    
+   
+    const fileNameOrfolder  = pathToBeDownload;
+    
 
     function windowsFontInstaller(){
-        console.log("its working")
+      console.log("windows font installer started");  
         var spawn = window.require('child_process').spawn,
-        ls    = spawn('cmd.exe', ['/c', addFont,fileNameOrfolder]);
+        ls    = spawn('cmd.exe', ['/c',addFont,fileNameOrfolder]); //run script font add bat script
 
         ls.stdout.on('data', function (data) {
         console.log('stdout: ' + data);
@@ -149,7 +107,17 @@ async function installFont(url) {
     
   }else{
 
- // for unix   
+    // download font file to user app directory
+  await new Promise(resolve =>
+     request(fontUrl)
+        .pipe(fs.createWriteStream(pathToBeDownload))
+        .on('finish', resolve));    
+
+  // for unix  
+  let pathToBeDownload = appUserFolder+'/'+fileName;
+  // Directory/File paths
+  const fontFilePath = pathToBeDownload;
+  const localFontsDirPath = "~/Library/Fonts/";
     
   const options = {
     name: 'fontcase'
@@ -185,5 +153,13 @@ const Gallery = () => (
     </ul>
   </div>
 );
+
+//url remove last part
+function RemoveLastDirectoryPartOf(the_url)
+{
+    var the_arr = the_url.split('\\');
+    the_arr.pop();
+    return( the_arr.join('\\') );
+}
 
 export default Gallery;
