@@ -310,8 +310,8 @@ class Gallery extends Component {
             checked={buttonState}
             large
             onChange={event => {
-              console.log(22222, event.target.value);
-              //   this.handlePublicChange(url);
+              // console.log(22222, event.target.value);
+              this.handlePublicChange(url);
             }}
           />
           <Text>2 fonts installed</Text>
