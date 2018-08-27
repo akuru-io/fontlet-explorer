@@ -105,38 +105,70 @@ async function installFont(url) {
     windowsFontInstaller();
 
     
-  }else{
-console.log(typeof fontUrl);
+  } // IF OS type is linux
+  else if(os.type() === "Linux" || os.type() === "linux" ){
 
- // Directory/File paths
- const fontFilePath = pathToBeDownload = appUserFolder+'/'+fileName;
- const localFontsDirPath = "~/Library/Fonts/";
+      // Directory/File paths
+      let pathToBeDownload = appUserFolder+'/'+fileName;
+      let fontFilePath = pathToBeDownload ;
+      let localFontsDirPath = "~/.fonts"; 
 
- 
+      // download font file to user app directory
+        await new Promise(resolve =>
+          request(fontUrl)
+              .pipe(fs.createWriteStream(pathToBeDownload))
+              .on('finish', resolve));    
 
- // download font file to user app directory
-  await new Promise(resolve =>
-     request(fontUrl)
-        .pipe(fs.createWriteStream(pathToBeDownload))
-        .on('finish', resolve));    
 
-  // for unix  
-  let pathToBeDownload = appUserFolder+'/'+fileName;
- 
+        const options = {
+          name: 'fontcase'
+        };
+        sudo.exec(`cp ${fontFilePath} ${localFontsDirPath}`, options,
+          function(error, stdout, stderr) {
+            if (error) throw error;
+            console.log('stdout-copy: ' + stdout);
+            sudo.exec(`fc-cache -f -v`, options,
+            function(error, stdout, stderr) {
+              if (error) throw error;
+              console.log('stdout-cache: ' + stdout);
+
+            });
+
+          }
+        );
+
+  }else { //todo lac os fix errors
+
+      console.log(typeof fontUrl);
+
+    // Directory/File paths
+    const fontFilePath = pathToBeDownload = appUserFolder+'/'+fileName;
+    const localFontsDirPath = "~/Library/Fonts/";
+
     
-  const options = {
-    name: 'fontcase'
-  };
-  sudo.exec(`cp ${fontFilePath} ${localFontsDirPath}`, options,
-    function(error, stdout, stderr) {
-      if (error) throw error;
-      console.log('stdout: ' + stdout);
-    }
-  );
+
+    // download font file to user app directory
+      await new Promise(resolve =>
+        request(fontUrl)
+            .pipe(fs.createWriteStream(pathToBeDownload))
+            .on('finish', resolve));    
+
+      // for unix  
+      let pathToBeDownload = appUserFolder+'/'+fileName;
+    
+        
+      const options = {
+        name: 'fontcase'
+      };
+      sudo.exec(`cp ${fontFilePath} ${localFontsDirPath}`, options,
+        function(error, stdout, stderr) {
+          if (error) throw error;
+          console.log('stdout: ' + stdout);
+        }
+      );
 
   }
-
-  
+   
 
 }
 
