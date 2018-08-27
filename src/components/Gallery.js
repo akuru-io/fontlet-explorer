@@ -16,7 +16,7 @@ const app = remote.app;
 const fonts = [
   {
     id: 1,
-    name: "ManameInformal-Regular",
+    name: "ManameInformal-Regular.otf",
     version: "1.0.1",
     publisher: "mooniak",
     url: "https://cdn.rawgit.com/mooniak/maname-fonts/gh-pages/fonts/otf/ManameInformal-Regular.otf"
@@ -81,6 +81,7 @@ async function installFont(url) {
     
    
     const fileNameOrfolder  = pathToBeDownload;
+    console.log("path to be dowloand")
     
 
     function windowsFontInstaller(){
@@ -129,9 +130,52 @@ async function installFont(url) {
     }
   );
 
-  }
+  } 
 
-  
+}
+
+function unstallFont(fontName){
+
+  console.log("fontName",fontName);
+
+  console.log("unstalling font function called")
+   //script for install font in windows
+   let resolveAppRoot = appRoot;
+   let removeFont = appRoot+'\\src\\lib\\removeFont.bat';
+   //resolve for build
+   console.log(444,resolveAppRoot.substr((resolveAppRoot.lastIndexOf('\\') + 1)));
+   if(resolveAppRoot.substr((resolveAppRoot.lastIndexOf('\\') + 1)) === "app.asar"){
+     resolveAppRoot =   RemoveLastDirectoryPartOf(resolveAppRoot);
+     resolveAppRoot =   RemoveLastDirectoryPartOf(resolveAppRoot.slice(0, -1));
+     removeFont = resolveAppRoot+'\\src\\lib\\removeFont.bat';
+     console.log(222,removeFont);
+   }
+
+   console.log(111,removeFont);
+
+  if(os.type() === "Windows_NT"){
+
+      function windowsFontUnstaller(fontName,removeFont){
+        console.log("windows font Unstaller started",fontName);  
+          var spawn = window.require('child_process').spawn,
+          ls    = spawn('cmd.exe', ['/c',removeFont,fontName]); //run script font add bat script
+
+          ls.stdout.on('data', function (data) {
+          console.log('stdout: ' + data);
+          });
+
+          ls.stderr.on('data', function (data) {
+          console.log('stderr: ' + data);
+          });
+
+          ls.on('exit', function (code) {
+          console.log('child process exited with code ' + code);
+          });
+
+      }
+
+      windowsFontUnstaller(fontName,removeFont);
+  }
 
 }
 
@@ -142,6 +186,7 @@ const FontItem = ({ id, name, version, publisher, url}) => (
         <p>{publisher}</p>
       
         <button onClick={() => installFont(url)}>Install</button>
+        <button onClick={() => unstallFont(name)}>Unstall</button>
     </div>
   </li>
 );
