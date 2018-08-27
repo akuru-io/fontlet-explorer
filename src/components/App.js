@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Welcome from "./Welcome";
-import Gallery from "./Gallery";
+import Welcome from './Welcome';
+import Gallery from './Gallery';
 
 class App extends Component {
   constructor() {
@@ -11,18 +11,18 @@ class App extends Component {
     };
   }
 
-  registerUser = (userEmail) => {
-    console.log("= ", userEmail);
+  registerUser = userEmail => {
+    console.log('= ', userEmail);
     this.setState({ registeredUser: true });
-  }
+  };
 
   render() {
     const { registeredUser } = this.state;
-
+    console.log('kkkkkkkkkkkkk');
     return (
       <div>
-        {!registeredUser && (<Welcome registerUser={this.registerUser} />)}
-        {registeredUser && (<Gallery />)}
+        {!registeredUser && <Welcome registerUser={this.registerUser} />}
+        {registeredUser && <Gallery />}
       </div>
     );
   }
