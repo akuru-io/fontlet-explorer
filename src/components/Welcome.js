@@ -66,6 +66,7 @@ function validateEmail(email) {
 }
 
 class Welcome extends Component {
+
   constructor(props) {
     super(props);
 
@@ -89,7 +90,7 @@ class Welcome extends Component {
       // alert('Invalid e-mail!');
 
       const Alert = new Notification('Title', {
-        body: 'Invalid Email'
+        body: 'Invalid E-mail!'
       });
     }
   };
