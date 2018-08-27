@@ -1,64 +1,185 @@
-import React from 'react';
-
-const sudo = window.require('sudo-prompt');
+import React from "react";
+const sudo = window.require("sudo-prompt");
 const os = window.require("os");
+
+var fs = window.require("fs");
+const request = window.require("request");
+
+// get the userData path according to os
+const remote = window.require("electron").remote;
+const app = remote.app;
 
 const fonts = [
   {
     id: 1,
-    name: "Abhaya Libre",
+    name: "ManameInformal-Regular",
     version: "1.0.1",
     publisher: "mooniak",
-    url: "url goes here"
+    url:
+      "https://cdn.rawgit.com/mooniak/maname-fonts/gh-pages/fonts/otf/ManameInformal-Regular.otf"
   },
   {
     id: 2,
-    name: "Malithi Web",
+    name: "GemunuLibre-Bold.otf",
     version: "1.0.2",
     publisher: "Pushpananda Ekanayake",
-    url: "url goes here"
+    url:
+      "http://cdn.rawgit.com/mooniak/gemunu-libre-font/gh-pages/tests/fonts/GemunuLibre-Bold.otf"
   }
 ];
 
-function installFont(url) {
+// get the user folder of application
+
+const appRoot = app.getAppPath();
+console.log("app root", appRoot);
+const appUserFolder = app.getPath("userData");
+console.log("user app file path => ", appUserFolder);
+
+async function installFont(url) {
   // Detect O/S
   console.log(os.type(), os.platform());
 
-  // Directory/File paths
-  const fontFilePath = "/Users/jarvis/Dev/apps/fontcase-apps/fontcase-explorer/_tmp/Athena.ttf";
-  const localFontsDirPath = "~/Library/Fonts/";
+  //replac this with url
+  const fontUrl = url;
 
-  // TODO:
-  // Here, based on the O/S do run the terminal commands in `sudo.exec(______)`
+  //get filename
+  const fileName = fontUrl.substr(fontUrl.lastIndexOf("/") + 1);
 
-  const options = {
-    name: 'fontcase'
-  };
-  sudo.exec(`cp ${fontFilePath} ${localFontsDirPath}`, options,
-    function(error, stdout, stderr) {
-      if (error) throw error;
-      console.log('stdout: ' + stdout);
+  //based os install font
+  if (os.type() === "Windows_NT") {
+    let pathToBeDownload = appUserFolder + "\\" + fileName; // TODO add folde name font to save downloaded fonts
+    // download font file to user app directory
+    await new Promise(resolve =>
+      request(fontUrl)
+        .pipe(fs.createWriteStream(pathToBeDownload))
+        .on("finish", resolve)
+    );
+
+    //script for install font in windows
+    let resolveAppRoot = appRoot;
+    let addFont = appRoot + "\\src\\lib\\addFont.bat";
+    //resolve for build
+    console.log(
+      444,
+      resolveAppRoot.substr(resolveAppRoot.lastIndexOf("\\") + 1)
+    );
+    if (
+      resolveAppRoot.substr(resolveAppRoot.lastIndexOf("\\") + 1) === "app.asar"
+    ) {
+      resolveAppRoot = RemoveLastDirectoryPartOf(resolveAppRoot);
+      resolveAppRoot = RemoveLastDirectoryPartOf(resolveAppRoot.slice(0, -1));
+      addFont = resolveAppRoot + "\\src\\lib\\addFont.bat";
+      console.log(222, addFont);
     }
-  );
+
+    console.log(111, addFont);
+
+    const fileNameOrfolder = pathToBeDownload;
+
+    function windowsFontInstaller() {
+      console.log("windows font installer started");
+      var spawn = window.require("child_process").spawn,
+        ls = spawn("cmd.exe", ["/c", addFont, fileNameOrfolder]); //run script font add bat script
+
+      ls.stdout.on("data", function(data) {
+        console.log("stdout: " + data);
+      });
+
+      ls.stderr.on("data", function(data) {
+        console.log("stderr: " + data);
+      });
+
+      ls.on("exit", function(code) {
+        console.log("child process exited with code " + code);
+      });
+    }
+
+    windowsFontInstaller();
+  } else if (os.type() === "Linux" || os.type() === "linux") {
+    // IF OS type is linux
+    // Directory/File paths
+    let pathToBeDownload = appUserFolder + "/" + fileName;
+    let fontFilePath = pathToBeDownload;
+    let localFontsDirPath = "~/.fonts";
+
+    // download font file to user app directory
+    await new Promise(resolve =>
+      request(fontUrl)
+        .pipe(fs.createWriteStream(pathToBeDownload))
+        .on("finish", resolve)
+    );
+
+    const options = {
+      name: "fontcase"
+    };
+    sudo.exec(`cp ${fontFilePath} ${localFontsDirPath}`, options, function(
+      error,
+      stdout,
+      stderr
+    ) {
+      if (error) throw error;
+      console.log("stdout-copy: " + stdout);
+      sudo.exec(`fc-cache -f -v`, options, function(error, stdout, stderr) {
+        if (error) throw error;
+        console.log("stdout-cache: " + stdout);
+      });
+    });
+  } else {
+    //todo lac os fix errors
+
+    console.log(typeof fontUrl, fontUrl);
+
+    let pathToBeDownload = appUserFolder + "/" + fileName;
+    let fontFilePath = pathToBeDownload.replace(" ", "\\ ");
+    const localFontsDirPath = "~/Library/Fonts/";
+
+    console.log(fontFilePath);
+
+    // download font file to user app directory
+    await new Promise(resolve =>
+      request(fontUrl)
+        .pipe(fs.createWriteStream(pathToBeDownload))
+        .on("finish", resolve)
+    );
+
+    const options = {
+      name: "fontcase"
+    };
+    sudo.exec(`cp ${fontFilePath} ${localFontsDirPath}`, options, function(
+      error,
+      stdout,
+      stderr
+    ) {
+      if (error) throw error;
+      console.log("stdout: " + stdout);
+    });
+  }
 }
 
-const FontItem = ({ id, name, version, publisher, url}) => (
+const FontItem = ({ id, name, version, publisher, url }) => (
   <li key={id}>
     <div>
-        <p>{name} | v{version}</p>
-        <p>{publisher}</p>
-      
-        <button onClick={() => installFont(url)}>Install</button>
+      <p>
+        {name} | v{version}
+      </p>
+      <p>{publisher}</p>
+
+      <button onClick={() => installFont(url)}>Install</button>
     </div>
   </li>
 );
 
 const Gallery = () => (
   <div>
-    <ul>
-      {fonts.map(FontItem)}
-    </ul>
+    <ul>{fonts.map(FontItem)}</ul>
   </div>
 );
+
+//url remove last part
+function RemoveLastDirectoryPartOf(the_url) {
+  var the_arr = the_url.split("\\");
+  the_arr.pop();
+  return the_arr.join("\\");
+}
 
 export default Gallery;
