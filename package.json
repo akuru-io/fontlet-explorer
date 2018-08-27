@@ -18,7 +18,7 @@
     "eject": "react-scripts eject",
     "dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "prod": "build --em.main=build/electron.js",
-    "release": "build --em.main=build/electron.js --publish=always",
+    "release": "GH_TOKEN=<put the token here> build --em.main=build/electron.js --publish=always",
     "preprod": "npm run build",
     "prerelease": "npm run build"
   },
@@ -35,7 +35,8 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "request": "^2.88.0",
-    "sudo-prompt": "^8.2.0"
+    "sudo-prompt": "^8.2.0",
+    "update-electron-app": "^1.3.0"
   },
   "devDependencies": {
     "concurrently": "3.5.1",
