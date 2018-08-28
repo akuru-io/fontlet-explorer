@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Switch } from '@blueprintjs/core';
 
-const Wrapper = styled.div`
+const Wrapper = styled.form`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,7 +96,13 @@ class Welcome extends Component {
 
   render() {
     return (
-      <Wrapper>
+      <Wrapper
+        onSubmit={event => {
+          event.preventDefault();
+
+          this.registerUser();
+        }}
+      >
         <MainTitle>Welcome to fontcase</MainTitle>
 
         <DiscriptionWrapper>
@@ -138,14 +144,7 @@ class Welcome extends Component {
         />
 
         <SubmitButtonWrapper />
-        <button
-          onClick={() => {
-            this.registerUser();
-          }}
-          className="bp3-button"
-          type="button"
-          style={{ width: 100 }}
-        >
+        <button className="bp3-button" type="submit" style={{ width: 100 }}>
           SUBMIT
         </button>
       </Wrapper>
