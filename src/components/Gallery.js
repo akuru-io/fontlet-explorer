@@ -231,6 +231,51 @@ async function installFont(url) {
   }
 }
 
+function unstallFont(fileName){
+  fileName = fileName.substr(fileName.lastIndexOf("\\") + 1)
+  let pathToBeDownload = appUserFolder + "\\" + fileName; // TODO add folde name font to save downloaded fonts
+
+
+    //script for install font in windows
+    let resolveAppRoot = appRoot;
+    let removeFont = appRoot + "\\src\\lib\\removeFont.bat";
+    //resolve for build
+    if (
+      resolveAppRoot.substr(resolveAppRoot.lastIndexOf("\\") + 1) === "app.asar"
+    ) {
+      resolveAppRoot = RemoveLastDirectoryPartOf(resolveAppRoot);
+      resolveAppRoot = RemoveLastDirectoryPartOf(resolveAppRoot.slice(0, -1));
+      removeFont = resolveAppRoot + "\\src\\lib\\removeFont.bat";
+      }
+
+    console.log(111, removeFont);
+
+    const fileNameOrfolder = pathToBeDownload;
+
+    function windowsFontUnstaller() {
+      console.log("windows font unstaller started");
+      var spawn = window.require("child_process").spawn,
+        ls = spawn("cmd.exe", ["/c", removeFont, fileNameOrfolder]); //run script font add bat script
+
+      ls.stdout.on("data", function(data) {
+        console.log("stdout: " + data);
+      });
+
+      ls.stderr.on("data", function(data) {
+        console.log("stderr: " + data);
+      });
+
+      ls.on("exit", function(code) {
+        console.log("child process exited with code " + code);
+      });
+    }
+
+    windowsFontUnstaller();
+
+
+
+}
+
 const FontItem = ({ id, name, version, publisher, url }) => (
   <li key={id}>
     <div>
@@ -253,25 +298,25 @@ class Gallery extends Component {
     this.handlePublicChange = this.handlePublicChange.bind(this);
   }
 
-  installFont = url => {
-    // Detect O/S
-    console.log(os.type(), os.platform());
+  // installFont = url => {
+  //   // Detect O/S
+  //   console.log(os.type(), os.platform());
 
-    // Directory/File paths
-    const fontFilePath = '/Users/jarvis/Dev/apps/fontcase-apps/fontcase-explorer/_tmp/Athena.ttf';
-    const localFontsDirPath = '~/Library/Fonts/';
+  //   // Directory/File paths
+  //   const fontFilePath = '/Users/jarvis/Dev/apps/fontcase-apps/fontcase-explorer/_tmp/Athena.ttf';
+  //   const localFontsDirPath = '~/Library/Fonts/';
 
-    // TODO:
-    // Here, based on the O/S do run the terminal commands in `sudo.exec(______)`
+  //   // TODO:
+  //   // Here, based on the O/S do run the terminal commands in `sudo.exec(______)`
 
-    const options = {
-      name: 'fontcase'
-    };
-    sudo.exec(`cp ${fontFilePath} ${localFontsDirPath}`, options, (error, stdout, stderr) => {
-      if (error) throw error;
-      console.log(`stdout: ${stdout}`);
-    });
-  };
+  //   const options = {
+  //     name: 'fontcase'
+  //   };
+  //   sudo.exec(`cp ${fontFilePath} ${localFontsDirPath}`, options, (error, stdout, stderr) => {
+  //     if (error) throw error;
+  //     console.log(`stdout: ${stdout}`);
+  //   });
+  // };
 
   handlePublicChange = url => {
     console.log('kkkk', url);
@@ -289,6 +334,8 @@ class Gallery extends Component {
       const Uninstall = new Notification('Title', {
         body: 'Font got Uninstalled'
       });
+
+      unstallFont(url);
     }
   };
 
