@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Welcome from './Welcome';
 import Gallery from './Gallery';
 
-import db from '../libs/db';
+import db from '../lib/db';
 
 const Loading = () => <div>Loading...</div>;
 const ErrorView = error => <div>{error}</div>;

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Switch } from '@blueprintjs/core';
 
 const Wrapper = styled.form`
   display: flex;
@@ -61,7 +60,10 @@ const SubmitButtonWrapper = styled.div`
 `;
 
 function validateEmail(email) {
+  /* eslint-disable max-len */
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  /* eslint-enable max-len */
+
   return re.test(String(email).toLowerCase());
 }
 
@@ -74,27 +76,23 @@ class Welcome extends Component {
     };
   }
 
-  handleChange = evt => {
-    this.setState({
-      userEmail: evt.target.value
-    });
-  };
-
-  registerUser = () => {
+  registerUser() {
     const { userEmail } = this.state;
 
     if (validateEmail(userEmail)) {
-      this.props.registerUser(userEmail);
+      // Call register user api
     } else {
-      // alert('Invalid e-mail!');
-
+      /* eslint-disable no-unused-vars */
       const Alert = new Notification('Title', {
         body: 'Invalid E-mail!'
       });
+      /* eslint-enable no-unused-vars */
     }
-  };
+  }
 
   render() {
+    const { userEmail } = this.state;
+
     return (
       <Wrapper
         onSubmit={event => {
@@ -135,8 +133,12 @@ class Welcome extends Component {
         <Title>Please register enter your email</Title>
 
         <input
-          value={this.state.userEmail}
-          onChange={this.handleChange}
+          value={userEmail}
+          onChange={event => {
+            this.setState({
+              userEmail: event.target.value
+            });
+          }}
           className="bp3-input"
           type="text"
           placeholder="do@example.com"

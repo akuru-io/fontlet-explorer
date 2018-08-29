@@ -1,6 +1,6 @@
-const DataSource = window.require("nedb");
-const remote = window.require("electron").remote;
-const app = remote.app;
+const DataSource = window.require('nedb');
+const { remote } = window.require('electron');
+const { app } = remote;
 
 const dbPath = `${app.getAppPath()}/resources/store`;
 const db = new DataSource({ filename: dbPath, autoload: true });
@@ -8,10 +8,10 @@ const db = new DataSource({ filename: dbPath, autoload: true });
 // TODO: Write a Singleton Class for this.
 const Database = {
   insert: (doc, cb) => {
-    db.loadDatabase((conErr) => {
+    db.loadDatabase(conErr => {
       if (conErr) cb(conErr, null);
 
-      db.insert(doc, function(err, resp) {
+      db.insert(doc, (err, resp) => {
         if (err) cb(err, null);
         cb(null, resp);
       });
@@ -19,7 +19,7 @@ const Database = {
   },
 
   update: (query, doc, cb) => {
-    db.loadDatabase((conErr) => {
+    db.loadDatabase(conErr => {
       if (conErr) cb(conErr, null);
 
       db.update(query, doc, (err, resp) => {
@@ -30,7 +30,7 @@ const Database = {
   },
 
   find: (query, cb) => {
-    db.loadDatabase((conErr) => {
+    db.loadDatabase(conErr => {
       if (conErr) cb(conErr, null);
 
       db.find(query, (err, resp) => {
@@ -38,7 +38,7 @@ const Database = {
         cb(null, resp);
       });
     });
-  },
-}
+  }
+};
 
 export default Database;
