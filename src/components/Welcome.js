@@ -88,7 +88,9 @@ class Welcome extends Component {
     } else {
       // alert('Invalid e-mail!');
 
-      const Alert = new Notification('Your email is invalid !');
+      const Alert = new Notification('Title', {
+        body: 'Invalid E-mail!'
+      });
     }
   };
 

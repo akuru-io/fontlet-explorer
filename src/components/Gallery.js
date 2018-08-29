@@ -212,13 +212,13 @@ class Gallery extends Component {
     );
   };
 
-  async installFont(url, id) {
+  installFont = async (url, id) => {
     // Detect O/S
     console.log(os.type(), os.platform());
 
     // replac this with url
     const fontUrl = url;
-    this.setState({ loading: true, loadingFontId: id });
+
     // get filename
     const fileName = fontUrl.substr(fontUrl.lastIndexOf('/') + 1);
 
@@ -255,15 +255,15 @@ class Gallery extends Component {
         const ls = spawn('cmd.exe', ['/c', addFont, fileNameOrfolder]); // run script font add bat script
 
         ls.stdout.on('data', data => {
-          console.log(`stdout: ${data}`);
+          console.log(`stdout: ${  data}`);
         });
 
         ls.stderr.on('data', data => {
-          console.log(`stderr: ${data}`);
+          console.log(`stderr: ${  data}`);
         });
 
         ls.on('exit', code => {
-          console.log(`child process exited with code ${code}`);
+          console.log(`child process exited with code ${  code}`);
         });
       }
 
@@ -287,13 +287,10 @@ class Gallery extends Component {
       };
       sudo.exec(`cp ${fontFilePath} ${localFontsDirPath}`, options, (error, stdout, stderr) => {
         if (error) throw error;
-        // this.setState({ loading: true });
-        console.log(`stdout-copy: ${stdout}`);
+        console.log(`stdout-copy: ${  stdout}`);
         sudo.exec(`fc-cache -f -v`, options, (error, stdout, stderr) => {
           if (error) throw error;
-          this.setState({ loading: false });
-          console.log(`stdout-cache: ${stdout}`);
-          const Install = new Notification('Font is successfully installed !');
+          console.log('stdout-cache: ' + stdout);
         });
       });
     } else {
@@ -319,19 +316,57 @@ class Gallery extends Component {
       };
       sudo.exec(`cp ${fontFilePath} ${localFontsDirPath}`, options, (error, stdout, stderr) => {
         if (error) throw error;
-
-        console.log(`stdout: ${stdout}`);
-        this.setState({ loading: false });
-        const Install = new Notification('Font is successfully installed !');
+        console.log(`stdout: ${  stdout}`);
       });
     }
-  }
+  };
 
   render() {
     const { loading, fontData } = this.state;
 
     return <Wrapper>{fontData.map(this.FontItem)}</Wrapper>;
   }
+}
+
+function unstallFont(fileName) {
+  fileName = fileName.substr(fileName.lastIndexOf('\\') + 1);
+  const pathToBeDownload = `${appUserFolder  }\\${  fileName}`; // TODO add folde name font to save downloaded fonts
+
+  // script for install font in windows
+  let resolveAppRoot = appRoot;
+  let removeFont = appRoot + '\\src\\lib\\removeFont.bat';
+  // resolve for build
+  if (resolveAppRoot.substr(resolveAppRoot.lastIndexOf('\\') + 1) === 'app.asar') {
+    resolveAppRoot = RemoveLastDirectoryPartOf(resolveAppRoot);
+    resolveAppRoot = RemoveLastDirectoryPartOf(resolveAppRoot.slice(0, -1));
+    removeFont = resolveAppRoot + '\\src\\lib\\removeFont.bat';
+  }
+
+  console.log(111, removeFont);
+
+  const fileNameOrfolder = pathToBeDownload;
+
+  function windowsFontUnstaller() {
+    console.log('windows font unstaller started');
+    var spawn = window.require('child_process').spawn;
+
+        
+var ls = spawn("cmd.exe", ["/c", removeFont, fileNameOrfolder]); // run script font add bat script
+
+    ls.stdout.on('data', (data) => {
+        console.log("stdout: " + data);
+      });
+
+    ls.stderr.on('data', (data) => {
+        console.log("stderr: " + data);
+      });
+
+    ls.on('exit', (code) => {
+        console.log("child process exited with code " + code);
+      });
+  }
+
+  windowsFontUnstaller();
 }
 
 // url remove last part
