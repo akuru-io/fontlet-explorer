@@ -24,7 +24,7 @@ const CardContent = styled.div`
 
 const VersionDetails = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   padding-right: 15px;
@@ -39,28 +39,31 @@ const FontName = styled.p`
   font-size: 17px;
   font-family: sans-serif;
   color: #867f7f;
-
+  margin-bottom: 0px;
   @media (max-width: 1000px) {
     font-size: 14px;
   }
 `;
 
-const Text = styled.p`
-  font-size: 11px;
+const Version = styled.p`
+  font-size: 17px;
   font-family: sans-serif;
-
+  color: #867f7f;
+  margin-left: 20px;
+  margin-bottom: 0px;
   @media (max-width: 1000px) {
-    font-size: 10px;
+    font-size: 14px;
   }
 `;
 
-const Version = styled.p`
-  font-size: 11px;
+const Variant = styled.p`
+  font-size: 17px;
   font-family: sans-serif;
-  color: #5a5555;
-
+  color: #867f7f;
+  margin-left: 20px;
+  margin-bottom: 0px;
   @media (max-width: 1000px) {
-    font-size: 10px;
+    font-size: 14px;
   }
 `;
 
@@ -68,12 +71,15 @@ const SettingsContent = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
+  background-color: #f7f7f7;
+  padding: 20px;
 `;
 
 const FontImage = styled.img`
   width: 100%;
   height: 100%;
 `;
+
 const ToggleButtonWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -86,7 +92,7 @@ class Gallery extends Component {
     super(props);
 
     this.state = {
-      loading: '',
+      loading: false,
       fontData: [],
       loadingFontId: ''
     };
@@ -131,24 +137,25 @@ class Gallery extends Component {
     this.setState({ fontData: newFontData });
   };
 
-  FontItem = ({ id, name, version, url, installed, fontImage }) => {
+  FontItem = ({ id, name, version, url, installed, fontImage, fontVariants }) => {
     const { loading, loadingFontId } = this.state;
     return (
-      <CardContent key={id}>
-        {loading &&
-          loadingFontId === id && (
-            <div className="bp3-progress-bar bp3-intent-primary">
-              <div className="bp3-progress-meter" />
-            </div>
-          )}
+      <CardContent className="card-style" key={id}>
         <Content elevation={Elevation.TWO}>
           <FontImage src={fontImage} />
+
+          {loading &&
+            loadingFontId === id && (
+              <div className="bp3-progress-bar bp3-intent-primary">
+                <div className="bp3-progress-meter" />
+              </div>
+            )}
 
           <SettingsContent>
             <VersionContent>
               <VersionDetails>
-                <FontName>{name}</FontName>
                 <Version>v{version}</Version>
+                <Variant>Number of Variants : {fontVariants}</Variant>
               </VersionDetails>
             </VersionContent>
 
@@ -161,7 +168,6 @@ class Gallery extends Component {
                   this.addRemoveFont(url, installed, id);
                 }}
               />
-              <Text>2 fonts installed</Text>
             </ToggleButtonWrapper>
           </SettingsContent>
         </Content>
@@ -171,7 +177,6 @@ class Gallery extends Component {
 
   render() {
     const { fontData } = this.state;
-
     return <Wrapper>{fontData.map(this.FontItem)}</Wrapper>;
   }
 }

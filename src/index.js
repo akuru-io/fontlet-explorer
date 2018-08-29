@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Welcome from './containers/Welcome';
 import App from './containers/App';
 import registerServiceWorker from './registerServiceWorker';
 

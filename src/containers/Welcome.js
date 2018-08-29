@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { Button } from '@blueprintjs/core';
+import { fetchUserEmail } from '../lib/emailRegister';
 
 const Wrapper = styled.form`
+  height: 100vh;
+  background-color: #ffffff;
+  overflow-y: hidden;
+`;
+
+const Content = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background-color: #ffffff;
   flex-direction: column;
+  height: 100%;
+  margin-top: 20px;
 `;
 
 const MainTitle = styled.p`
@@ -19,9 +27,10 @@ const Description = styled.p`
   font-size: 17px;
   font-family: sans-serif;
   text-align: center;
+  color: #6d6d6d;
 
   @media (max-width: 1000px) {
-    font-size: 15px;
+    font-size: 15.5px;
   }
 `;
 
@@ -39,16 +48,15 @@ const Title = styled.p`
   margin-top: 50px;
   font-family: sans-serif;
   text-align: center;
+  color: #6d6d6d;
 
   @media (max-width: 1000px) {
-    margin-top: 30px;
+    margin-top: 42px;
   }
 `;
 
-const ButtonContent = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const SkipButtonWrapper = styled.div`
+  margin-top: 20px;
 `;
 
 const SubmitButtonWrapper = styled.div`
@@ -72,83 +80,99 @@ class Welcome extends Component {
     super(props);
 
     this.state = {
-      userEmail: ''
+      userEmail: '',
+      loading: false
     };
+
+    this.registerUser = this.registerUser.bind(this);
   }
 
-  registerUser() {
+  async registerUser() {
     const { userEmail } = this.state;
 
+    this.setState({ loading: true });
+
     if (validateEmail(userEmail)) {
+      const data = await fetchUserEmail(userEmail);
+
+      if (data === 'Success') {
+        console.log('done');
+        this.setState({ loading: false });
+        /* eslint-disable no-unused-vars */
+        const Alert = new Notification('Your Email is successfully submitted !');
+      } else {
+        console.log('fail');
+        this.setState({ loading: false });
+        const Alert = new Notification('Something went wrong !');
+      }
+
       // Call register user api
     } else {
-      /* eslint-disable no-unused-vars */
-      const Alert = new Notification('Title', {
-        body: 'Invalid E-mail!'
-      });
+      this.setState({ loading: false });
+      const Alert = new Notification('Your email is invalid !');
       /* eslint-enable no-unused-vars */
     }
   }
 
   render() {
-    const { userEmail } = this.state;
+    const { userEmail, loading } = this.state;
 
     return (
       <Wrapper
         onSubmit={event => {
           event.preventDefault();
-
           this.registerUser();
         }}
       >
-        <MainTitle>Welcome to fontcase</MainTitle>
+        {loading && (
+          <div className="bp3-progress-bar bp3-intent-primary">
+            <div className="bp3-progress-meter" />
+          </div>
+        )}
 
-        <DiscriptionWrapper>
-          <Description>
-            Lorem iDescriptionsum dolor sit amet, consectetur adipiscing elit. Donec sed semper
-            magna, vitae auctor nisi. Pellentesque eleifend est in nisi euismod faucibus. Praesent
-            facilisis elementum sapien id pulvinar. Vestibulum ut finibus ex. Vivamus elementum
-            massa et diam sollicitudin, eget interdum erat volutpat. Duis porttitor massa sapien,
-            vitae blandit magna venenatis nec. Nullam pulvinar, magna vel convallis auctor, dui ex
-            lacinia nisi, a porttitor elit risus ac ex.
-          </Description>
-        </DiscriptionWrapper>
+        <Content>
+          <MainTitle>Welcome to fontcase</MainTitle>
 
-        <Title>Please select your language</Title>
+          <DiscriptionWrapper>
+            <Description>
+              Fontcase brings you the latest and greatest free and open source fonts right to your
+              computer! Fontcase keeps your fonts fresh by automatically updating them to fit the
+              latest versions and even try out Beta versions before anybody else does! Right now
+              Fontcase is in its early stages, but you can register now using your email to get
+              updates.
+            </Description>
+          </DiscriptionWrapper>
 
-        <ButtonContent>
-          <button className="bp3-button " type="button" style={{ width: 80 }}>
-            English
-          </button>
+          <Title>Please register enter your email</Title>
 
-          <button className="bp3-button" type="button" style={{ width: 80 }}>
-            Sinhala
-          </button>
+          <input
+            value={userEmail}
+            onChange={event => {
+              this.setState({
+                userEmail: event.target.value
+              });
+            }}
+            className="bp3-input"
+            type="text"
+            placeholder="do@example.com"
+            dir="auto"
+          />
 
-          <button className="bp3-button" type="button" style={{ width: 80 }}>
-            Tamil
-          </button>
-        </ButtonContent>
-
-        <Title>Please register enter your email</Title>
-
-        <input
-          value={userEmail}
-          onChange={event => {
-            this.setState({
-              userEmail: event.target.value
-            });
-          }}
-          className="bp3-input"
-          type="text"
-          placeholder="do@example.com"
-          dir="auto"
-        />
-
-        <SubmitButtonWrapper />
-        <button className="bp3-button" type="submit" style={{ width: 100 }}>
-          SUBMIT
-        </button>
+          <SubmitButtonWrapper>
+            <button className="bp3-button" type="submit" style={{ width: 100 }}>
+              SUBMIT
+            </button>
+          </SubmitButtonWrapper>
+          <SkipButtonWrapper>
+            <button
+              className="bp3-button bp3-intent-primary bp3-minimal"
+              type="button"
+              style={{ width: 100 }}
+            >
+              SKIP
+            </button>
+          </SkipButtonWrapper>
+        </Content>
       </Wrapper>
     );
   }

@@ -9,6 +9,16 @@ body {
   
 }
 
+.switch-style{
+  margin: 0px;
+}
+
 .switch-style span{
   outline: none !important;
+  
 }
+
+.bp3-card {
+  padding :0px;
+}
+
