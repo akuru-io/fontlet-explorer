@@ -4,6 +4,7 @@ import { Switch, Card, Elevation } from '@blueprintjs/core';
 
 import fonts from '../data/fonts';
 import installFont from '../lib/installFont';
+import getFontStatus from '../lib/getFontStatus';
 
 // Styles
 const Wrapper = styled.div`
@@ -94,7 +95,12 @@ class Gallery extends Component {
   }
 
   componentDidMount() {
-    this.setState({ fontData: fonts });
+    const fontData = fonts.map(font => ({
+      ...font,
+      installed: getFontStatus(font.name)
+    }));
+
+    this.setState({ fontData });
   }
 
   addRemoveFont = async (url, installed, id) => {
