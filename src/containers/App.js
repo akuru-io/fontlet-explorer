@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import Welcome from './Welcome';
 import Gallery from './Gallery';
 
-import db from "../libs/db";
+import db from '../libs/db';
 
-const Loading = () => (<div>Loading...</div>);
-const ErrorView = (error) => (<div>{error}</div>);
+const Loading = () => <div>Loading...</div>;
+const ErrorView = error => <div>{error}</div>;
 
 class App extends Component {
   constructor() {
@@ -19,35 +19,39 @@ class App extends Component {
   }
 
   componentDidMount() {
-    db.find({type: "init"}, (err, resp) => {
+    db.find({ type: 'init' }, (err, resp) => {
       if (err) {
         this.setState({
-          error: "Database connetion error."
-        })
+          error: 'Database connetion error.'
+        });
         return;
       }
 
-      const {intialized, userEmail} = resp[0] || {};
+      const { intialized, userEmail } = resp[0] || {};
       this.setState({
         registeredUser: intialized && userEmail,
         loading: false
-      })
+      });
     });
   }
 
   registerUser = userEmail => {
     if (!userEmail) {
+      /* eslint-disable no-unused-vars */
       const Alert = new Notification('Error!', {
         body: 'Invalid E-mail!'
       });
+
       return;
     }
 
-    db.update({type: "init"}, {type: "init", userEmail: userEmail, intialized: true}, (err, resp) => {
+    db.update({ type: 'init' }, { type: 'init', userEmail, intialized: true }, (err, resp) => {
       if (err) {
         const Alert = new Notification('Error!', {
           body: 'User registration failed!'
         });
+        /* eslint-enable no-unused-vars */
+
         return;
       }
       this.setState({ registeredUser: true });
@@ -68,6 +72,5 @@ class App extends Component {
     );
   }
 }
-
 
 export default App;
