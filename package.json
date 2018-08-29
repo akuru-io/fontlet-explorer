@@ -2,14 +2,14 @@
   "name": "fontcase-explorer",
   "description": "fontcase-explorer",
   "version": "0.0.2",
-  "author": "thinkholic",
+  "author": "Friends of Akuru",
   "license": "MIT",
-  "homepage": "./",
+  "homepage": "http://typography.lk/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fontcase/fontcase-explorer.git"
   },
-  "main": "public/electron.js",
+  "main": "electron.js",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

@@ -40,7 +40,8 @@
 
     "import/prefer-default-export": 0,
 
-    "react/prefer-stateless-function": [0, { "ignorePureComponents": true }]
+    "react/prefer-stateless-function": [0, { "ignorePureComponents": true }],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }] 
   },
   "plugins": ["prettier"]
 }
