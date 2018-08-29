@@ -8,9 +8,14 @@ require('update-electron-app')();
 const { app, BrowserWindow } = electron;
 
 let mainWindow;
-
+console.log(path.join(__dirname, 'src/assets/images/fontcase-icon.png'));
 function createWindow() {
-  mainWindow = new BrowserWindow({ width: 900, height: 680, resizable: false });
+  mainWindow = new BrowserWindow({
+    width: 900,
+    height: 680,
+    resizable: false,
+    icon: path.join(__dirname, 'assets/icons/png/64x64.png')
+  });
   mainWindow.loadURL(
     isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`
   );
