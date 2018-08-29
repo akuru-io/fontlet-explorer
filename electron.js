@@ -8,7 +8,7 @@ require('update-electron-app')();
 const { app, BrowserWindow } = electron;
 
 let mainWindow;
-console.log(path.join(__dirname, 'src/assets/images/fontcase-icon.png'));
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 900,
