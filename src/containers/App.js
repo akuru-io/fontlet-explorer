@@ -4,7 +4,11 @@ import Gallery from './Gallery';
 
 import db from '../lib/db';
 
-const Loading = () => <div>Loading...</div>;
+const Loading = () => (
+  <div className="bp3-progress-bar bp3-intent-primary">
+    <div className="bp3-progress-meter" />
+  </div>
+);
 const ErrorView = error => <div>{error}</div>;
 
 class App extends Component {
@@ -26,7 +30,6 @@ class App extends Component {
         });
         return;
       }
-
       const { intialized, userEmail } = resp[0] || {};
       this.setState({
         registeredUser: intialized && userEmail,

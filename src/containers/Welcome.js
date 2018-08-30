@@ -89,17 +89,17 @@ class Welcome extends Component {
 
   async registerUser() {
     const { userEmail } = this.state;
-
+    const { registerUser } = this.props;
     this.setState({ loading: true });
 
     if (validateEmail(userEmail)) {
       const data = await fetchUserEmail(userEmail);
 
       if (data === 'Success') {
-        console.log('done');
         this.setState({ loading: false });
-        /* eslint-disable no-unused-vars */
         const Alert = new Notification('Your Email is successfully submitted !');
+        registerUser(userEmail);
+        /* eslint-disable no-unused-vars */
       } else {
         console.log('fail');
         this.setState({ loading: false });

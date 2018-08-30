@@ -6,6 +6,8 @@ import fonts from '../data/fonts';
 import installFont from '../lib/installFont';
 import getFontStatus from '../lib/getFontStatus';
 
+import db from '../lib/fontDb';
+
 // Styles
 const Wrapper = styled.div`
   height: 100vh;
@@ -101,12 +103,42 @@ class Gallery extends Component {
   }
 
   componentDidMount() {
-    const fontData = fonts.map(font => ({
-      ...font,
-      installed: getFontStatus(font.name)
-    }));
+    /* eslint-disable no-unused-vars */
 
-    this.setState({ fontData });
+    fonts.map(font => {
+      db.findOne({ id: font.id }, (err, doc) => {
+        if (err) {
+          const Alert = new Notification('Something went wrong !');
+        }
+        if (doc === null) {
+          db.insert(
+            {
+              id: font.id,
+              name: font.name,
+              version: font.version,
+              url: font.url,
+              fontVariants: font.fontVariants,
+              fontImage: font.fontImage
+            },
+            (err, resp) => {
+              if (err) {
+                const Alert = new Notification('Something went wrong !');
+              } else {
+                this.setState({
+                  fontData: [...this.state.fontData, resp]
+                });
+              }
+            }
+          );
+        } else {
+          this.setState({
+            fontData: [...this.state.fontData, doc]
+          });
+        }
+      });
+    });
+
+    /* eslint-enable no-unused-vars */
   }
 
   addRemoveFont = async (url, installed, id) => {
@@ -139,6 +171,7 @@ class Gallery extends Component {
 
   FontItem = ({ id, name, version, url, installed, fontImage, fontVariants }) => {
     const { loading, loadingFontId } = this.state;
+
     return (
       <CardContent className="card-style" key={id}>
         <Content elevation={Elevation.TWO}>
@@ -162,7 +195,7 @@ class Gallery extends Component {
             <ToggleButtonWrapper>
               <Switch
                 className="switch-style"
-                checked={installed}
+                checked={installed || false}
                 large
                 onChange={() => {
                   this.addRemoveFont(url, installed, id);
@@ -177,6 +210,7 @@ class Gallery extends Component {
 
   render() {
     const { fontData } = this.state;
+
     return <Wrapper>{fontData.map(this.FontItem)}</Wrapper>;
   }
 }

@@ -8,7 +8,7 @@ export default [
     publisher: 'mooniak',
     url:
       'https://cdn.rawgit.com/mooniak/maname-fonts/gh-pages/fonts/otf/ManameInformal-Regular.otf',
-    fontImage: Assets.abhayaDisplay,
+    fontImage: require('../assets/images/abhaya-display.svg'),
     fontVariants: 5
   },
   {
@@ -18,7 +18,7 @@ export default [
     publisher: 'Pushpananda Ekanayake',
     url:
       'http://cdn.rawgit.com/mooniak/gemunu-libre-font/gh-pages/tests/fonts/GemunuLibre-Bold.otf',
-    fontImage: Assets.galleDisplay,
+    fontImage: require('../assets/images/galle-display.svg'),
     fontVariants: 6
   }
 ];
