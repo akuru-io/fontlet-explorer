@@ -142,44 +142,15 @@ class Gallery extends Component {
     /* eslint-enable no-unused-vars */
   }
 
-  addRemoveFont = async (url, installing, id) => {
+  addRemoveFont = async (installing, id) => {
     const { fontData } = this.state;
     const fontsToBeInstalled = fontData.find((f) => f.id === id);
-    const fontList = fontsToBeInstalled.list;
+
+    this.setState({ loading: true, loadingFontId: id });
 
     if (installing) {
       try {
-        this.setState({ loading: true, loadingFontId: id });
-
-        // const fontList = fontsToBeInstalled.list;
-        // const promiseAll = fontList.map((font) => {
-        //   return new Promise((resolve, relect) => {
-
-        //     installFont(font, (error, resp) => {
-        //       if (error) relect();
-
-        //       // Update states
-        //       const newFontData = fontData.map(font => {
-        //         if (font.id === id) {
-        //           return {
-        //             ...font,
-        //             installed: true
-        //           };
-        //         }
-        //         return font;
-        //       });
-        //       this.setState({ loading: false, loadingFontId: '', fontData: newFontData });
-
-        //       // Update storage
-        //       dbFonts.update({id: id}, {type: "fonts", id: id, installed: true}, (dbErr) => {
-        //         if (dbErr) relect();
-        //       });
-        //     });
-        //   })
-        // });
-
-        // console.log("$$$ ", promiseAll);
-
+        const fontList = fontsToBeInstalled.list;
         installFont(fontList, (error, resp) => {
           if (error) {
             const Alert = new Notification('Oops!.. Font installing failed!');
@@ -210,10 +181,21 @@ class Gallery extends Component {
       }
     } else {
       // TODO: Set uninstall also like above
+      // Update states
+      const newFontData = fontData.map(font => {
+        if (font.id === id) {
+          return {
+            ...font,
+            installed: false
+          };
+        }
+        return font;
+      });
+      this.setState({ loading: false, loadingFontId: '', fontData: newFontData });
     }
   };
 
-  FontItem = ({ id, name, version, url, installed, fontImage, fontVariants }) => {
+  FontItem = ({ id, name, version, installed, fontImage, fontVariants }) => {
     const { loading, loadingFontId } = this.state;
 
     return (
@@ -242,7 +224,7 @@ class Gallery extends Component {
                 checked={installed || false}
                 large
                 onChange={() => {
-                  this.addRemoveFont(url, !installed, id);
+                  this.addRemoveFont(!installed, id);
                 }}
               />
             </ToggleButtonWrapper>
