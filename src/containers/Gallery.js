@@ -37,19 +37,8 @@ const VersionContent = styled.div`
   flex: 1;
 `;
 
-const FontName = styled.p`
-  font-size: 17px;
-  font-family: sans-serif;
-  color: #867f7f;
-  margin-bottom: 0px;
-  @media (max-width: 1000px) {
-    font-size: 14px;
-  }
-`;
-
 const Version = styled.p`
   font-size: 17px;
-  font-family: sans-serif;
   color: #867f7f;
   margin-left: 20px;
   margin-bottom: 0px;
@@ -60,7 +49,6 @@ const Version = styled.p`
 
 const Variant = styled.p`
   font-size: 17px;
-  font-family: sans-serif;
   color: #867f7f;
   margin-left: 20px;
   margin-bottom: 0px;

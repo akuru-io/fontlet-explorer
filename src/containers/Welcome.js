@@ -19,12 +19,10 @@ const Content = styled.div`
 
 const MainTitle = styled.p`
   font-size: 30px;
-  font-family: sans-serif;
 `;
 
 const Description = styled.p`
   font-size: 17px;
-  font-family: sans-serif;
   text-align: center;
   color: #6d6d6d;
 
@@ -45,7 +43,6 @@ const DiscriptionWrapper = styled.div`
 const Title = styled.p`
   font-size: 17px;
   margin-top: 50px;
-  font-family: sans-serif;
   text-align: center;
   color: #6d6d6d;
 
