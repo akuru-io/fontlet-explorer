@@ -118,6 +118,7 @@ class Gallery extends Component {
         installFont(fontList, (error, resp) => {
           if (error) {
             const Alert = new Notification('Oops!.. Font installing failed!');
+            this.setState({ loading: false, loadingFontId: '' });
             return;
           }
 
@@ -142,6 +143,7 @@ class Gallery extends Component {
         });
       } catch (error) {
         const Alert = new Notification('Oops!.. Font installing failed!');
+        this.setState({ loading: false, loadingFontId: '' });
       }
     } else {
       // TODO: Set uninstall also like above
@@ -161,6 +163,7 @@ class Gallery extends Component {
       dbFonts.update({id: id}, {type: "fonts", id: id, installed: false}, (dbErr) => {
         if (dbErr) {
           const Alert = new Notification('Oops!.. Something wrong in updating database.');
+          return;
         }
       })
     }
