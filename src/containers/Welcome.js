@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Button } from '@blueprintjs/core';
 import { fetchUserEmail } from '../lib/emailRegister';
 
 const Wrapper = styled.form`
@@ -116,7 +115,7 @@ class Welcome extends Component {
 
   render() {
     const { userEmail, loading } = this.state;
-
+    const { skipButtonFunction } = this.props;
     return (
       <Wrapper
         onSubmit={event => {
@@ -168,6 +167,7 @@ class Welcome extends Component {
               className="bp3-button bp3-intent-primary bp3-minimal"
               type="button"
               style={{ width: 100 }}
+              onClick={skipButtonFunction}
             >
               SKIP
             </button>

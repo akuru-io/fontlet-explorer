@@ -61,6 +61,10 @@ class App extends Component {
     });
   };
 
+  skipButtonFunction = () => {
+    this.setState({ registeredUser: true });
+  };
+
   render() {
     const { registeredUser, loading, error } = this.state;
 
@@ -69,7 +73,9 @@ class App extends Component {
 
     return (
       <div>
-        {!registeredUser && <Welcome registerUser={this.registerUser} />}
+        {!registeredUser && (
+          <Welcome registerUser={this.registerUser} skipButtonFunction={this.skipButtonFunction} />
+        )}
         {registeredUser && <Gallery />}
       </div>
     );
