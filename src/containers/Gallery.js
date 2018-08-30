@@ -188,7 +188,7 @@ class Gallery extends Component {
             <VersionContent>
               <VersionDetails>
                 <Version>v{version}</Version>
-                <Variant>Number of Variants : {fontVariants}</Variant>
+                <Variant>Number of styles : {fontVariants}</Variant>
               </VersionDetails>
             </VersionContent>
 
