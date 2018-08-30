@@ -6,7 +6,6 @@ import fonts from '../data/fonts';
 import installFont from '../lib/installFont';
 import getFontStatus from '../lib/getFontStatus';
 
-import db from '../lib/fontDb';
 import dbFonts from '../lib/db/fonts';
 
 // Styles
@@ -105,41 +104,6 @@ class Gallery extends Component {
         });
       });
     })
-
-    // fonts.map(font => {
-    //   db.findOne({ id: font.id }, (err, doc) => {
-    //     if (err) {
-    //       const Alert = new Notification('Oops!.. Something went wrong!');
-    //     }
-    //     if (doc === null) {
-    //       db.insert(
-    //         {
-    //           id: font.id,
-    //           name: font.name,
-    //           version: font.version,
-    //           url: font.url,
-    //           fontVariants: font.fontVariants,
-    //           fontImage: font.fontImage
-    //         },
-    //         (err, resp) => {
-    //           if (err) {
-    //             const Alert = new Notification('Oops!.. Something went wrong!');
-    //           } else {
-    //             this.setState({
-    //               fontData: [...this.state.fontData, resp]
-    //             });
-    //           }
-    //         }
-    //       );
-    //     } else {
-    //       this.setState({
-    //         fontData: [...this.state.fontData, doc]
-    //       });
-    //     }
-    //   });
-    // });
-
-    /* eslint-enable no-unused-vars */
   }
 
   addRemoveFont = async (installing, id) => {
@@ -192,6 +156,13 @@ class Gallery extends Component {
         return font;
       });
       this.setState({ loading: false, loadingFontId: '', fontData: newFontData });
+
+      // Update storage
+      dbFonts.update({id: id}, {type: "fonts", id: id, installed: false}, (dbErr) => {
+        if (dbErr) {
+          const Alert = new Notification('Oops!.. Something wrong in updating database.');
+        }
+      })
     }
   };
 

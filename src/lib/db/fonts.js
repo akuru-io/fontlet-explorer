@@ -2,7 +2,7 @@ const DataSource = window.require('nedb');
 const { remote } = window.require('electron');
 const { app } = remote;
 
-const dbPath = `${app.getAppPath()}/resources/_fonts`;
+const dbPath = `${app.getAppPath()}/resources/fonts`;
 const db = new DataSource({ filename: dbPath, autoload: true });
 
 // TODO: Write a Singleton Class for this.

@@ -5,25 +5,6 @@ const os = window.require('os');
 const fs = window.require('fs');
 const request = window.require('request');
 
-const windowsFontInstaller = ({ addFont, fileNameOrfolder }, cb) => {
-  const { spawn } = window.require('child_process');
-  
-  const ls = spawn('cmd.exe', ['/c', addFont, fileNameOrfolder]); // run script font add bat script
-
-  ls.stdout.on('data', data => {
-    cb(null, data);
-  });
-
-  ls.stderr.on('data', data => {
-    cb(data, null);
-  });
-
-  ls.on('exit', code => {
-    cb(code, null);
-  });
-};
-
-
 async function win(fontList, cb) {
   // replac this with url
   const fontUrl = fontList[0];
@@ -52,9 +33,21 @@ async function win(fontList, cb) {
   }
 
   const fileNameOrfolder = pathToBeDownload;
-  windowsFontInstaller({ addFont, fileNameOrfolder }, (err) => {
-    if (err) cb(true, null);
-    cb(null, true);
+
+  // Install
+  const { spawn } = window.require('child_process');
+  const ls = spawn('cmd.exe', ['/c', addFont, fileNameOrfolder]); // run script font add bat script
+
+  ls.stdout.on('data', data => {
+    cb(null, data);
+  });
+
+  ls.stderr.on('data', data => {
+    cb(data, null);
+  });
+
+  ls.on('exit', code => {
+    cb(code, null);
   });
 }
 
@@ -103,6 +96,8 @@ async function mac(fontList, cb) {
   const pathToBeDownload = `${appUserFolder}/${fileName}`;
   const fontFilePath = pathToBeDownload.replace(' ', '\\ ');
   const localFontsDirPath = '~/Library/Fonts/';
+
+  console.log("** ", fontFilePath)
 
   // download font file to user app directory
   await new Promise(resolve =>
