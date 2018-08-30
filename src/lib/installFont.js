@@ -24,14 +24,15 @@ const windowsFontInstaller = ({ addFont, fileNameOrfolder }) => {
   });
 };
 
-export default async url => {
+export default async (fontList, cb) => {
+
   // replac this with url
-  const fontUrl = url;
+  const fontUrl = fontList[0];
 
   // get filename
   const fileName = fontUrl.substr(fontUrl.lastIndexOf('/') + 1);
 
-  // based os install font
+  // WIN32
   if (os.type() === 'Windows_NT') {
     const pathToBeDownload = `${appUserFolder}\\${fileName}`; // TODO add folde name
     // font to save downloaded fonts
@@ -45,8 +46,7 @@ export default async url => {
     // script for install font in windows
     let resolveAppRoot = appRoot;
     let addFont = `${appRoot}\\src\\lib\\addFont.bat`;
-    // resolve for build
-    console.log(444, resolveAppRoot.substr(resolveAppRoot.lastIndexOf('\\') + 1));
+    
     if (resolveAppRoot.substr(resolveAppRoot.lastIndexOf('\\') + 1) === 'app.asar') {
       resolveAppRoot = removeLastDirectoryPartOf(resolveAppRoot);
       resolveAppRoot = removeLastDirectoryPartOf(resolveAppRoot.slice(0, -1));
@@ -54,10 +54,7 @@ export default async url => {
       console.log(222, addFont);
     }
 
-    console.log(111, addFont);
-
     const fileNameOrfolder = pathToBeDownload;
-
     windowsFontInstaller({ addFont, fileNameOrfolder });
   } else if (os.type() === 'Linux' || os.type() === 'linux') {
     // IF OS type is linux
@@ -106,8 +103,11 @@ export default async url => {
       name: 'fontcase'
     };
     sudo.exec(`cp ${fontFilePath} ${localFontsDirPath}`, options, (error, stdout) => {
-      if (error) throw error;
-      console.log(`stdout: ${stdout}`);
+      if (error) {
+        cb(error, null);
+        return;
+      };
+      cb(null, {stdout})
     });
   }
 };
