@@ -4,16 +4,12 @@ import ReactSVG from 'react-svg';
 import { fetchUserEmail } from '../lib/emailRegister';
 
 import fontletLogo from '../assets/images/fontCase_round_background_animated.svg';
-import fontletLogo2 from '../assets/images/fontCase_logo_no_background.png';
+import Input from '../components/Input';
 
-const Wrapper = styled.form`
+const Wrapper = styled.div`
   height: 100vh;
   background-color: #ffffff;
   overflow-y: hidden;
-`;
-
-const Logo = styled.img`
-  width: 141.5px;
 `;
 
 const Content = styled.div`
@@ -56,18 +52,6 @@ const Title = styled.p`
   color: #6d6d6d;
 `;
 
-const SkipButtonWrapper = styled.div`
-  margin-top: 20px;
-`;
-
-const SubmitButtonWrapper = styled.div`
-  margin-top: 40px;
-
-  @media (max-width: 1000px) {
-    margin-top: 30px;
-  }
-`;
-
 function validateEmail(email) {
   /* eslint-disable max-len */
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -94,15 +78,13 @@ class Welcome extends Component {
     super(props);
 
     this.state = {
-      userEmail: '',
       loading: false
     };
 
     this.registerUser = this.registerUser.bind(this);
   }
 
-  async registerUser() {
-    const { userEmail } = this.state;
+  async registerUser(userEmail) {
     const { registerUser } = this.props;
     this.setState({ loading: true });
 
@@ -129,15 +111,10 @@ class Welcome extends Component {
   }
 
   render() {
-    const { userEmail, loading } = this.state;
+    const { loading } = this.state;
     const { skipButtonFunction } = this.props;
     return (
-      <Wrapper
-        onSubmit={event => {
-          event.preventDefault();
-          this.registerUser();
-        }}
-      >
+      <Wrapper>
         {loading && (
           <div className="bp3-progress-bar bp3-intent-primary">
             <div className="bp3-progress-meter" />
@@ -146,20 +123,14 @@ class Welcome extends Component {
 
         <Content>
           <MainTitle>Welcome to FontLet</MainTitle>
-
-          {userEmail === '' ? (
-            <ReactSVG
-              src={fontletLogo}
-              evalScripts="once"
-              svgStyle={{ width: 170 }}
-              onInjected={svg => {
-                animateLogo();
-              }}
-            />
-          ) : (
-            <Logo src={fontletLogo2} />
-          )}
-
+          <ReactSVG
+            src={fontletLogo}
+            evalScripts="once"
+            svgStyle={{ width: 170 }}
+            onInjected={svg => {
+              animateLogo();
+            }}
+          />
           <DiscriptionWrapper>
             <Description>
               Fontlet brings you the latest and greatest free and open source fonts right to your
@@ -169,37 +140,8 @@ class Welcome extends Component {
               updates.
             </Description>
           </DiscriptionWrapper>
-
           <Title>Please register enter your email</Title>
-
-          <input
-            value={userEmail}
-            onChange={event => {
-              this.setState({
-                userEmail: event.target.value
-              });
-            }}
-            className="bp3-input"
-            type="text"
-            placeholder="do@example.com"
-            dir="auto"
-          />
-
-          <SubmitButtonWrapper>
-            <button className="bp3-button" type="submit" style={{ width: 100 }}>
-              SUBMIT
-            </button>
-          </SubmitButtonWrapper>
-          <SkipButtonWrapper>
-            <button
-              className="bp3-button bp3-intent-primary bp3-minimal"
-              type="button"
-              style={{ width: 100 }}
-              onClick={skipButtonFunction}
-            >
-              SKIP
-            </button>
-          </SkipButtonWrapper>
+          <Input registerUser={this.registerUser} skipButtonFunction={skipButtonFunction} />
         </Content>
       </Wrapper>
     );
