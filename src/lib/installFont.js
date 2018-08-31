@@ -4,6 +4,7 @@ const sudo = window.require('sudo-prompt');
 const os = window.require('os');
 const fs = window.require('fs');
 const request = window.require('request');
+const exec = window.require('child_process').exec;
 
 async function win(fontList, cb) {
   // TODO: IMPLEMENTS MULTI_FONTS INSTALL MECHANISM like in Mac/Lin methods ***
@@ -53,6 +54,7 @@ async function win(fontList, cb) {
 
 async function lin(fontList, cb) {
   const fontInstallingQueue = fontList.map(async (fontUrl) => {
+    console.log(fontUrl)
     const fileName = fontUrl.substr(fontUrl.lastIndexOf('/') + 1);
     const pathToBeDownload = `${appUserFolder}/${fileName}`;
 
@@ -62,7 +64,7 @@ async function lin(fontList, cb) {
         .on('finish', resolve)
     );
     return pathToBeDownload;
-  });
+  })
 
 
   Promise.all(fontInstallingQueue).then((paths) => {
@@ -73,20 +75,34 @@ async function lin(fontList, cb) {
       name: 'fontcase',
       cachePassword: true
     };
-    sudo.exec(`cp ${fontsFilePath} ${localFontsDirPath}`, options, (error, stdout) => {
+
+   exec(`mkdir -p ${localFontsDirPath}`, {}, (error, stdout) => {
+    if (error) {
+      console.log(error)
+      cb(error, null);
+      return;
+    }
+
+    exec(`cp ${fontsFilePath} ${localFontsDirPath}`, options, (error, stdout) => {
       if (error) {
+        console.log(error)
         cb(error, null);
         return;
       }
 
       sudo.exec(`fc-cache -f -v`, options, (fCacheError, fCacheStdout) => {
         if (fCacheError) {
+          console.log(fCacheError)
           cb(fCacheError, null);
           return;
         }
         cb(null, fCacheStdout);
       });
     });
+   })
+
+
+
   });
 }
 
