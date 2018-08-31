@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import ReactSVG from 'react-svg';
 import { fetchUserEmail } from '../lib/emailRegister';
+
+import fontletLogo from '../assets/images/fontCase_round_background_animated.svg';
+import fontletLogo2 from '../assets/images/fontCase_logo_no_background.png';
 
 const Wrapper = styled.form`
   height: 100vh;
   background-color: #ffffff;
   overflow-y: hidden;
+`;
+
+const Logo = styled.img`
+  width: 141.5px;
 `;
 
 const Content = styled.div`
@@ -19,6 +27,7 @@ const Content = styled.div`
 
 const MainTitle = styled.p`
   font-size: 30px;
+  margin-bottom: 22px;
 `;
 
 const Description = styled.p`
@@ -32,7 +41,7 @@ const Description = styled.p`
 `;
 
 const DiscriptionWrapper = styled.div`
-  margin-top: 30px;
+  margin-top: 20px;
   width: 40%;
 
   @media (max-width: 1000px) {
@@ -42,13 +51,9 @@ const DiscriptionWrapper = styled.div`
 
 const Title = styled.p`
   font-size: 17px;
-  margin-top: 50px;
+  margin-top: 20px;
   text-align: center;
   color: #6d6d6d;
-
-  @media (max-width: 1000px) {
-    margin-top: 42px;
-  }
 `;
 
 const SkipButtonWrapper = styled.div`
@@ -70,6 +75,19 @@ function validateEmail(email) {
 
   return re.test(String(email).toLowerCase());
 }
+
+const animateLogo = () => {
+  const fontlet = document.getElementById('Fontlet');
+
+  if (fontlet) {
+    // Start the line drawing
+    fontlet.classList.add('start');
+    setTimeout(() => {
+      // Signal the end of the drawing to start the fill color animation
+      fontlet.classList.add('finished');
+    }, 2500);
+  }
+};
 
 class Welcome extends Component {
   constructor(props) {
@@ -127,11 +145,24 @@ class Welcome extends Component {
         )}
 
         <Content>
-          <MainTitle>Welcome to fontcase</MainTitle>
+          <MainTitle>Welcome to FontLet</MainTitle>
+
+          {userEmail === '' ? (
+            <ReactSVG
+              src={fontletLogo}
+              evalScripts="once"
+              svgStyle={{ width: 170 }}
+              onInjected={svg => {
+                animateLogo();
+              }}
+            />
+          ) : (
+            <Logo src={fontletLogo2} />
+          )}
 
           <DiscriptionWrapper>
             <Description>
-              Fontcase brings you the latest and greatest free and open source fonts right to your
+              Fontlet brings you the latest and greatest free and open source fonts right to your
               computer! Fontcase keeps your fonts fresh by automatically updating them to fit the
               latest versions and even try out Beta versions before anybody else does! Right now
               Fontcase is in its early stages, but you can register now using your email to get

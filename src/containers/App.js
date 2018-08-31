@@ -38,20 +38,23 @@ class App extends Component {
 
       if (!intialized) {
         // Update fonts collection
-        fonts.forEach((font) => {
-          dbFonts.insert({
-            type: "fonts",
-            id: font.id,
-            installed: false
-          }, (errInit) => {
+        fonts.forEach(font => {
+          dbFonts.insert(
+            {
+              type: 'fonts',
+              id: font.id,
+              installed: false
+            },
+            errInit => {
               if (errInit) {
                 this.setState({
                   error: 'Oops!.. Initializing failed!'
                 });
               }
               return;
-          })
-        })
+            }
+          );
+        });
       }
 
       this.setState({
@@ -85,17 +88,21 @@ class App extends Component {
   };
 
   skipButtonFunction = () => {
-    db.update({ type: 'init' }, { type: 'init', userEmail: null, intialized: true }, (err, resp) => {
-      if (err) {
-        const Alert = new Notification('Error!', {
-          body: 'Initializing failed!'
-        });
-        /* eslint-enable no-unused-vars */
+    db.update(
+      { type: 'init' },
+      { type: 'init', userEmail: null, intialized: true },
+      (err, resp) => {
+        if (err) {
+          const Alert = new Notification('Error!', {
+            body: 'Initializing failed!'
+          });
+          /* eslint-enable no-unused-vars */
 
-        return;
+          return;
+        }
+        this.setState({ registeredUser: true });
       }
-      this.setState({ registeredUser: true });
-    });
+    );
   };
 
   render() {
