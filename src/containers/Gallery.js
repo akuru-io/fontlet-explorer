@@ -21,7 +21,8 @@ const Content = styled(Card)`
   flex-direction: column;
 `;
 const CardContent = styled.div`
-  margin-top: 15px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 `;
 
 const VersionDetails = styled.div`
