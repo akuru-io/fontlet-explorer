@@ -4,7 +4,7 @@ const sudo = window.require('sudo-prompt');
 const os = window.require('os');
 const fs = window.require('fs');
 const request = window.require('request');
-const exec = window.require('child_process').exec;
+const { exec } = window.require('child_process');
 
 async function win(fontList, cb) {
   // TODO: IMPLEMENTS MULTI_FONTS INSTALL MECHANISM like in Mac/Lin methods ***
@@ -25,12 +25,11 @@ async function win(fontList, cb) {
   // script for install font in windows
   let resolveAppRoot = appRoot;
   let addFont = `${appRoot}\\src\\lib\\addFont.bat`;
-  
+
   if (resolveAppRoot.substr(resolveAppRoot.lastIndexOf('\\') + 1) === 'app.asar') {
     resolveAppRoot = removeLastDirectoryPartOf(resolveAppRoot);
     resolveAppRoot = removeLastDirectoryPartOf(resolveAppRoot.slice(0, -1));
     addFont = `${resolveAppRoot}\\src\\lib\\addFont.bat`;
-    console.log(222, addFont);
   }
 
   const fileNameOrfolder = pathToBeDownload;
@@ -53,8 +52,7 @@ async function win(fontList, cb) {
 }
 
 async function lin(fontList, cb) {
-  const fontInstallingQueue = fontList.map(async (fontUrl) => {
-    console.log(fontUrl)
+  const fontInstallingQueue = fontList.map(async fontUrl => {
     const fileName = fontUrl.substr(fontUrl.lastIndexOf('/') + 1);
     const pathToBeDownload = `${appUserFolder}/${fileName}`;
 
@@ -64,11 +62,10 @@ async function lin(fontList, cb) {
         .on('finish', resolve)
     );
     return pathToBeDownload;
-  })
+  });
 
-
-  Promise.all(fontInstallingQueue).then((paths) => {
-    const fontsFilePath = paths.join(" ");
+  Promise.all(fontInstallingQueue).then(paths => {
+    const fontsFilePath = paths.join(' ');
     const localFontsDirPath = '~/.fonts';
 
     const options = {
@@ -76,38 +73,32 @@ async function lin(fontList, cb) {
       cachePassword: true
     };
 
-   exec(`mkdir -p ${localFontsDirPath}`, {}, (error, stdout) => {
-    if (error) {
-      console.log(error)
-      cb(error, null);
-      return;
-    }
-
-    exec(`cp ${fontsFilePath} ${localFontsDirPath}`, options, (error, stdout) => {
+    exec(`mkdir -p ${localFontsDirPath}`, {}, error => {
       if (error) {
-        console.log(error)
         cb(error, null);
         return;
       }
 
-      sudo.exec(`fc-cache -f -v`, options, (fCacheError, fCacheStdout) => {
-        if (fCacheError) {
-          console.log(fCacheError)
-          cb(fCacheError, null);
+      exec(`cp ${fontsFilePath} ${localFontsDirPath}`, options, fontCopyError => {
+        if (fontCopyError) {
+          cb(fontCopyError, null);
           return;
         }
-        cb(null, fCacheStdout);
+
+        sudo.exec(`fc-cache -f -v`, options, (fCacheError, fCacheStdout) => {
+          if (fCacheError) {
+            cb(fCacheError, null);
+            return;
+          }
+          cb(null, fCacheStdout);
+        });
       });
     });
-   })
-
-
-
   });
 }
 
 async function mac(fontList, cb) {
-  const fontInstallingQueue = fontList.map(async (fontUrl) => {
+  const fontInstallingQueue = fontList.map(async fontUrl => {
     const fileName = fontUrl.substr(fontUrl.lastIndexOf('/') + 1);
     const pathToBeDownload = `${appUserFolder}/${fileName}`;
 
@@ -119,8 +110,8 @@ async function mac(fontList, cb) {
     return pathToBeDownload;
   });
 
-  Promise.all(fontInstallingQueue).then((paths) => {
-    const fontsFilePath = paths.map(path => path.replace(' ', '\\ ')).join(" ");
+  Promise.all(fontInstallingQueue).then(paths => {
+    const fontsFilePath = paths.map(path => path.replace(' ', '\\ ')).join(' ');
     const localFontsDirPath = '~/Library/Fonts/';
 
     const options = {
@@ -133,14 +124,14 @@ async function mac(fontList, cb) {
         return;
       }
 
-      cb(null, {stdout})
+      cb(null, { stdout });
     });
   });
 }
 
 export default async (fontList, cb) => {
   if (os.type() === 'Windows_NT') {
-    win(fontList, (err) => {
+    win(fontList, err => {
       if (err) {
         cb(true, null);
         return;
@@ -148,7 +139,7 @@ export default async (fontList, cb) => {
       cb(null, true);
     });
   } else if (os.type() === 'Linux' || os.type() === 'linux') {
-    lin(fontList, (err) => {
+    lin(fontList, err => {
       if (err) {
         cb(true, null);
         return;
@@ -156,7 +147,7 @@ export default async (fontList, cb) => {
       cb(null, true);
     });
   } else {
-    mac(fontList, (err) => {
+    mac(fontList, err => {
       if (err) {
         cb(true, null);
         return;
