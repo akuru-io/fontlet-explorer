@@ -9,7 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/fontcase/fontcase-explorer.git"
   },
-  "main": "build/electron.js",
+  "main": "public/electron.js",
   "scripts": {
     "dev": "yarn react-scripts start",
     "build": "react-scripts build",
