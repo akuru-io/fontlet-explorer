@@ -21,7 +21,8 @@ const Content = styled(Card)`
   flex-direction: column;
 `;
 const CardContent = styled.div`
-  margin-top: 15px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 `;
 
 const VersionDetails = styled.div`
@@ -92,23 +93,23 @@ class Gallery extends Component {
 
   componentDidMount() {
     /* eslint-disable no-unused-vars */
-    fonts.forEach((f) => {
-      dbFonts.find({id: f.id}, (err, resp) => {
+    fonts.forEach(f => {
+      dbFonts.find({ id: f.id }, (err, resp) => {
         if (err) {
           const Alert = new Notification('Oops!.. Something went wrong!');
           return;
         }
-        const font = resp && resp[0] || {};
+        const font = (resp && resp[0]) || {};
         this.setState({
-          fontData: [...this.state.fontData, {...f, ...font}]
+          fontData: [...this.state.fontData, { ...f, ...font }]
         });
       });
-    })
+    });
   }
 
   addRemoveFont = async (installing, id) => {
     const { fontData } = this.state;
-    const fontsToBeInstalled = fontData.find((f) => f.id === id);
+    const fontsToBeInstalled = fontData.find(f => f.id === id);
 
     this.setState({ loading: true, loadingFontId: id });
 
@@ -133,13 +134,13 @@ class Gallery extends Component {
             return font;
           });
           this.setState({ loading: false, loadingFontId: '', fontData: newFontData });
-
+          const Alert = new Notification('Font is installed successfully ! ');
           // Update storage
-          dbFonts.update({id: id}, {type: "fonts", id: id, installed: true}, (dbErr) => {
+          dbFonts.update({ id }, { type: 'fonts', id, installed: true }, dbErr => {
             if (dbErr) {
               const Alert = new Notification('Oops!.. Something wrong in updating database.');
             }
-          })
+          });
         });
       } catch (error) {
         const Alert = new Notification('Oops!.. Font installing failed!');
@@ -160,12 +161,11 @@ class Gallery extends Component {
       this.setState({ loading: false, loadingFontId: '', fontData: newFontData });
 
       // Update storage
-      dbFonts.update({id: id}, {type: "fonts", id: id, installed: false}, (dbErr) => {
+      dbFonts.update({ id }, { type: 'fonts', id, installed: false }, dbErr => {
         if (dbErr) {
           const Alert = new Notification('Oops!.. Something wrong in updating database.');
-          return;
         }
-      })
+      });
     }
   };
 

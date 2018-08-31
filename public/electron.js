@@ -1,11 +1,13 @@
 const electron = require('electron');
+const openAboutWindow = require('about-window').default;
 const path = require('path');
 const isDev = require('electron-is-dev');
 const notifier = require('node-notifier');
 const { autoUpdater } = require('electron-updater');
+
 require('update-electron-app')();
 
-const { app, BrowserWindow } = electron;
+const { app, BrowserWindow, Menu } = electron;
 
 let mainWindow;
 
@@ -24,7 +26,7 @@ function createWindow() {
   initAutoUpdate();
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 }
 
 function initAutoUpdate() {
@@ -77,4 +79,28 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+app.once('ready', () => {
+  const menu = Menu.buildFromTemplate([
+    {
+      label: 'About',
+      submenu: [
+        {
+          label: 'Font Case',
+          click: () =>
+            openAboutWindow({
+              icon_path: path.join(__dirname, 'src/assets/images/fontCase_round_background.svg'),
+              css_path: path.join(__dirname, 'src/about.css'),
+              use_version_info: false,
+              description:
+                'Fontlet is a free software project led by a community who loves Free/Libre and Open source fonts. Initial development is supported by Mooniak, LeafyCode and HostGrid. Credits Kasun Indi, Kosala Senevirathne, Malith Widanapathirana, Pathum Egodawatta, Pubudu Kodikara, Rajitha Manamperi',
+              copyright: 'Copyright (c) 2018',
+              homepage: 'http://mooniak.com/'
+            })
+        }
+      ]
+    }
+  ]);
+  Menu.setApplicationMenu(menu);
 });

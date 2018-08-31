@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import ReactSVG from 'react-svg';
 import { fetchUserEmail } from '../lib/emailRegister';
 
-const Wrapper = styled.form`
+import fontletLogo from '../assets/images/fontCase_round_background_animated.svg';
+import Input from '../components/Input';
+
+const Wrapper = styled.div`
   height: 100vh;
   background-color: #ffffff;
   overflow-y: hidden;
@@ -19,6 +23,7 @@ const Content = styled.div`
 
 const MainTitle = styled.p`
   font-size: 30px;
+  margin-bottom: 22px;
 `;
 
 const Description = styled.p`
@@ -32,7 +37,7 @@ const Description = styled.p`
 `;
 
 const DiscriptionWrapper = styled.div`
-  margin-top: 30px;
+  margin-top: 20px;
   width: 40%;
 
   @media (max-width: 1000px) {
@@ -42,25 +47,9 @@ const DiscriptionWrapper = styled.div`
 
 const Title = styled.p`
   font-size: 17px;
-  margin-top: 50px;
+  margin-top: 20px;
   text-align: center;
   color: #6d6d6d;
-
-  @media (max-width: 1000px) {
-    margin-top: 42px;
-  }
-`;
-
-const SkipButtonWrapper = styled.div`
-  margin-top: 20px;
-`;
-
-const SubmitButtonWrapper = styled.div`
-  margin-top: 40px;
-
-  @media (max-width: 1000px) {
-    margin-top: 30px;
-  }
 `;
 
 function validateEmail(email) {
@@ -71,20 +60,31 @@ function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 
+const animateLogo = () => {
+  const fontlet = document.getElementById('Fontlet');
+
+  if (fontlet) {
+    // Start the line drawing
+    fontlet.classList.add('start');
+    setTimeout(() => {
+      // Signal the end of the drawing to start the fill color animation
+      fontlet.classList.add('finished');
+    }, 2500);
+  }
+};
+
 class Welcome extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      userEmail: '',
       loading: false
     };
 
     this.registerUser = this.registerUser.bind(this);
   }
 
-  async registerUser() {
-    const { userEmail } = this.state;
+  async registerUser(userEmail) {
     const { registerUser } = this.props;
     this.setState({ loading: true });
 
@@ -110,15 +110,10 @@ class Welcome extends Component {
   }
 
   render() {
-    const { userEmail, loading } = this.state;
+    const { loading } = this.state;
     const { skipButtonFunction } = this.props;
     return (
-      <Wrapper
-        onSubmit={event => {
-          event.preventDefault();
-          this.registerUser();
-        }}
-      >
+      <Wrapper>
         {loading && (
           <div className="bp3-progress-bar bp3-intent-primary">
             <div className="bp3-progress-meter" />
@@ -126,48 +121,26 @@ class Welcome extends Component {
         )}
 
         <Content>
-          <MainTitle>Welcome to fontcase</MainTitle>
-
+          <MainTitle>Welcome to FontLet</MainTitle>
+          <ReactSVG
+            src={fontletLogo}
+            evalScripts="once"
+            svgStyle={{ width: 170 }}
+            onInjected={svg => {
+              animateLogo();
+            }}
+          />
           <DiscriptionWrapper>
             <Description>
-              Fontcase brings you the latest and greatest free and open source fonts right to your
+              Fontlet brings you the latest and greatest free and open source fonts right to your
               computer! Fontcase keeps your fonts fresh by automatically updating them to fit the
               latest versions and even try out Beta versions before anybody else does! Right now
               Fontcase is in its early stages, but you can register now using your email to get
               updates.
             </Description>
           </DiscriptionWrapper>
-
           <Title>Please register enter your email</Title>
-
-          <input
-            value={userEmail}
-            onChange={event => {
-              this.setState({
-                userEmail: event.target.value
-              });
-            }}
-            className="bp3-input"
-            type="text"
-            placeholder="do@example.com"
-            dir="auto"
-          />
-
-          <SubmitButtonWrapper>
-            <button className="bp3-button" type="submit" style={{ width: 100 }}>
-              SUBMIT
-            </button>
-          </SubmitButtonWrapper>
-          <SkipButtonWrapper>
-            <button
-              className="bp3-button bp3-intent-primary bp3-minimal"
-              type="button"
-              style={{ width: 100 }}
-              onClick={skipButtonFunction}
-            >
-              SKIP
-            </button>
-          </SkipButtonWrapper>
+          <Input registerUser={this.registerUser} skipButtonFunction={skipButtonFunction} />
         </Content>
       </Wrapper>
     );
