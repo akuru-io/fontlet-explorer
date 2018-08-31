@@ -15,12 +15,9 @@ export default filePath => {
     removeFont = `${resolveAppRoot}\\src\\lib\\removeFont.bat`;
   }
 
-  console.log(111, removeFont);
-
   const fileNameOrfolder = pathToBeDownload;
 
   function windowsFontUnstaller() {
-    console.log('windows font unstaller started');
     const { spawn } = window.require('child_process');
 
     const ls = spawn('cmd.exe', ['/c', removeFont, fileNameOrfolder]); // run script font

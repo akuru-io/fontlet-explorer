@@ -1,8 +1,9 @@
-const DataSource = window.require('nedb');
-const { remote } = window.require('electron');
-const { app } = remote;
+import { appRoot } from '../core';
 
-const dbPath = `${app.getAppPath()}/resources/store`;
+const DataSource = window.require('nedb');
+
+const dbPath = `${appRoot}\\src\\resources\\store`;
+
 const db = new DataSource({ filename: dbPath, autoload: true });
 
 // TODO: Write a Singleton Class for this.

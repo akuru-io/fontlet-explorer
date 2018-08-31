@@ -97,7 +97,6 @@ class Welcome extends Component {
         registerUser(userEmail);
         /* eslint-disable no-unused-vars */
       } else {
-        console.log('fail');
         this.setState({ loading: false });
         const Alert = new Notification('Something went wrong !');
       }
