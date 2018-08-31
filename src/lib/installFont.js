@@ -5,109 +5,147 @@ const os = window.require('os');
 const fs = window.require('fs');
 const request = window.require('request');
 
-const windowsFontInstaller = ({ addFont, fileNameOrfolder }) => {
-  console.log('windows font installer started');
-  const { spawn } = window.require('child_process');
-
-  const ls = spawn('cmd.exe', ['/c', addFont, fileNameOrfolder]); // run script font add bat script
-
-  ls.stdout.on('data', data => {
-    console.log(`stdout: ${data}`);
-  });
-
-  ls.stderr.on('data', data => {
-    console.log(`stderr: ${data}`);
-  });
-
-  ls.on('exit', code => {
-    console.log(`child process exited with code ${code}`);
-  });
-};
-
-export default async url => {
-  // replac this with url
-  const fontUrl = url;
+async function win(fontList, cb) {
+  // TODO: IMPLEMENTS MULTI_FONTS INSTALL MECHANISM like in Mac/Lin methods ***
+  const fontUrl = fontList[0];
 
   // get filename
   const fileName = fontUrl.substr(fontUrl.lastIndexOf('/') + 1);
 
-  // based os install font
-  if (os.type() === 'Windows_NT') {
-    const pathToBeDownload = `${appUserFolder}\\${fileName}`; // TODO add folde name
-    // font to save downloaded fonts
-    // download font file to user app directory
+  const pathToBeDownload = `${appUserFolder}\\${fileName}`; // TODO add folde name
+  // font to save downloaded fonts
+  // download font file to user app directory
+  await new Promise(resolve =>
+    request(fontUrl)
+      .pipe(fs.createWriteStream(pathToBeDownload))
+      .on('finish', resolve)
+  );
+
+  // script for install font in windows
+  let resolveAppRoot = appRoot;
+  let addFont = `${appRoot}\\src\\lib\\addFont.bat`;
+  
+  if (resolveAppRoot.substr(resolveAppRoot.lastIndexOf('\\') + 1) === 'app.asar') {
+    resolveAppRoot = removeLastDirectoryPartOf(resolveAppRoot);
+    resolveAppRoot = removeLastDirectoryPartOf(resolveAppRoot.slice(0, -1));
+    addFont = `${resolveAppRoot}\\src\\lib\\addFont.bat`;
+    console.log(222, addFont);
+  }
+
+  const fileNameOrfolder = pathToBeDownload;
+
+  // Install
+  const { spawn } = window.require('child_process');
+  const ls = spawn('cmd.exe', ['/c', addFont, fileNameOrfolder]); // run script font add bat script
+
+  ls.stdout.on('data', data => {
+    cb(null, data);
+  });
+
+  ls.stderr.on('data', data => {
+    cb(data, null);
+  });
+
+  ls.on('exit', code => {
+    cb(code, null);
+  });
+}
+
+async function lin(fontList, cb) {
+  const fontInstallingQueue = fontList.map(async (fontUrl) => {
+    const fileName = fontUrl.substr(fontUrl.lastIndexOf('/') + 1);
+    const pathToBeDownload = `${appUserFolder}/${fileName}`;
+
     await new Promise(resolve =>
       request(fontUrl)
         .pipe(fs.createWriteStream(pathToBeDownload))
         .on('finish', resolve)
     );
+    return pathToBeDownload;
+  });
 
-    // script for install font in windows
-    let resolveAppRoot = appRoot;
-    let addFont = `${appRoot}\\src\\lib\\addFont.bat`;
-    // resolve for build
-    console.log(444, resolveAppRoot.substr(resolveAppRoot.lastIndexOf('\\') + 1));
-    if (resolveAppRoot.substr(resolveAppRoot.lastIndexOf('\\') + 1) === 'app.asar') {
-      resolveAppRoot = removeLastDirectoryPartOf(resolveAppRoot);
-      resolveAppRoot = removeLastDirectoryPartOf(resolveAppRoot.slice(0, -1));
-      addFont = `${resolveAppRoot}\\src\\lib\\addFont.bat`;
-      console.log(222, addFont);
-    }
 
-    console.log(111, addFont);
-
-    const fileNameOrfolder = pathToBeDownload;
-
-    windowsFontInstaller({ addFont, fileNameOrfolder });
-  } else if (os.type() === 'Linux' || os.type() === 'linux') {
-    // IF OS type is linux
-    // Directory/File paths
-    const pathToBeDownload = `${appUserFolder}/${fileName}`;
-    const fontFilePath = pathToBeDownload;
+  Promise.all(fontInstallingQueue).then((paths) => {
+    const fontsFilePath = paths.join(" ");
     const localFontsDirPath = '~/.fonts';
 
-    // download font file to user app directory
-    await new Promise(resolve =>
-      request(fontUrl)
-        .pipe(fs.createWriteStream(pathToBeDownload))
-        .on('finish', resolve)
-    );
-
     const options = {
-      name: 'fontcase'
+      name: 'fontcase',
+      cachePassword: true
     };
-    sudo.exec(`cp ${fontFilePath} ${localFontsDirPath}`, options, (error, stdout) => {
-      if (error) throw error;
-      console.log(`stdout-copy: ${stdout}`);
+    sudo.exec(`cp ${fontsFilePath} ${localFontsDirPath}`, options, (error, stdout) => {
+      if (error) {
+        cb(error, null);
+        return;
+      }
+
       sudo.exec(`fc-cache -f -v`, options, (fCacheError, fCacheStdout) => {
-        if (fCacheError) throw fCacheError;
-        console.log(`stdout-cache: ${fCacheStdout}`);
+        if (fCacheError) {
+          cb(fCacheError, null);
+          return;
+        }
+        cb(null, fCacheStdout);
       });
     });
-  } else {
-    // todo lac os fix errors
+  });
+}
 
-    console.log(typeof fontUrl, fontUrl);
-
+async function mac(fontList, cb) {
+  const fontInstallingQueue = fontList.map(async (fontUrl) => {
+    const fileName = fontUrl.substr(fontUrl.lastIndexOf('/') + 1);
     const pathToBeDownload = `${appUserFolder}/${fileName}`;
-    const fontFilePath = pathToBeDownload.replace(' ', '\\ ');
-    const localFontsDirPath = '~/Library/Fonts/';
 
-    console.log(fontFilePath);
-
-    // download font file to user app directory
     await new Promise(resolve =>
       request(fontUrl)
         .pipe(fs.createWriteStream(pathToBeDownload))
         .on('finish', resolve)
     );
+    return pathToBeDownload;
+  });
+
+  Promise.all(fontInstallingQueue).then((paths) => {
+    const fontsFilePath = paths.map(path => path.replace(' ', '\\ ')).join(" ");
+    const localFontsDirPath = '~/Library/Fonts/';
 
     const options = {
-      name: 'fontcase'
+      name: 'fontcase',
+      cachePassword: true
     };
-    sudo.exec(`cp ${fontFilePath} ${localFontsDirPath}`, options, (error, stdout) => {
-      if (error) throw error;
-      console.log(`stdout: ${stdout}`);
+    sudo.exec(`cp ${fontsFilePath} ${localFontsDirPath}`, options, (error, stdout) => {
+      if (error) {
+        cb(error, null);
+        return;
+      }
+
+      cb(null, {stdout})
+    });
+  });
+}
+
+export default async (fontList, cb) => {
+  if (os.type() === 'Windows_NT') {
+    win(fontList, (err) => {
+      if (err) {
+        cb(true, null);
+        return;
+      }
+      cb(null, true);
+    });
+  } else if (os.type() === 'Linux' || os.type() === 'linux') {
+    lin(fontList, (err) => {
+      if (err) {
+        cb(true, null);
+        return;
+      }
+      cb(null, true);
+    });
+  } else {
+    mac(fontList, (err) => {
+      if (err) {
+        cb(true, null);
+        return;
+      }
+      cb(null, true);
     });
   }
 };

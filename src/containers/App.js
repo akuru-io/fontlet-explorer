@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import Welcome from './Welcome';
 import Gallery from './Gallery';
 
-import db from '../lib/db';
+import db from '../lib/db/store';
+import dbFonts from '../lib/db/fonts';
+
+import fonts from '../data/fonts';
 
 const Loading = () => (
   <div className="bp3-progress-bar bp3-intent-primary">
@@ -26,13 +29,33 @@ class App extends Component {
     db.find({ type: 'init' }, (err, resp) => {
       if (err) {
         this.setState({
-          error: 'Database connetion error.'
+          error: 'Oops!.. Something wrong in database connetion.'
         });
         return;
       }
-      const { intialized, userEmail } = resp[0] || {};
+
+      const { intialized } = resp[0] || {};
+
+      if (!intialized) {
+        // Update fonts collection
+        fonts.forEach((font) => {
+          dbFonts.insert({
+            type: "fonts",
+            id: font.id,
+            installed: false
+          }, (errInit) => {
+              if (errInit) {
+                this.setState({
+                  error: 'Oops!.. Initializing failed!'
+                });
+              }
+              return;
+          })
+        })
+      }
+
       this.setState({
-        registeredUser: intialized && userEmail,
+        registeredUser: intialized,
         loading: false
       });
     });
@@ -62,7 +85,17 @@ class App extends Component {
   };
 
   skipButtonFunction = () => {
-    this.setState({ registeredUser: true });
+    db.update({ type: 'init' }, { type: 'init', userEmail: null, intialized: true }, (err, resp) => {
+      if (err) {
+        const Alert = new Notification('Error!', {
+          body: 'Initializing failed!'
+        });
+        /* eslint-enable no-unused-vars */
+
+        return;
+      }
+      this.setState({ registeredUser: true });
+    });
   };
 
   render() {
