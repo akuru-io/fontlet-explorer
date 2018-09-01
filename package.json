@@ -2,21 +2,21 @@
   "name": "FontLet",
   "description": "A package manager for fonts bringing latest and greatest libre fonts to your desktop ",
   "version": "0.0.2",
-  "author": "Friends of Akuru",
+  "author": "Friends of Akuru <hello@akurucollective.com>",
   "license": "MIT",
   "homepage": "./",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fontcase/fontcase-explorer.git"
   },
-  "main": "public/electron.js",
+  "main": "build/electron.js",
   "scripts": {
     "dev": "yarn react-scripts start",
     "build": "react-scripts build",
     "start": "concurrently \"cross-env BROWSER=none yarn react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
-    "pack": "electron-builder --dir",
+    "pack": "electron-builder build —em.main=build/electron.js",
     "electron-pack": "build —em.main=build/electron.js",
-    "dist": "GH_TOKEN=<github_token> yarn build --x64 --macos --win --linux --c.extraMetadata.main=build/electron.js -p always"
+    "dist": "yarn build && GH_TOKEN=<token> electron-builder build --x64 --macos --win --linux --c.extraMetadata.main=build/electron.js -p always"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.4.0",
@@ -72,6 +72,21 @@
     ],
     "publish": {
       "provider": "github"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "msi"
+      ]
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "AppImage",
+        "rpm",
+        "snap"
+      ],
+      "category": "Development"
     }
   }
 }

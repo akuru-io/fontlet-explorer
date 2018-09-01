@@ -53,9 +53,9 @@ const Title = styled.p`
 `;
 
 function validateEmail(email) {
-  /* eslint-disable max-len */
+  /* eslint-disable */
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  /* eslint-enable max-len */
+  /* eslint-enable */
 
   return re.test(String(email).toLowerCase());
 }
@@ -93,9 +93,10 @@ class Welcome extends Component {
 
       if (data === 'Success') {
         this.setState({ loading: false });
+        /* eslint-disable no-unused-vars */
+
         const Alert = new Notification('Your Email is successfully submitted !');
         registerUser(userEmail);
-        /* eslint-disable no-unused-vars */
       } else {
         this.setState({ loading: false });
         const Alert = new Notification('Something went wrong !');
@@ -126,7 +127,7 @@ class Welcome extends Component {
             src={fontletLogo}
             evalScripts="once"
             svgStyle={{ width: 170 }}
-            onInjected={svg => {
+            onInjected={() => {
               animateLogo();
             }}
           />

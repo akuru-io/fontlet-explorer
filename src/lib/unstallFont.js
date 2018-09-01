@@ -23,6 +23,7 @@ export default filePath => {
     const ls = spawn('cmd.exe', ['/c', removeFont, fileNameOrfolder]); // run script font
     // add bat script
 
+ /* eslint-disable */
     ls.stdout.on('data', data => {
       console.log(`stdout: ${data}`);
     });
@@ -34,6 +35,7 @@ export default filePath => {
     ls.on('exit', code => {
       console.log(`child process exited with code ${code}`);
     });
+     /* eslint-enable */
   }
 
   windowsFontUnstaller();
