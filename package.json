@@ -11,7 +11,7 @@
   },
   "main": "build/electron.js",
   "scripts": {
-    "dev": "yarn react-scripts start",
+    "dev": "npm run build && npm start",
     "build": "react-scripts build",
     "start": "concurrently \"cross-env BROWSER=none yarn react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
     "pack": "electron-builder build —em.main=build/electron.js",
@@ -71,7 +71,9 @@
       "src/lib/**"
     ],
     "publish": {
-      "provider": "github"
+      "provider": "github",
+      "owner": "fontcase",
+      "repo": "fontcase-explorer"
     },
     "win": {
       "target": [
