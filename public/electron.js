@@ -19,7 +19,7 @@ function createWindow() {
     width: 900,
     height: 680,
     resizable: false,
-    icon: path.join(__dirname, 'assets/icon.png')
+    icon: path.join(__dirname, 'icon.png')
   });
   mainWindow.loadURL(
     isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`

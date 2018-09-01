@@ -1,7 +1,7 @@
 {
   "name": "FontLet",
   "description": "A package manager for fonts bringing latest and greatest libre fonts to your desktop ",
-  "version": "0.0.23",
+  "version": "0.0.27",
   "author": "Friends of Akuru <hello@akurucollective.com>",
   "license": "MIT",
   "homepage": "./",
@@ -83,15 +83,14 @@
     "win": {
       "target": [
         "nsis",
-        "msi"
+        "zip"
       ]
     },
     "linux": {
       "target": [
         "deb",
         "AppImage",
-        "rpm",
-        "snap"
+        "zip"
       ],
       "category": "Development"
     }
