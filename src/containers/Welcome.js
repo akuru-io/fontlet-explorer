@@ -122,7 +122,7 @@ class Welcome extends Component {
         )}
 
         <Content>
-          <MainTitle>Welcome to FontLet App</MainTitle>
+          <MainTitle>Welcome to FontLet</MainTitle>
           <ReactSVG
             src={fontletLogo}
             evalScripts="once"

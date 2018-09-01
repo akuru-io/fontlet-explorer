@@ -2,7 +2,6 @@ const electron = require('electron');
 const openAboutWindow = require('about-window').default;
 const path = require('path');
 const isDev = require('electron-is-dev');
-const notifier = require('node-notifier');
 const { autoUpdater } = require('electron-updater');
 
 require('update-electron-app')();
@@ -14,25 +13,6 @@ let mainWindow;
 autoUpdater.logger = require('electron-log');
 
 autoUpdater.logger.transports.file.level = 'info';
-
-autoUpdater.on('checking-for-update', () => {
-  console.log('Checking for update...');
-});
-autoUpdater.on('update-available', info => {
-  console.log('Update available.', info);
-});
-autoUpdater.on('update-not-available', info => {
-  console.log('Update not available.', info);
-});
-autoUpdater.on('error', err => {
-  console.log(`Error in auto-updater. ${err}`);
-});
-autoUpdater.on('download-progress', progressObj => {
-  console.log('downloading....................');
-});
-autoUpdater.on('update-downloaded', info => {
-  console.log('Update downloaded', info);
-});
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -49,47 +29,7 @@ function createWindow() {
   });
   // initAutoUpdate();
   autoUpdater.checkForUpdatesAndNotify();
-  autoUpdater.checkForUpdates();
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
-}
-
-function initAutoUpdate() {
-  if (isDev) {
-    return;
-  }
-
-  if (process.platform === 'linux') {
-    return;
-  }
-
-  autoUpdater.checkForUpdates();
-  autoUpdater.signals.updateDownloaded(showUpdateNotification);
-}
-
-function showUpdateNotification(update) {
-  const updateInfo = update || {};
-  const restartNowAction = 'Restart now';
-
-  const versionLabel = updateInfo.label ? `Version ${updateInfo.version}` : 'The latest version';
-
-  notifier.notify(
-    {
-      title: 'A new update is ready to install.',
-      message:
-        `${versionLabel}` +
-        'has been downloaded and will be automatically installed after restart.',
-      closeLabel: 'Okay',
-      actions: restartNowAction
-    },
-    (err, response, metadata) => {
-      if (err) throw err;
-      if (metadata.activationValue !== restartNowAction) {
-        return;
-      }
-      autoUpdater.quitAndInstall();
-    }
-  );
 }
 
 app.on('ready', createWindow);
