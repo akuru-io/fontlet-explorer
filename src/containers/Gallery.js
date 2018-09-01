@@ -4,6 +4,7 @@ import { Switch, Card, Elevation } from '@blueprintjs/core';
 
 import fonts from '../data/fonts';
 import installFont from '../lib/installFont';
+import uninstallFont from '../lib/uninstallFonts';
 import getFontStatus from '../lib/getFontStatus';
 
 import dbFonts from '../lib/db/fonts';
@@ -147,24 +148,31 @@ class Gallery extends Component {
         this.setState({ loading: false, loadingFontId: '' });
       }
     } else {
-      // TODO: Set uninstall also like above
-      // Update states
-      const newFontData = fontData.map(font => {
-        if (font.id === id) {
-          return {
-            ...font,
-            installed: false
-          };
+      uninstallFont(fontsToBeInstalled, (error) => {
+        if (error) {
+          const Alert = new Notification('Oops!.. Font uninstalling failed!');
+          this.setState({ loading: false, loadingFontId: '' });
+          return;
         }
-        return font;
-      });
-      this.setState({ loading: false, loadingFontId: '', fontData: newFontData });
 
-      // Update storage
-      dbFonts.update({ id }, { type: 'fonts', id, installed: false }, dbErr => {
-        if (dbErr) {
-          const Alert = new Notification('Oops!.. Something wrong in updating database.');
-        }
+        // Update states
+        const newFontData = fontData.map(font => {
+          if (font.id === id) {
+            return {
+              ...font,
+              installed: false
+            };
+          }
+          return font;
+        });
+        this.setState({ loading: false, loadingFontId: '', fontData: newFontData });
+
+        // Update storage
+        dbFonts.update({ id }, { type: 'fonts', id, installed: false }, dbErr => {
+          if (dbErr) {
+            const Alert = new Notification('Oops!.. Something wrong in updating database.');
+          }
+        });
       });
     }
   };
