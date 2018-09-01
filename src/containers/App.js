@@ -36,7 +36,18 @@ class App extends Component {
 
       const { intialized } = resp[0] || {};
 
-      if (!intialized) {
+      if (intialized === undefined) {
+        db.insert({ type: "init", userEmail: null, intialized: false }, (errInit) => {
+          if (errInit) {
+            this.setState({
+              error: 'Oops!.. Initializing failed!'
+            });
+            return;
+          }
+        });
+      }
+
+      if (!intialized && intialized !== undefined) {
         // Update fonts collection
         fonts.forEach(font => {
           dbFonts.insert(
@@ -45,13 +56,13 @@ class App extends Component {
               id: font.id,
               installed: false
             },
-            errInit => {
-              if (errInit) {
+            errInsert => {
+              if (errInsert) {
                 this.setState({
                   error: 'Oops!.. Initializing failed!'
                 });
+                return;
               }
-              return;
             }
           );
         });
