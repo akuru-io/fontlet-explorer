@@ -1,8 +1,8 @@
-import { appRoot } from './core';
+import { appUserFolder } from './core';
 
 const DataSource = window.require('nedb');
 
-const dbPath = `${appRoot}\\src\\resources\\store`;
+const dbPath = `${appUserFolder}\\resources\\store`;
 
 const db = new DataSource({ filename: dbPath, autoload: true });
 

@@ -1,7 +1,7 @@
 {
   "name": "FontLet",
   "description": "A package manager for fonts bringing latest and greatest libre fonts to your desktop ",
-  "version": "0.0.11",
+  "version": "0.0.14",
   "author": "Friends of Akuru <hello@akurucollective.com>",
   "license": "MIT",
   "homepage": "./",
@@ -16,7 +16,7 @@
     "start": "concurrently \"cross-env BROWSER=none yarn react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
     "pack": "electron-builder build —em.main=build/electron.js",
     "electron-pack": "build —em.main=build/electron.js",
-    "dist": "yarn build && electron-builder build --x64 --macos --c.extraMetadata.main=build/electron.js -p always"
+    "dist": "yarn build && electron-builder build --x64 --macos --win --linux --c.extraMetadata.main=build/electron.js -p always"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.4.0",
@@ -68,7 +68,8 @@
       "buildResources": "assets"
     },
     "extraFiles": [
-      "src/lib/**"
+      "src/lib/**",
+      "src/resources/**"
     ],
     "publish": {
       "provider": "github"

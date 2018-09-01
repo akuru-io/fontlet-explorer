@@ -15,7 +15,8 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 900,
     height: 680,
-    resizable: false
+    resizable: false,
+    icon: path.join(__dirname, 'assets/icon.png')
   });
   mainWindow.loadURL(
     isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`
@@ -23,8 +24,8 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
-  initAutoUpdate();
-
+  // initAutoUpdate();
+  autoUpdater.checkForUpdatesAndNotify();
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
 }
@@ -70,9 +71,7 @@ function showUpdateNotification(update) {
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  app.quit();
 });
 
 app.on('activate', () => {
