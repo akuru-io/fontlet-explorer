@@ -99,6 +99,7 @@ class Gallery extends Component {
           const Alert = new Notification('Oops!.. Something went wrong!');
           return;
         }
+
         const font = (resp && resp[0]) || {};
         this.setState({
           fontData: [...this.state.fontData, { ...f, ...font }]
