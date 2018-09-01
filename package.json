@@ -1,6 +1,6 @@
 {
-  "name": "fontcase-explorer",
-  "description": "fontcase-explorer",
+  "name": "FontLet",
+  "description": "A package manager for fonts bringing latest and greatest libre fonts to your desktop ",
   "version": "0.0.2",
   "author": "Friends of Akuru",
   "license": "MIT",
@@ -56,8 +56,8 @@
     "wait-on": "^2.1.0"
   },
   "build": {
-    "productName": "FontLet App",
-    "appId": "com.fontlet.app",
+    "productName": "FontLet",
+    "appId": "org.fontlet.app",
     "files": [
       "build/**/*",
       "node_modules/**/*",
