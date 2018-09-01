@@ -11,6 +11,29 @@ const { app, BrowserWindow, Menu } = electron;
 
 let mainWindow;
 
+autoUpdater.logger = require('electron-log');
+
+autoUpdater.logger.transports.file.level = 'info';
+
+autoUpdater.on('checking-for-update', () => {
+  console.log('Checking for update...');
+});
+autoUpdater.on('update-available', info => {
+  console.log('Update available.', info);
+});
+autoUpdater.on('update-not-available', info => {
+  console.log('Update not available.', info);
+});
+autoUpdater.on('error', err => {
+  console.log(`Error in auto-updater. ${err}`);
+});
+autoUpdater.on('download-progress', progressObj => {
+  console.log('downloading....................');
+});
+autoUpdater.on('update-downloaded', info => {
+  console.log('Update downloaded', info);
+});
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 900,
@@ -26,8 +49,9 @@ function createWindow() {
   });
   // initAutoUpdate();
   autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.checkForUpdates();
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 }
 
 function initAutoUpdate() {
