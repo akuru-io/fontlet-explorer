@@ -7,13 +7,13 @@
   "homepage": "./",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fontcase/fontcase-explorer.git"
+    "url": "git+https://github.com/fontlet/fontlet-explorer.git"
   },
   "main": "build/electron.js",
   "scripts": {
-    "dev": "yarn react-scripts start",
-    "build": "react-scripts build",
     "start": "concurrently \"cross-env BROWSER=none yarn react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
+    "build": "react-scripts build",
+    "dev": "npm run build && npm start",
     "pack": "electron-builder build —em.main=build/electron.js",
     "electron-pack": "build —em.main=build/electron.js",
     "dist": "yarn build && electron-builder build --x64 --macos --win --linux --c.extraMetadata.main=build/electron.js -p always"
@@ -72,7 +72,9 @@
       "src/resources/**"
     ],
     "publish": {
-      "provider": "github"
+      "provider": "github",
+      "owner": "fontlet",
+      "repo": "fontlet-explorer"
     },
     "mac": {
       "target": [
