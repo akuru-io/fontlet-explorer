@@ -37,6 +37,7 @@ class App extends Component {
       const { intialized } = resp[0] || {};
 
       if (intialized === undefined) {
+        // Initializing
         db.insert({ type: "init", userEmail: null, intialized: false }, (errInit) => {
           if (errInit) {
             this.setState({
@@ -44,6 +45,11 @@ class App extends Component {
             });
             return;
           }
+        });
+
+        // Update font collection
+        fonts.forEach((font) => {
+          dbFonts.insert({ type: 'fonts', id: font.id, installed: false }, () => {});
         });
       }
 
