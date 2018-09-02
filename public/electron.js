@@ -30,6 +30,7 @@ function createWindow() {
   // initAutoUpdate();
   autoUpdater.checkForUpdatesAndNotify();
   // Open the DevTools.
+  // mainWindow.webContents.openDevTools();
 }
 
 app.on('ready', createWindow);
@@ -53,8 +54,9 @@ app.once('ready', () => {
           label: 'FontLet',
           click: () =>
             openAboutWindow({
-              icon_path: path.join(__dirname, '../src/assets/images/fontCase_round_background.svg'),
-              css_path: path.join(__dirname, 'src/about.css'),
+              icon_path: `${app.getAppPath()}/about/about-icon.png`,
+              css_path: `${app.getAppPath()}/about/about.css`,
+              package_json_dir: __dirname,
               use_version_info: false,
               description:
                 'Fontlet is a free software project led by a community who loves Free/Libre and Open source fonts. Initial development is supported by Mooniak, LeafyCode and HostGrid. Credits Kasun Indi, Kosala Senevirathne, Malith Widanapathirana, Pathum Egodawatta, Pubudu Kodikara, Rajitha Manamperi, Sachintha Kodagoda',

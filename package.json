@@ -62,6 +62,7 @@
       "build/**/*",
       "node_modules/**/*",
       "resources/**/*",
+      "about/**/*",
       "package.json"
     ],
     "directories": {
