@@ -51,7 +51,7 @@ app.once('ready', () => {
       label: 'About',
       submenu: [
         {
-          label: 'FontLet',
+          label: 'About FontLet',
           click: () =>
             openAboutWindow({
               icon_path: `${app.getAppPath()}/about/about-icon.png`,
@@ -63,6 +63,13 @@ app.once('ready', () => {
               copyright: 'Copyright (c) 2018',
               homepage: 'https://fontlet.app/'
             })
+        },
+        {
+          label: 'Quit',
+          accelerator: 'Command+Q',
+          click: () => {
+            app.quit();
+          }
         }
       ]
     }
