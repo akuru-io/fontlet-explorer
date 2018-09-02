@@ -59,7 +59,7 @@ app.once('ready', () => {
               description:
                 'Fontlet is a free software project led by a community who loves Free/Libre and Open source fonts. Initial development is supported by Mooniak, LeafyCode and HostGrid. Credits Kasun Indi, Kosala Senevirathne, Malith Widanapathirana, Pathum Egodawatta, Pubudu Kodikara, Rajitha Manamperi, Sachintha Kodagoda',
               copyright: 'Copyright (c) 2018',
-              homepage: 'http://mooniak.com/'
+              homepage: 'https://fontlet.app/'
             })
         }
       ]
