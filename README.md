@@ -1,4 +1,4 @@
-# FontLet Explorer
+# Fontlet Explorer
 
 ## Setup
 
