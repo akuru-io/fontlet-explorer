@@ -1,0 +1,19 @@
+# This is the official list of people who can contribute
+# (and typically have contributed) code to this repository.
+# The AUTHORS file lists the copyright holders; this file
+# lists people.
+#
+#
+# Names should be added to this file like so:
+#     Name <email address>
+#
+# Please keep the list sorted.
+# (first name; alphabetical order)
+
+Kasun Indi <mailtokasun@gmail.com>
+Kosala Senevirathne  <kosala@mooniak.com>
+Malith Widanapathirana  <malith@leafycode.com>
+Pathum Egodawatta <pathum@mooniak.com>
+Pubudu Kodikara <pubudu@@leafycode.com>
+Rajitha Manamperi <rajitha@mooniak.com>
+Sachintha Kodagoda <sacsand.k@gmail.com>
