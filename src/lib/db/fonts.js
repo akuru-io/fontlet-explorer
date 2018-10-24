@@ -1,6 +1,6 @@
-import { appUserFolder } from '../core';
+import { appUserFolder } from "../core";
 
-const DataSource = window.require('nedb');
+const DataSource = window.require("nedb");
 
 const dbPath = `${appUserFolder}\\resources\\fonts`;
 const db = new DataSource({ filename: dbPath, autoload: true });

@@ -9,9 +9,7 @@ export default filePath => {
   let resolveAppRoot = appRoot;
   let removeFont = `${appRoot}\\src\\lib\\removeFont.bat`;
   // resolve for build
-  if (
-    resolveAppRoot.substr(resolveAppRoot.lastIndexOf("\\") + 1) === "app.asar"
-  ) {
+  if (resolveAppRoot.substr(resolveAppRoot.lastIndexOf("\\") + 1) === "app.asar") {
     resolveAppRoot = removeLastDirectoryPartOf(resolveAppRoot);
     resolveAppRoot = removeLastDirectoryPartOf(resolveAppRoot.slice(0, -1));
     removeFont = `${resolveAppRoot}\\src\\lib\\removeFont.bat`;

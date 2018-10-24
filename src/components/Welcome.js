@@ -95,9 +95,7 @@ class Welcome extends Component {
         this.setState({ loading: false });
         /* eslint-disable no-unused-vars */
 
-        const Alert = new Notification(
-          "Your Email is successfully submitted !"
-        );
+        const Alert = new Notification("Your Email is successfully submitted !");
         registerUser(userEmail);
       } else {
         this.setState({ loading: false });
@@ -115,6 +113,10 @@ class Welcome extends Component {
   render() {
     const { loading } = this.state;
     const { skipButtonFunction } = this.props;
+
+    // eslint-disable-next-line
+    const descText = "Fontlet brings you the latest and greatest free and open source fonts right to your computer! Fontcase keeps your fonts fresh by automatically updating them to fit the latest versions and even try out Beta versions before anybody else does! Right now Fontcase is in its early stages, but you can register now using your email to get updates.";
+
     return (
       <Wrapper>
         {loading && (
@@ -134,20 +136,10 @@ class Welcome extends Component {
             }}
           />
           <DiscriptionWrapper>
-            <Description>
-              Fontlet brings you the latest and greatest free and open source
-              fonts right to your computer! Fontcase keeps your fonts fresh by
-              automatically updating them to fit the latest versions and even
-              try out Beta versions before anybody else does! Right now Fontcase
-              is in its early stages, but you can register now using your email
-              to get updates.
-            </Description>
+            <Description>{descText}</Description>
           </DiscriptionWrapper>
           <Title>Please register enter your email</Title>
-          <Input
-            registerUser={this.registerUser}
-            skipButtonFunction={skipButtonFunction}
-          />
+          <Input registerUser={this.registerUser} skipButtonFunction={skipButtonFunction} />
         </Content>
       </Wrapper>
     );

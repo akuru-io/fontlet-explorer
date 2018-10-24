@@ -13,7 +13,7 @@
         "functions": false
       }
     ],
-    "complexity": [1, 5],
+    "complexity": [1, 6],
     "comma-dangle": ["error", "never"],
 
     "prettier/prettier": [
