@@ -27,10 +27,14 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+  
   // initAutoUpdate();
   autoUpdater.checkForUpdatesAndNotify();
+  
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
+  }
 }
 
 app.on('ready', createWindow);
