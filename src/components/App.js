@@ -38,24 +38,17 @@ class App extends Component {
 
       if (intialized === undefined) {
         // Initializing
-        db.insert(
-          { type: "init", userEmail: null, intialized: false },
-          errInit => {
-            if (errInit) {
-              this.setState({
-                error: "Oops!.. Initializing failed!"
-              });
-              return;
-            }
+        db.insert({ type: "init", userEmail: null, intialized: false }, errInit => {
+          if (errInit) {
+            this.setState({
+              error: "Oops!.. Initializing failed!"
+            });
           }
-        );
+        });
 
         // Update font collection
         fonts.forEach(font => {
-          dbFonts.insert(
-            { type: "fonts", id: font.id, installed: false },
-            () => {}
-          );
+          dbFonts.insert({ type: "fonts", id: font.id, installed: false }, () => {});
         });
       }
 
@@ -73,7 +66,6 @@ class App extends Component {
                 this.setState({
                   error: "Oops!.. Initializing failed!"
                 });
-                return;
               }
             }
           );
@@ -89,7 +81,7 @@ class App extends Component {
 
   registerUser = userEmail => {
     if (!userEmail) {
-      /* eslint-disable no-unused-vars */
+      // eslint-disable-next-line no-unused-vars
       const Alert = new Notification("Error!", {
         body: "Invalid E-mail!"
       });
@@ -97,39 +89,29 @@ class App extends Component {
       return;
     }
 
-    db.update(
-      { type: "init" },
-      { type: "init", userEmail, intialized: true },
-      (err, resp) => {
-        if (err) {
-          const Alert = new Notification("Error!", {
-            body: "User registration failed!"
-          });
-          /* eslint-enable no-unused-vars */
-
-          return;
-        }
-        this.setState({ registeredUser: true });
+    db.update({ type: "init" }, { type: "init", userEmail, intialized: true }, err => {
+      if (err) {
+        // eslint-disable-next-line no-unused-vars
+        const Alert = new Notification("Error!", {
+          body: "User registration failed!"
+        });
+        return;
       }
-    );
+      this.setState({ registeredUser: true });
+    });
   };
 
   skipButtonFunction = () => {
-    db.update(
-      { type: "init" },
-      { type: "init", userEmail: null, intialized: true },
-      (err, resp) => {
-        if (err) {
-          const Alert = new Notification("Error!", {
-            body: "Initializing failed!"
-          });
-          /* eslint-enable no-unused-vars */
-
-          return;
-        }
-        this.setState({ registeredUser: true });
+    db.update({ type: "init" }, { type: "init", userEmail: null, intialized: true }, err => {
+      if (err) {
+        // eslint-disable-next-line no-unused-vars
+        const Alert = new Notification("Error!", {
+          body: "Initializing failed!"
+        });
+        return;
       }
-    );
+      this.setState({ registeredUser: true });
+    });
   };
 
   render() {
@@ -141,10 +123,7 @@ class App extends Component {
     return (
       <div>
         {!registeredUser && (
-          <Welcome
-            registerUser={this.registerUser}
-            skipButtonFunction={this.skipButtonFunction}
-          />
+          <Welcome registerUser={this.registerUser} skipButtonFunction={this.skipButtonFunction} />
         )}
         {registeredUser && <Gallery />}
       </div>

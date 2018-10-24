@@ -1,4 +1,4 @@
-import { appUserFolder, appRoot, removeLastDirectoryPartOf } from "./core";
+// import { appUserFolder, appRoot, removeLastDirectoryPartOf } from "./core";
 
 const os = window.require("os");
 const sudo = window.require("sudo-prompt");
@@ -15,7 +15,7 @@ async function lin(filesNames, cb) {
     name: "fontcase",
     cachePassword: true
   };
-  sudo.exec(`rm -rf ${filePaths}`, options, (error, stdout) => {
+  sudo.exec(`rm -rf ${filePaths}`, options, (error /* , stdout */) => {
     if (error) {
       cb(error, null);
       return;

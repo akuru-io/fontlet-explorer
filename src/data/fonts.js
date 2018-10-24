@@ -21,12 +21,9 @@ export default [
     name: "GalleALPHA",
     version: "0.050",
     publisher: "mooniak",
-    url:
-      "https://github.com/mooniak/galle-fonts/raw/ALPHA/fonts/ttf/GalleALPHA-Regular.ttf",
+    url: "https://github.com/mooniak/galle-fonts/raw/ALPHA/fonts/ttf/GalleALPHA-Regular.ttf",
     fontImage: require("../assets/images/galle-display.svg"),
     fontVariants: 1,
-    list: [
-      "https://github.com/mooniak/galle-fonts/raw/ALPHA/fonts/ttf/GalleALPHA-Regular.ttf"
-    ]
+    list: ["https://github.com/mooniak/galle-fonts/raw/ALPHA/fonts/ttf/GalleALPHA-Regular.ttf"]
   }
 ];
