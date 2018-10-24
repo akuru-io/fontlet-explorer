@@ -1,16 +1,18 @@
-import { appUserFolder, appRoot, removeLastDirectoryPartOf } from './core';
+import { appUserFolder, appRoot, removeLastDirectoryPartOf } from "./core";
 
-const os = window.require('os');
-const sudo = window.require('sudo-prompt');
+const os = window.require("os");
+const sudo = window.require("sudo-prompt");
 
 async function lin(filesNames, cb) {
-  const filePaths = filesNames.map((fileName) => {
-    const localFontsDirPath = '~/.fonts';
-    return `${localFontsDirPath}/${fileName}`;
-  }).join(" ");
+  const filePaths = filesNames
+    .map(fileName => {
+      const localFontsDirPath = "~/.fonts";
+      return `${localFontsDirPath}/${fileName}`;
+    })
+    .join(" ");
 
   const options = {
-    name: 'fontcase',
+    name: "fontcase",
     cachePassword: true
   };
   sudo.exec(`rm -rf ${filePaths}`, options, (error, stdout) => {
@@ -30,13 +32,15 @@ async function lin(filesNames, cb) {
 }
 
 async function mac(filesNames, cb) {
-  const filePaths = filesNames.map((fileName) => {
-    const localFontsDirPath = '~/Library/Fonts/';
-    return `${localFontsDirPath}/${fileName}`;
-  }).join(" ");
+  const filePaths = filesNames
+    .map(fileName => {
+      const localFontsDirPath = "~/Library/Fonts/";
+      return `${localFontsDirPath}/${fileName}`;
+    })
+    .join(" ");
 
   const options = {
-    name: 'fontcase',
+    name: "fontcase",
     cachePassword: true
   };
   sudo.exec(`rm -rf ${filePaths}`, options, (error, stdout) => {
@@ -56,11 +60,11 @@ export default async (font, cb) => {
     return splittedUrl[0];
   });
 
-  if (os.type() === 'Windows_NT') {
+  if (os.type() === "Windows_NT") {
     // TODO
     // Implements a windows uninstaller
     cb(null, true);
-  } else if (os.type() === 'Linux' || os.type() === 'linux') {
+  } else if (os.type() === "Linux" || os.type() === "linux") {
     lin(filesNames, err => {
       if (err) {
         cb(true, null);
@@ -77,4 +81,4 @@ export default async (font, cb) => {
       cb(null, true);
     });
   }
-}
+};

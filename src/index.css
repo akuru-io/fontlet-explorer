@@ -4,19 +4,17 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Noto Sans', sans-serif;
+  font-family: "Noto Sans", sans-serif;
 }
 
-.switch-style{
+.switch-style {
   margin: 0px;
 }
 
-.switch-style span{
+.switch-style span {
   outline: none !important;
-  
 }
 
 .bp3-card {
-  padding :0px;
+  padding: 0px;
 }
-

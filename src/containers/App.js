@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import Welcome from './Welcome';
-import Gallery from './Gallery';
+import React, { Component } from "react";
+import Welcome from "./Welcome";
+import Gallery from "./Gallery";
 
-import db from '../lib/db/store';
-import dbFonts from '../lib/db/fonts';
+import db from "../lib/db/store";
+import dbFonts from "../lib/db/fonts";
 
-import fonts from '../data/fonts';
+import fonts from "../data/fonts";
 
 const Loading = () => (
   <div className="bp3-progress-bar bp3-intent-primary">
@@ -26,10 +26,10 @@ class App extends Component {
   }
 
   componentDidMount() {
-    db.find({ type: 'init' }, (err, resp) => {
+    db.find({ type: "init" }, (err, resp) => {
       if (err) {
         this.setState({
-          error: 'Oops!.. Something wrong in database connetion.'
+          error: "Oops!.. Something wrong in database connetion."
         });
         return;
       }
@@ -38,18 +38,24 @@ class App extends Component {
 
       if (intialized === undefined) {
         // Initializing
-        db.insert({ type: "init", userEmail: null, intialized: false }, (errInit) => {
-          if (errInit) {
-            this.setState({
-              error: 'Oops!.. Initializing failed!'
-            });
-            return;
+        db.insert(
+          { type: "init", userEmail: null, intialized: false },
+          errInit => {
+            if (errInit) {
+              this.setState({
+                error: "Oops!.. Initializing failed!"
+              });
+              return;
+            }
           }
-        });
+        );
 
         // Update font collection
-        fonts.forEach((font) => {
-          dbFonts.insert({ type: 'fonts', id: font.id, installed: false }, () => {});
+        fonts.forEach(font => {
+          dbFonts.insert(
+            { type: "fonts", id: font.id, installed: false },
+            () => {}
+          );
         });
       }
 
@@ -58,14 +64,14 @@ class App extends Component {
         fonts.forEach(font => {
           dbFonts.insert(
             {
-              type: 'fonts',
+              type: "fonts",
               id: font.id,
               installed: false
             },
             errInsert => {
               if (errInsert) {
                 this.setState({
-                  error: 'Oops!.. Initializing failed!'
+                  error: "Oops!.. Initializing failed!"
                 });
                 return;
               }
@@ -84,34 +90,38 @@ class App extends Component {
   registerUser = userEmail => {
     if (!userEmail) {
       /* eslint-disable no-unused-vars */
-      const Alert = new Notification('Error!', {
-        body: 'Invalid E-mail!'
+      const Alert = new Notification("Error!", {
+        body: "Invalid E-mail!"
       });
 
       return;
     }
 
-    db.update({ type: 'init' }, { type: 'init', userEmail, intialized: true }, (err, resp) => {
-      if (err) {
-        const Alert = new Notification('Error!', {
-          body: 'User registration failed!'
-        });
-        /* eslint-enable no-unused-vars */
+    db.update(
+      { type: "init" },
+      { type: "init", userEmail, intialized: true },
+      (err, resp) => {
+        if (err) {
+          const Alert = new Notification("Error!", {
+            body: "User registration failed!"
+          });
+          /* eslint-enable no-unused-vars */
 
-        return;
+          return;
+        }
+        this.setState({ registeredUser: true });
       }
-      this.setState({ registeredUser: true });
-    });
+    );
   };
 
   skipButtonFunction = () => {
     db.update(
-      { type: 'init' },
-      { type: 'init', userEmail: null, intialized: true },
+      { type: "init" },
+      { type: "init", userEmail: null, intialized: true },
       (err, resp) => {
         if (err) {
-          const Alert = new Notification('Error!', {
-            body: 'Initializing failed!'
+          const Alert = new Notification("Error!", {
+            body: "Initializing failed!"
           });
           /* eslint-enable no-unused-vars */
 
@@ -131,7 +141,10 @@ class App extends Component {
     return (
       <div>
         {!registeredUser && (
-          <Welcome registerUser={this.registerUser} skipButtonFunction={this.skipButtonFunction} />
+          <Welcome
+            registerUser={this.registerUser}
+            skipButtonFunction={this.skipButtonFunction}
+          />
         )}
         {registeredUser && <Gallery />}
       </div>

@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import { Switch, Card, Elevation } from '@blueprintjs/core';
+import React, { Component } from "react";
+import styled from "styled-components";
+import { Switch, Card, Elevation } from "@blueprintjs/core";
 
-import fonts from '../data/fonts';
-import installFont from '../lib/installFont';
-import uninstallFont from '../lib/uninstallFonts';
+import fonts from "../data/fonts";
+import installFont from "../lib/installFont";
+import uninstallFont from "../lib/uninstallFonts";
 
-import dbFonts from '../lib/db/fonts';
+import dbFonts from "../lib/db/fonts";
 
 // Styles
 const Wrapper = styled.div`
@@ -85,7 +85,7 @@ class Gallery extends Component {
     this.state = {
       loading: false,
       fontData: [],
-      loadingFontId: ''
+      loadingFontId: ""
     };
 
     this.addRemoveFont = this.addRemoveFont.bind(this);
@@ -96,7 +96,7 @@ class Gallery extends Component {
     fonts.forEach(f => {
       dbFonts.find({ id: f.id }, (err, resp) => {
         if (err) {
-          const Alert = new Notification('Oops!.. Something went wrong!');
+          const Alert = new Notification("Oops!.. Something went wrong!");
           return;
         }
 
@@ -106,7 +106,7 @@ class Gallery extends Component {
         });
       });
     });
-     /* eslint-enable */
+    /* eslint-enable */
   }
 
   addRemoveFont = async (installing, id) => {
@@ -121,8 +121,8 @@ class Gallery extends Component {
         installFont(fontList, error => {
           /* eslint-disable */
           if (error) {
-            const Alert = new Notification('Oops!.. Font installing failed!');
-            this.setState({ loading: false, loadingFontId: '' });
+            const Alert = new Notification("Oops!.. Font installing failed!");
+            this.setState({ loading: false, loadingFontId: "" });
             return;
           }
           /* eslint-enable */
@@ -137,24 +137,34 @@ class Gallery extends Component {
             return font;
           });
           /* eslint-disable */
-          this.setState({ loading: false, loadingFontId: '', fontData: newFontData });
-          const Alert = new Notification('Font installed successfully! ');
-          // Update storage
-          dbFonts.update({ id }, { type: 'fonts', id, installed: true }, dbErr => {
-            if (dbErr) {
-              const Alert = new Notification('Oops!.. Something wrong in updating database.');
-            }
+          this.setState({
+            loading: false,
+            loadingFontId: "",
+            fontData: newFontData
           });
+          const Alert = new Notification("Font installed successfully! ");
+          // Update storage
+          dbFonts.update(
+            { id },
+            { type: "fonts", id, installed: true },
+            dbErr => {
+              if (dbErr) {
+                const Alert = new Notification(
+                  "Oops!.. Something wrong in updating database."
+                );
+              }
+            }
+          );
         });
       } catch (error) {
-        const Alert = new Notification('Oops!.. Font installing failed!');
-        this.setState({ loading: false, loadingFontId: '' });
+        const Alert = new Notification("Oops!.. Font installing failed!");
+        this.setState({ loading: false, loadingFontId: "" });
       }
     } else {
       uninstallFont(fontsToBeInstalled, error => {
         if (error) {
-          const Alert = new Notification('Oops!.. Font uninstalling failed!');
-          this.setState({ loading: false, loadingFontId: '' });
+          const Alert = new Notification("Oops!.. Font uninstalling failed!");
+          this.setState({ loading: false, loadingFontId: "" });
           return;
         }
         /* eslint-enable */
@@ -168,16 +178,26 @@ class Gallery extends Component {
           }
           return font;
         });
-        this.setState({ loading: false, loadingFontId: '', fontData: newFontData });
+        this.setState({
+          loading: false,
+          loadingFontId: "",
+          fontData: newFontData
+        });
 
         // Update storage
-        dbFonts.update({ id }, { type: 'fonts', id, installed: false }, dbErr => {
-          if (dbErr) {
-            /* eslint-disable */
-            const Alert = new Notification('Oops!.. Something wrong in updating database.');
-             /* eslint-enable */
+        dbFonts.update(
+          { id },
+          { type: "fonts", id, installed: false },
+          dbErr => {
+            if (dbErr) {
+              /* eslint-disable */
+              const Alert = new Notification(
+                "Oops!.. Something wrong in updating database."
+              );
+              /* eslint-enable */
+            }
           }
-        });
+        );
       });
     }
   };

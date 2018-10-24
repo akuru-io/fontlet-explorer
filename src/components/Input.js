@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
+import React, { Component } from "react";
+import styled from "styled-components";
 
 const Content = styled.form`
   display: flex;
@@ -25,7 +25,7 @@ class Input extends Component {
     super(props);
 
     this.state = {
-      userEmail: ''
+      userEmail: ""
     };
   }
 

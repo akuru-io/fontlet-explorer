@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import ReactSVG from 'react-svg';
-import { fetchUserEmail } from '../lib/emailRegister';
+import React, { Component } from "react";
+import styled from "styled-components";
+import ReactSVG from "react-svg";
+import { fetchUserEmail } from "../lib/emailRegister";
 
-import fontletLogo from '../assets/images/fontCase_round_background_animated.svg';
-import Input from '../components/Input';
+import fontletLogo from "../assets/images/fontCase_round_background_animated.svg";
+import Input from "../components/Input";
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -61,14 +61,14 @@ function validateEmail(email) {
 }
 
 const animateLogo = () => {
-  const fontlet = document.getElementById('Fontlet');
+  const fontlet = document.getElementById("Fontlet");
 
   if (fontlet) {
     // Start the line drawing
-    fontlet.classList.add('start');
+    fontlet.classList.add("start");
     setTimeout(() => {
       // Signal the end of the drawing to start the fill color animation
-      fontlet.classList.add('finished');
+      fontlet.classList.add("finished");
     }, 2500);
   }
 };
@@ -91,21 +91,23 @@ class Welcome extends Component {
     if (validateEmail(userEmail)) {
       const data = await fetchUserEmail(userEmail);
 
-      if (data === 'Success') {
+      if (data === "Success") {
         this.setState({ loading: false });
         /* eslint-disable no-unused-vars */
 
-        const Alert = new Notification('Your Email is successfully submitted !');
+        const Alert = new Notification(
+          "Your Email is successfully submitted !"
+        );
         registerUser(userEmail);
       } else {
         this.setState({ loading: false });
-        const Alert = new Notification('Something went wrong !');
+        const Alert = new Notification("Something went wrong !");
       }
 
       // Call register user api
     } else {
       this.setState({ loading: false });
-      const Alert = new Notification('Your email is invalid !');
+      const Alert = new Notification("Your email is invalid !");
       /* eslint-enable no-unused-vars */
     }
   }
@@ -133,15 +135,19 @@ class Welcome extends Component {
           />
           <DiscriptionWrapper>
             <Description>
-              Fontlet brings you the latest and greatest free and open source fonts right to your
-              computer! Fontcase keeps your fonts fresh by automatically updating them to fit the
-              latest versions and even try out Beta versions before anybody else does! Right now
-              Fontcase is in its early stages, but you can register now using your email to get
-              updates.
+              Fontlet brings you the latest and greatest free and open source
+              fonts right to your computer! Fontcase keeps your fonts fresh by
+              automatically updating them to fit the latest versions and even
+              try out Beta versions before anybody else does! Right now Fontcase
+              is in its early stages, but you can register now using your email
+              to get updates.
             </Description>
           </DiscriptionWrapper>
           <Title>Please register enter your email</Title>
-          <Input registerUser={this.registerUser} skipButtonFunction={skipButtonFunction} />
+          <Input
+            registerUser={this.registerUser}
+            skipButtonFunction={skipButtonFunction}
+          />
         </Content>
       </Wrapper>
     );

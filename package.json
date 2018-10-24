@@ -11,6 +11,8 @@
   },
   "main": "build/electron.js",
   "scripts": {
+    "lint": "eslint ./src",
+    "prettier": "prettier --write ./src/**/*.js ./src/**/*.css ./src/**/*.json",
     "start": "concurrently \"cross-env BROWSER=none yarn react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
     "build": "react-scripts build",
     "dev": "npm run build && npm start",

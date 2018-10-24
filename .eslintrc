@@ -13,12 +13,13 @@
         "functions": false
       }
     ],
+    "complexity": [1, 5],
     "comma-dangle": ["error", "never"],
 
     "prettier/prettier": [
       "error",
       {
-        "singleQuote": true,
+        "singleQuote": false,
         "printWidth": 100
       }
     ],
