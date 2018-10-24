@@ -4,7 +4,7 @@ import ReactSVG from "react-svg";
 import { fetchUserEmail } from "../lib/emailRegister";
 
 import fontletLogo from "../assets/images/fontCase_round_background_animated.svg";
-import Input from "../components/Input";
+import Input from "./Input";
 
 const Wrapper = styled.div`
   height: 100vh;
