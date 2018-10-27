@@ -16,18 +16,18 @@ class Database {
         cb(null, resp);
       });
     });
-  }
+  };
 
-  update = (query, doc, cb) => {
+  update = (query, doc, options = {}, cb) => {
     this.dbCon.loadDatabase(conErr => {
       if (conErr) cb(conErr, null);
 
-      this.dbCon.update(query, doc, (err, resp) => {
+      this.dbCon.update(query, doc, options, (err, resp) => {
         if (err) cb(err, null);
         cb(null, resp);
       });
     });
-  }
+  };
 
   find = (query, cb) => {
     this.dbCon.loadDatabase(conErr => {
@@ -38,7 +38,7 @@ class Database {
         cb(null, resp);
       });
     });
-  }
+  };
 
   findOne = (query, cb) => {
     this.dbCon.loadDatabase(conErr => {
@@ -49,7 +49,7 @@ class Database {
         cb(null, doc);
       });
     });
-  }
+  };
 }
 
 export default Database;
