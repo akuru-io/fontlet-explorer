@@ -45,6 +45,7 @@ class AppContainer extends React.Component {
     this.setState({ registering: true });
     registerUser(userObj, (error, { isUserRegistered, user }) => {
       this.setState(() => ({
+        // eslint-disable-next-line
         user: { ...this.state.user, ...user },
         isUserRegistered,
         error,
@@ -73,6 +74,7 @@ class AppContainer extends React.Component {
         }
 
         this.setState({
+          // eslint-disable-next-line
           installedFonts: [...this.state.installedFonts, font]
         });
 
@@ -102,6 +104,7 @@ class AppContainer extends React.Component {
 
         this.setState({
           installedFonts: filter(
+            // eslint-disable-next-line
             this.state.installedFonts,
             f => f.id !== font.id
           )

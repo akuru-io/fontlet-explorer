@@ -1,5 +1,5 @@
 import React from "react";
-import Welcome from "./Welcome/";
+import Welcome from "./Welcome";
 import Gallery from "./Gallery";
 
 const Loading = () => (

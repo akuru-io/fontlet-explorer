@@ -96,18 +96,18 @@ class Gallery extends Component {
     const { id, coverImageUrl, version, fontStyles } = font;
     const { loading, installedFonts } = this.props;
     const { waiting } = this.state;
+    const waitForData = loading && waiting;
 
     const installed = !!find(installedFonts, f => f.id === id);
 
     return (
       <CardContent className="card-style" key={id}>
         <Content elevation={Elevation.TWO}>
-          {loading &&
-            waiting && (
-              <div className="bp3-progress-bar bp3-intent-primary">
-                <div className="bp3-progress-meter" />
-              </div>
-            )}
+          {waitForData && (
+            <div className="bp3-progress-bar bp3-intent-primary">
+              <div className="bp3-progress-meter" />
+            </div>
+          )}
 
           <FontImage src={coverImageUrl} />
           <SettingsContent>
