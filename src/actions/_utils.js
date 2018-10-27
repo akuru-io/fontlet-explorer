@@ -1,8 +1,8 @@
 import includes from "lodash/includes";
 
-import Database from "../utils/database/async";
+import Database from "../libs/database/async";
 import { resourceDirPath, FL_RESOURCE_URL } from "../config";
-import { get } from "../utils/request";
+import { get } from "../libs/request";
 
 const os = window.require("os");
 
