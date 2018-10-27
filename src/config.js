@@ -13,17 +13,9 @@ export const appRoot = app.getAppPath();
 export const appUserDir = app.getPath("userData");
 export const resourceDirPath = `${appUserDir}\\resources`;
 
-// Url remove last part of.
-export const removeLastDirPartOf = url => {
-  const urlArr = url.split("\\");
-  urlArr.pop();
-  return urlArr.join("\\");
-};
-
 export default {
   API_BASE_URL,
   FL_RESOURCE_URL,
   appRoot,
-  appUserDir,
-  removeLastDirPartOf
-}
+  appUserDir
+};
