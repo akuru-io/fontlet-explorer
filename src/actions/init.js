@@ -1,8 +1,9 @@
 import { getLocalCacheInstance, fetchResourceJSON } from "./_utils";
 
 const init = async (cb = () => {}) => {
-  const localCache = getLocalCacheInstance();
   try {
+    const localCache = getLocalCacheInstance();
+
     // Check for existing user in localCache
     const resourceJson = await fetchResourceJSON();
     const user = await localCache.findOne({ type: "INIT" });
