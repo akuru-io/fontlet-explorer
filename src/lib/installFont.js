@@ -26,7 +26,9 @@ async function win(fontList, cb) {
   let resolveAppRoot = appRoot;
   let addFont = `${appRoot}\\src\\lib\\addFont.bat`;
 
-  if (resolveAppRoot.substr(resolveAppRoot.lastIndexOf("\\") + 1) === "app.asar") {
+  if (
+    resolveAppRoot.substr(resolveAppRoot.lastIndexOf("\\") + 1) === "app.asar"
+  ) {
     resolveAppRoot = removeLastDirectoryPartOf(resolveAppRoot);
     resolveAppRoot = removeLastDirectoryPartOf(resolveAppRoot.slice(0, -1));
     addFont = `${resolveAppRoot}\\src\\lib\\addFont.bat`;
@@ -79,20 +81,24 @@ async function lin(fontList, cb) {
         return;
       }
 
-      exec(`cp ${fontsFilePath} ${localFontsDirPath}`, options, fontCopyError => {
-        if (fontCopyError) {
-          cb(fontCopyError, null);
-          return;
-        }
-
-        sudo.exec(`fc-cache -f -v`, options, (fCacheError, fCacheStdout) => {
-          if (fCacheError) {
-            cb(fCacheError, null);
+      exec(
+        `cp ${fontsFilePath} ${localFontsDirPath}`,
+        options,
+        fontCopyError => {
+          if (fontCopyError) {
+            cb(fontCopyError, null);
             return;
           }
-          cb(null, fCacheStdout);
-        });
-      });
+
+          sudo.exec(`fc-cache -f -v`, options, (fCacheError, fCacheStdout) => {
+            if (fCacheError) {
+              cb(fCacheError, null);
+              return;
+            }
+            cb(null, fCacheStdout);
+          });
+        }
+      );
     });
   });
 }
@@ -118,14 +124,18 @@ async function mac(fontList, cb) {
       name: "fontcase",
       cachePassword: true
     };
-    sudo.exec(`cp ${fontsFilePath} ${localFontsDirPath}`, options, (error, stdout) => {
-      if (error) {
-        cb(error, null);
-        return;
-      }
+    sudo.exec(
+      `cp ${fontsFilePath} ${localFontsDirPath}`,
+      options,
+      (error, stdout) => {
+        if (error) {
+          cb(error, null);
+          return;
+        }
 
-      cb(null, { stdout });
-    });
+        cb(null, { stdout });
+      }
+    );
   });
 }
 
