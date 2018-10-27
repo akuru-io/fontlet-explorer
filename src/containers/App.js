@@ -1,10 +1,17 @@
 import React from "react";
+import filter from "lodash/filter";
 
 import App from "../components/App";
 
 import init from "../actions/init";
 import { registerUser } from "../actions/user";
-import { installFont, uninstallFont } from "../actions/fonts";
+import {
+  installFont,
+  uninstallFont,
+  addInstalledFontToLocalCache,
+  removeInstalledFontFromLocalCache
+} from "../actions/fonts/index";
+import Alert from "../utils/alert";
 
 class AppContainer extends React.Component {
   state = {
@@ -46,13 +53,72 @@ class AppContainer extends React.Component {
     });
   };
 
+  installFont = font => {
+    installFont(font, error => {
+      if (error) {
+        this.setState({
+          error
+        });
+        return;
+      }
+
+      // Update localCache
+      addInstalledFontToLocalCache(font, lCError => {
+        if (lCError) {
+          this.setState({
+            error
+          });
+          Alert.error(`${font.familyName} installing failed!.`);
+          return;
+        }
+
+        this.setState({
+          installedFonts: [...this.state.installedFonts, font]
+        });
+
+        Alert.success(`${font.familyName} installed successfully!.`);
+      });
+    });
+  };
+
+  uninstallFont = font => {
+    uninstallFont(font, error => {
+      if (error) {
+        this.setState({
+          error
+        });
+        return;
+      }
+
+      // Update localCache
+      removeInstalledFontFromLocalCache(font, lCError => {
+        if (lCError) {
+          this.setState({
+            error
+          });
+          Alert.error(`${font.familyName} uninstalling failed!.`);
+          return;
+        }
+
+        this.setState({
+          installedFonts: filter(
+            this.state.installedFonts,
+            f => f.id !== font.id
+          )
+        });
+
+        Alert.success(`${font.familyName} unstalled successfully!.`);
+      });
+    });
+  };
+
   render() {
     return (
       <App
         {...this.state}
         registerUser={this.registerUser}
-        installFont={installFont}
-        uninstallFont={uninstallFont}
+        installFont={this.installFont}
+        uninstallFont={this.uninstallFont}
       />
     );
   }
