@@ -1,17 +1,17 @@
 const DataSource = window.require("nedb");
 
 class Database {
-  dbCon = null;
+  datastore = null;
 
   constructor(dbPath) {
-    this.dbCon = new DataSource({ filename: dbPath, autoload: true });
+    this.datastore = new DataSource({ filename: dbPath, autoload: true });
   }
 
   insert = (doc, cb) => {
-    this.dbCon.loadDatabase(conErr => {
+    this.datastore.loadDatabase(conErr => {
       if (conErr) cb(conErr, null);
 
-      this.dbCon.insert(doc, (err, resp) => {
+      this.datastore.insert(doc, (err, resp) => {
         if (err) cb(err, null);
         cb(null, resp);
       });
@@ -19,10 +19,10 @@ class Database {
   };
 
   update = (query, doc, options = {}, cb) => {
-    this.dbCon.loadDatabase(conErr => {
+    this.datastore.loadDatabase(conErr => {
       if (conErr) cb(conErr, null);
 
-      this.dbCon.update(query, doc, options, (err, resp) => {
+      this.datastore.update(query, doc, options, (err, resp) => {
         if (err) cb(err, null);
         cb(null, resp);
       });
@@ -30,10 +30,10 @@ class Database {
   };
 
   find = (query, cb) => {
-    this.dbCon.loadDatabase(conErr => {
+    this.datastore.loadDatabase(conErr => {
       if (conErr) cb(conErr, null);
 
-      this.dbCon.find(query, (err, resp) => {
+      this.datastore.find(query, (err, resp) => {
         if (err) cb(err, null);
         cb(null, resp);
       });
@@ -41,10 +41,10 @@ class Database {
   };
 
   findOne = (query, cb) => {
-    this.dbCon.loadDatabase(conErr => {
+    this.datastore.loadDatabase(conErr => {
       if (conErr) cb(conErr, null);
 
-      this.dbCon.findOne(query, (err, doc) => {
+      this.datastore.findOne(query, (err, doc) => {
         if (err) cb(err, null);
         cb(null, doc);
       });

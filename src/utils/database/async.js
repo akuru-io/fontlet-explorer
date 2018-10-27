@@ -18,6 +18,8 @@ class Database {
 
   update = (query, doc, options = {}) =>
     this.datastore.update(query, doc, options);
+
+  remove = (query, options = {}) => this.datastore.remove(query, options);
 }
 
 export default Database;
