@@ -10,7 +10,7 @@ import {
   installFont,
   uninstallFont,
   addInstalledFontToLocalCache,
-  removeInstalledFontFromLocalCache
+  removeUninstalledFontFromLocalCache
 } from "../actions/fonts/index";
 import Alert from "../libs/alert";
 
@@ -31,11 +31,20 @@ class AppContainer extends React.Component {
     init(
       (
         error,
-        { announcement, fonts, flags, user, lastUpdated, isUserRegistered }
+        {
+          announcement,
+          fonts,
+          installedFonts,
+          flags,
+          user,
+          lastUpdated,
+          isUserRegistered
+        }
       ) => {
         this.setState(() => ({
           announcement,
           fonts,
+          installedFonts,
           flags,
           user,
           lastUpdated,
@@ -114,7 +123,7 @@ class AppContainer extends React.Component {
       }
 
       // Update localCache
-      removeInstalledFontFromLocalCache(font, lCError => {
+      removeUninstalledFontFromLocalCache(font, lCError => {
         if (lCError) {
           this.setState({ error });
           this.setFlag(font, false);

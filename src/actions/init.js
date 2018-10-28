@@ -1,5 +1,5 @@
-import { getLocalCacheInstance, fetchResourceJSON } from "./_utils";
 import each from "lodash/each";
+import { getLocalCacheInstance, fetchResourceJSON } from "./_utils";
 
 const init = async (cb = () => {}) => {
   try {
@@ -11,12 +11,12 @@ const init = async (cb = () => {}) => {
     const userModifed = { ...user, lastSeen: new Date() };
     let installedFonts = null;
 
-    // If the user already registered
+    // If the user already registered;
     if (user) {
       // Update lastSeen
       localCache.update({ type: "INIT" }, userModifed);
       // Fetch Installed fonts
-      installedFonts = localCache.find({ type: "INSTALLED" });
+      installedFonts = await localCache.find({ type: "INSTALLED" });
     }
 
     const flags = {};

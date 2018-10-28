@@ -24,7 +24,7 @@ export const addInstalledFontToLocalCache = async (font, cb = () => {}) => {
   }
 };
 
-export const removeInstalledFontFromLocalCache = async (
+export const removeUninstalledFontFromLocalCache = async (
   font,
   cb = () => {}
 ) => {

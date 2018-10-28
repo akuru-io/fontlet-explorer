@@ -13,7 +13,6 @@ const App = ({
   fonts,
   flags,
   installedFonts,
-  user,
   error,
   isUserRegistered,
   registerUser,
@@ -22,10 +21,10 @@ const App = ({
   registering,
   loading
 }) => {
-  console.log("> ", user, isUserRegistered);
   if (error) return <ErrorView error={error} />;
   if (loading) return <Loading />;
-  if (!!user)
+
+  if (isUserRegistered)
     return (
       <Gallery
         loading={loading}
