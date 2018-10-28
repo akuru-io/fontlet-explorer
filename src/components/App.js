@@ -18,6 +18,7 @@ const App = ({
   registerUser,
   installFont,
   uninstallFont,
+  updateFont,
   registering,
   loading
 }) => {
@@ -32,6 +33,7 @@ const App = ({
         flags={flags}
         installedFonts={installedFonts}
         installFont={installFont}
+        updateFont={updateFont}
         uninstallFont={uninstallFont}
       />
     );

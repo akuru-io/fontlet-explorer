@@ -103,6 +103,11 @@ class Gallery extends Component {
     installFont(font);
   };
 
+  handleUpdateAction = font => {
+    const { updateFont } = this.props;
+    updateFont(font);
+  };
+
   renderFontItem = font => {
     const {
       familyName,
@@ -110,11 +115,13 @@ class Gallery extends Component {
       foundry,
       coverImageUrl,
       version,
-      fontStyles
+      fontStyles,
+      isUpdateAvailable
     } = font;
     const { installedFonts, flags } = this.props;
     const installedFont = find(installedFonts, f => f.id === id);
     const installed = !!installedFont;
+    const showUpdateBtn = installed && isUpdateAvailable;
 
     return (
       <CardContent className="card-style" key={id}>
@@ -133,6 +140,13 @@ class Gallery extends Component {
                 <Foundry>from {foundry}</Foundry>
                 <Version>v {version}</Version>
                 <Variant>{fontStyles.length} fonts in family</Variant>
+                {showUpdateBtn && (
+                  <input
+                    type="button"
+                    onClick={() => this.handleUpdateAction(font)}
+                    value="Update"
+                  />
+                )}
               </VersionDetails>
             </VersionContent>
 

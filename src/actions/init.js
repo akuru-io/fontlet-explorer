@@ -1,4 +1,5 @@
 import each from "lodash/each";
+import find from "lodash/find";
 import { getLocalCacheInstance, fetchResourceJSON } from "./_utils";
 
 const init = async (cb = () => {}) => {
@@ -24,8 +25,19 @@ const init = async (cb = () => {}) => {
       flags[id] = null;
     });
 
+    // set isUpdateAvailable flag
+    const fonts = resourceJson.fonts.map(font => {
+      const fontInstalled = find(installedFonts, f => f.id === font.id);
+      if (!fontInstalled) return { ...font, isUpdateAvailable: false };
+      return {
+        ...font,
+        isUpdateAvailable: font.version === fontInstalled.version
+      };
+    });
+
     cb(null, {
       ...resourceJson,
+      fonts,
       user,
       installedFonts: installedFonts || [],
       flags,
