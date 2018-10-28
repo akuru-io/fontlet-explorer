@@ -74,18 +74,6 @@ const ToggleButtonWrapper = styled.div`
 `;
 
 class Gallery extends Component {
-  state = {
-    waiting: true
-  };
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState(() => ({
-        waiting: false
-      }));
-    }, 500);
-  }
-
   handleSwitchAction = (font, uninstall) => {
     const { installFont, uninstallFont } = this.props;
     if (uninstall) uninstallFont(font);
@@ -94,16 +82,13 @@ class Gallery extends Component {
 
   renderFontItem = font => {
     const { id, coverImageUrl, version, fontStyles } = font;
-    const { loading, installedFonts } = this.props;
-    const { waiting } = this.state;
-    const waitForData = loading && waiting;
-
+    const { installedFonts, flags } = this.props;
     const installed = !!find(installedFonts, f => f.id === id);
 
     return (
       <CardContent className="card-style" key={id}>
         <Content elevation={Elevation.TWO}>
-          {waitForData && (
+          {flags[id] && (
             <div className="bp3-progress-bar bp3-intent-primary">
               <div className="bp3-progress-meter" />
             </div>

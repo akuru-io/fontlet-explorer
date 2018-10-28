@@ -11,22 +11,26 @@ const ErrorView = error => <div>{error}</div>;
 
 const App = ({
   fonts,
+  flags,
   installedFonts,
+  user,
   error,
   isUserRegistered,
-  registering,
-  loading,
   registerUser,
   installFont,
-  uninstallFont
+  uninstallFont,
+  registering,
+  loading
 }) => {
+  console.log("> ", user, isUserRegistered);
   if (error) return <ErrorView error={error} />;
   if (loading) return <Loading />;
-  if (isUserRegistered)
+  if (!!user)
     return (
       <Gallery
         loading={loading}
         fonts={fonts}
+        flags={flags}
         installedFonts={installedFonts}
         installFont={installFont}
         uninstallFont={uninstallFont}

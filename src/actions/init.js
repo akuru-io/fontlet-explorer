@@ -1,4 +1,5 @@
 import { getLocalCacheInstance, fetchResourceJSON } from "./_utils";
+import each from "lodash/each";
 
 const init = async (cb = () => {}) => {
   try {
@@ -18,10 +19,16 @@ const init = async (cb = () => {}) => {
       installedFonts = localCache.find({ type: "INSTALLED" });
     }
 
+    const flags = {};
+    each(resourceJson.fonts, ({ id }) => {
+      flags[id] = true;
+    });
+
     cb(null, {
       ...resourceJson,
       user,
       installedFonts: installedFonts || [],
+      flags,
       isUserRegistered: !!user
     });
   } catch (error) {
