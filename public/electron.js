@@ -55,7 +55,7 @@ app.once('ready', () => {
       label: 'About',
       submenu: [
         {
-          label: 'About FontLet',
+          label: 'About Fontlet',
           click: () =>
             openAboutWindow({
               icon_path: `${app.getAppPath()}/about/about-icon.png`,

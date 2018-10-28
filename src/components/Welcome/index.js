@@ -77,7 +77,7 @@ const Welcome = ({ registering, registerUser }) => (
     )}
 
     <Content>
-      <MainTitle>Welcome to FontLet</MainTitle>
+      <MainTitle>Welcome to Fontlet</MainTitle>
       <ReactSVG
         src={fontletLogo}
         evalScripts="once"
