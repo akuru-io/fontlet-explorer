@@ -1,5 +1,5 @@
 {
-  "name": "FontLet",
+  "name": "Fontlet",
   "description": "A package manager for fonts bringing latest and greatest libre fonts to your desktop ",
   "version": "0.0.29-alpha",
   "author": "Friends of Akuru <hello@akurucollective.com>",
@@ -29,14 +29,15 @@
     "electron-is-dev": "^0.3.0",
     "electron-log": "^2.2.14",
     "electron-updater": "^3.1.2",
+    "lodash": "^4.17.11",
     "nedb": "^1.8.0",
+    "nedb-promises": "^3.0.2",
     "node-notifier": "^5.2.1",
     "os": "^0.1.1",
     "path": "^0.12.7",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-svg": "^6.0.5",
-    "recompose": "^0.30.0",
     "request": "^2.88.0",
     "styled-components": "^3.4.5",
     "sudo-prompt": "^8.2.0",
@@ -59,7 +60,7 @@
     "wait-on": "^2.1.0"
   },
   "build": {
-    "productName": "FontLet",
+    "productName": "Fontlet",
     "appId": "org.fontlet.app",
     "files": [
       "build/**/*",

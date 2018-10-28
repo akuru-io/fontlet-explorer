@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Switch, Card, Elevation } from "@blueprintjs/core";
-
-import fonts from "../data/fonts";
-import installFont from "../lib/installFont";
-import uninstallFont from "../lib/uninstallFonts";
-
-import dbFonts from "../lib/db/fonts";
+import find from "lodash/find";
 
 // Styles
 const Wrapper = styled.div`
@@ -38,6 +33,16 @@ const VersionContent = styled.div`
   flex: 1;
 `;
 
+const Name = styled.p`
+  font-size: 17px;
+  color: #000000;
+  margin-left: 20px;
+  margin-bottom: 0px;
+  @media (max-width: 1000px) {
+    font-size: 14px;
+  }
+`;
+
 const Version = styled.p`
   font-size: 17px;
   color: #867f7f;
@@ -49,6 +54,16 @@ const Version = styled.p`
 `;
 
 const Variant = styled.p`
+  font-size: 17px;
+  color: #867f7f;
+  margin-left: 20px;
+  margin-bottom: 0px;
+  @media (max-width: 1000px) {
+    font-size: 14px;
+  }
+`;
+
+const Foundry = styled.p`
   font-size: 17px;
   color: #867f7f;
   margin-left: 20px;
@@ -79,151 +94,54 @@ const ToggleButtonWrapper = styled.div`
 `;
 
 class Gallery extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loading: false,
-      fontData: [],
-      loadingFontId: ""
-    };
-
-    this.addRemoveFont = this.addRemoveFont.bind(this);
-  }
-
-  componentDidMount() {
-    fonts.forEach(f => {
-      dbFonts.find({ id: f.id }, (err, resp) => {
-        if (err) {
-          // eslint-disable-next-line no-unused-vars
-          const Alert = new Notification("Oops!.. Something went wrong!");
-          return;
-        }
-
-        const font = (resp && resp[0]) || {};
-        // TODO: Fix lint issue
-        // eslint-disable-next-line
-        this.setState({fontData: [...this.state.fontData, { ...f, ...font }]});
-      });
-    });
-  }
-
-  addRemoveFont = async (installing, id) => {
-    const { fontData } = this.state;
-    const fontsToBeInstalled = fontData.find(f => f.id === id);
-
-    this.setState({ loading: true, loadingFontId: id });
-
-    if (installing) {
-      try {
-        const fontList = fontsToBeInstalled.list;
-        installFont(fontList, error => {
-          if (error) {
-            // eslint-disable-next-line no-unused-vars
-            const Alert = new Notification("Oops!.. Font installing failed!");
-            this.setState({ loading: false, loadingFontId: "" });
-            return;
-          }
-
-          // Update states
-          const newFontData = fontData.map(font => {
-            if (font.id === id) {
-              return {
-                ...font,
-                installed: true
-              };
-            }
-            return font;
-          });
-
-          this.setState({
-            loading: false,
-            loadingFontId: "",
-            fontData: newFontData
-          });
-          // eslint-disable-next-line no-unused-vars
-          const Alert = new Notification("Font installed successfully! ");
-
-          // Update storage
-          dbFonts.update({ id }, { type: "fonts", id, installed: true }, dbErr => {
-            if (dbErr) {
-              // eslint-disable-next-line
-              const Alert = new Notification("Oops!.. Something wrong in updating database.");
-            }
-          });
-        });
-      } catch (error) {
-        // eslint-disable-next-line
-        const Alert = new Notification("Oops!.. Font installing failed!");
-        this.setState({ loading: false, loadingFontId: "" });
-      }
-    } else {
-      uninstallFont(fontsToBeInstalled, error => {
-        if (error) {
-          // eslint-disable-next-line no-unused-vars
-          const Alert = new Notification("Oops!.. Font uninstalling failed!");
-          this.setState({ loading: false, loadingFontId: "" });
-          return;
-        }
-
-        // Update states
-        const newFontData = fontData.map(font => {
-          if (font.id === id) {
-            return {
-              ...font,
-              installed: false
-            };
-          }
-          return font;
-        });
-        this.setState({
-          loading: false,
-          loadingFontId: "",
-          fontData: newFontData
-        });
-
-        // Update storage
-        dbFonts.update({ id }, { type: "fonts", id, installed: false }, dbErr => {
-          if (dbErr) {
-            // eslint-disable-next-line no-unused-vars
-            const Alert = new Notification("Oops!.. Something wrong in updating database.");
-          }
-        });
-      });
+  handleSwitchAction = (font, installed) => {
+    const { installFont, uninstallFont } = this.props;
+    if (installed) {
+      uninstallFont(font);
+      return;
     }
+    installFont(font);
   };
 
-  FontItem = ({ id, version, installed, fontImage, fontVariants }) => {
-    const { loading, loadingFontId } = this.state;
+  renderFontItem = font => {
+    const {
+      familyName,
+      id,
+      foundry,
+      coverImageUrl,
+      version,
+      fontStyles
+    } = font;
+    const { installedFonts, flags } = this.props;
+    const installedFont = find(installedFonts, f => f.id === id);
+    const installed = !!installedFont;
 
     return (
       <CardContent className="card-style" key={id}>
         <Content elevation={Elevation.TWO}>
-          <FontImage src={fontImage} />
+          {flags[id] && (
+            <div className="bp3-progress-bar bp3-intent-primary">
+              <div className="bp3-progress-meter" />
+            </div>
+          )}
 
-          {loading &&
-            loadingFontId === id && (
-              <div className="bp3-progress-bar bp3-intent-primary">
-                <div className="bp3-progress-meter" />
-              </div>
-            )}
-
+          <FontImage src={coverImageUrl} />
           <SettingsContent>
             <VersionContent>
               <VersionDetails>
+                <Name>{familyName}</Name>
+                <Foundry>from {foundry}</Foundry>
                 <Version>v {version}</Version>
-                <Variant>Number of styles : {fontVariants}</Variant>
+                <Variant>{fontStyles.length} fonts in family</Variant>
               </VersionDetails>
             </VersionContent>
 
             <ToggleButtonWrapper>
               <Switch
                 className="switch-style"
-                checked={installed || false}
+                checked={installed}
                 large
-                onChange={() => {
-                  this.addRemoveFont(!installed, id);
-                }}
+                onChange={() => this.handleSwitchAction(font, installed)}
               />
             </ToggleButtonWrapper>
           </SettingsContent>
@@ -233,9 +151,8 @@ class Gallery extends Component {
   };
 
   render() {
-    const { fontData } = this.state;
-
-    return <Wrapper>{fontData.map(this.FontItem)}</Wrapper>;
+    const { fonts } = this.props;
+    return <Wrapper>{fonts.map(this.renderFontItem)}</Wrapper>;
   }
 }
 

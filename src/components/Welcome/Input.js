@@ -25,25 +25,25 @@ class Input extends Component {
     super(props);
 
     this.state = {
-      userEmail: ""
+      email: ""
     };
   }
 
   render() {
-    const { userEmail } = this.state;
+    const { email } = this.state;
     const { skipButtonFunction, registerUser } = this.props;
     return (
       <Content
         onSubmit={event => {
           event.preventDefault();
-          registerUser(userEmail);
+          registerUser({ email });
         }}
       >
         <input
-          value={userEmail}
+          value={email}
           onChange={event => {
             this.setState({
-              userEmail: event.target.value
+              email: event.target.value
             });
           }}
           className="bp3-input"
