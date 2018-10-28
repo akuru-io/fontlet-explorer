@@ -31,7 +31,7 @@ const init = async (cb = () => {}) => {
       if (!fontInstalled) return { ...font, isUpdateAvailable: false };
       return {
         ...font,
-        isUpdateAvailable: font.version === fontInstalled.version
+        isUpdateAvailable: font.version !== fontInstalled.version
       };
     });
 
