@@ -33,6 +33,16 @@ const VersionContent = styled.div`
   flex: 1;
 `;
 
+const Name = styled.p`
+  font-size: 17px;
+  color: #000000;
+  margin-left: 20px;
+  margin-bottom: 0px;
+  @media (max-width: 1000px) {
+    font-size: 14px;
+  }
+`;
+
 const Version = styled.p`
   font-size: 17px;
   color: #867f7f;
@@ -44,6 +54,16 @@ const Version = styled.p`
 `;
 
 const Variant = styled.p`
+  font-size: 17px;
+  color: #867f7f;
+  margin-left: 20px;
+  margin-bottom: 0px;
+  @media (max-width: 1000px) {
+    font-size: 14px;
+  }
+`;
+
+const Foundry = styled.p`
   font-size: 17px;
   color: #867f7f;
   margin-left: 20px;
@@ -84,7 +104,7 @@ class Gallery extends Component {
   };
 
   renderFontItem = font => {
-    const { id, coverImageUrl, version, fontStyles } = font;
+    const { familyName, id, foundry, coverImageUrl, version, fontStyles } = font;
     const { installedFonts, flags } = this.props;
     const installedFont = find(installedFonts, f => f.id === id);
     const installed = !!installedFont;
@@ -102,8 +122,10 @@ class Gallery extends Component {
           <SettingsContent>
             <VersionContent>
               <VersionDetails>
+                <Name>{familyName}</Name>
+                <Foundry>from {foundry}</Foundry>
                 <Version>v {version}</Version>
-                <Variant>Number of styles : {fontStyles.length}</Variant>
+                <Variant>{fontStyles.length} fonts in family</Variant>
               </VersionDetails>
             </VersionContent>
 
