@@ -27,7 +27,7 @@ const init = async (cb = () => {}) => {
 
     // set isUpdateAvailable flag
     const fonts = resourceJson.fonts.map(font => {
-      const fontInstalled = find(installedFonts, f => f.id === font.id);
+      const fontInstalled = find(installedFonts || [], f => f.id === font.id);
       if (!fontInstalled) return { ...font, isUpdateAvailable: false };
       return {
         ...font,
