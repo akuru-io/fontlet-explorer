@@ -77,6 +77,25 @@ app.once('ready', () => {
         }
       ]
     }
+    ,
+{
+      label: 'Help',
+      submenu: [
+          {
+               label: 'FAQ',
+               click() { electron.shell.openExternal('https://fontlet.app/faq') }
+          },
+          {
+            label: 'Report issues',
+            click() { electron.shell.openExternal('https://github.com/fontlet/fontlet-explorer/issues/new') }
+            },
+          {
+               label: 'Contact Us',
+               click() { electron.shell.openExternal('mailto:hello@mooniak.com?subject=Fontlet%20App') }
+          }
+         ]
+     }
+
   ]);
   Menu.setApplicationMenu(menu);
 });
