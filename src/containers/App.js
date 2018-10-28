@@ -11,6 +11,7 @@ import {
   addInstalledFontToLocalCache,
   removeUninstalledFontFromLocalCache
 } from "../actions/fonts/index";
+
 import Alert from "../libs/alert";
 
 class AppContainer extends React.Component {

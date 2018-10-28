@@ -1,5 +1,5 @@
 {
-  "name": "FontLet",
+  "name": "Fontlet",
   "description": "A package manager for fonts bringing latest and greatest libre fonts to your desktop ",
   "version": "0.0.29-alpha",
   "author": "Friends of Akuru <hello@akurucollective.com>",
@@ -60,7 +60,7 @@
     "wait-on": "^2.1.0"
   },
   "build": {
-    "productName": "FontLet",
+    "productName": "Fontlet",
     "appId": "org.fontlet.app",
     "files": [
       "build/**/*",
