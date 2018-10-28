@@ -104,7 +104,14 @@ class Gallery extends Component {
   };
 
   renderFontItem = font => {
-    const { familyName, id, foundry, coverImageUrl, version, fontStyles } = font;
+    const {
+      familyName,
+      id,
+      foundry,
+      coverImageUrl,
+      version,
+      fontStyles
+    } = font;
     const { installedFonts, flags } = this.props;
     const installedFont = find(installedFonts, f => f.id === id);
     const installed = !!installedFont;

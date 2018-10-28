@@ -7,7 +7,7 @@ import { get } from "../libs/request";
 const os = window.require("os");
 
 export const getLocalCacheInstance = () =>
-  new Database(`${resourceDirPath}\\localCache10`);
+  new Database(`${resourceDirPath}\\localCache11`);
 
 export const fetchResourceJSON = () => get(FL_RESOURCE_URL);
 
