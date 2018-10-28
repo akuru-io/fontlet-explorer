@@ -12,9 +12,9 @@ export const getLocalCacheInstance = () =>
 export const fetchResourceJSON = () => get(FL_RESOURCE_URL);
 
 export const getPlatformInfo = () => {
-  const osTypeMap = { Windows_NT: "Win", Darwin: "Darwin", Linux: "Linux" };
+  const osTypeMap = { Windows_NT: "win", Darwin: "darwin", Linux: "linux" };
   const osType = os.type();
-  const type = includes(Object.keys(osTypeMap), osType) ? osType : "Linux";
+  const type = includes(Object.keys(osTypeMap), osType) ? osType : "linux";
   return { type: osTypeMap[type] };
 };
 

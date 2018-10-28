@@ -3,9 +3,9 @@ import winUninstaller from "./win";
 import linuxUninstaller from "./linux";
 
 const uninstall = {
-  Win: winUninstaller,
-  Darwin: darwinUninstaller,
-  Linux: linuxUninstaller
+  win: winUninstaller,
+  darwin: darwinUninstaller,
+  linux: linuxUninstaller
 };
 
 export default uninstall;

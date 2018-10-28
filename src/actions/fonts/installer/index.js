@@ -3,9 +3,9 @@ import winInstaller from "./win";
 import linuxInstaller from "./linux";
 
 const install = {
-  Win: winInstaller,
-  Darwin: darwinInstaller,
-  Linux: linuxInstaller
+  win: winInstaller,
+  darwin: darwinInstaller,
+  linux: linuxInstaller
 };
 
 export default install;

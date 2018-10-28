@@ -15,10 +15,7 @@ const linuxUninstaller = async (font, cb) => {
     })
     .join(" ");
 
-  const options = {
-    name: "fontcase",
-    cachePassword: true
-  };
+  const options = { name: "fontlet", cachePassword: true };
   sudo.exec(`rm -rf ${filePaths}`, options, (error /* , stdout */) => {
     if (error) {
       cb({ message: "Uninstalling failed!", params: error }, null);

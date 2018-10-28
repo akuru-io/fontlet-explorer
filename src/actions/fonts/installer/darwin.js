@@ -23,7 +23,7 @@ const darwinInstaller = async (font, cb) => {
     const localFontsDirPath = localFontsDirPaths.darwin;
 
     const options = {
-      name: "fontcase",
+      name: "fontlet",
       cachePassword: true
     };
     sudo.exec(

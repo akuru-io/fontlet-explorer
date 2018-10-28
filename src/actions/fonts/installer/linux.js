@@ -23,10 +23,7 @@ const linuxInstaller = async (font, cb) => {
     const fontsFilePath = paths.join(" ");
     const localFontsDirPath = localFontsDirPaths.linux;
 
-    const options = {
-      name: "fontcase",
-      cachePassword: true
-    };
+    const options = { name: "fontlet", cachePassword: true };
 
     // TODO: xx
     exec(`mkdir -p ${localFontsDirPath}`, {}, error => {
