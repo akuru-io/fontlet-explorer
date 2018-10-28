@@ -74,16 +74,20 @@ const ToggleButtonWrapper = styled.div`
 `;
 
 class Gallery extends Component {
-  handleSwitchAction = (font, uninstall) => {
+  handleSwitchAction = (font, installed) => {
     const { installFont, uninstallFont } = this.props;
-    if (uninstall) uninstallFont(font);
+    if (installed) {
+      uninstallFont(font);
+      return;
+    }
     installFont(font);
   };
 
   renderFontItem = font => {
     const { id, coverImageUrl, version, fontStyles } = font;
     const { installedFonts, flags } = this.props;
-    const installed = !!find(installedFonts, f => f.id === id);
+    const installedFont = find(installedFonts, f => f.id === id);
+    const installed = !!installedFont;
 
     return (
       <CardContent className="card-style" key={id}>

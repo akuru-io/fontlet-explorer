@@ -13,6 +13,11 @@ export const appRoot = app.getAppPath();
 export const appUserDir = app.getPath("userData");
 export const resourceDirPath = `${appUserDir}\\resources`;
 
+export const localFontsDirPaths = {
+  darwin: "~/Library/Fonts/",
+  linux: "~/.fonts"
+};
+
 export default {
   API_BASE_URL,
   FL_RESOURCE_URL,

@@ -1,6 +1,5 @@
 import React from "react";
 import filter from "lodash/filter";
-import each from "lodash/each";
 
 import App from "../components/App";
 
@@ -54,15 +53,6 @@ class AppContainer extends React.Component {
         }));
       }
     );
-
-    // set flags (false)
-    setTimeout(() => {
-      const { flags } = this.state;
-      each(flags, (val, key) => {
-        flags[key] = !val;
-      });
-      this.setState(() => ({ flags }));
-    }, 500);
   }
 
   setFlag = ({ id }, status) => {
@@ -84,11 +74,11 @@ class AppContainer extends React.Component {
     });
   };
 
-  installFont = font => {
+  install = font => {
     this.setFlag(font, true);
     installFont(font, error => {
       if (error) {
-        this.setState({ error });
+        // this.setState({ error });
         this.setFlag(font, false);
         return;
       }
@@ -96,7 +86,7 @@ class AppContainer extends React.Component {
       // Update localCache
       addInstalledFontToLocalCache(font, lCError => {
         if (lCError) {
-          this.setState({ error });
+          this.setState({ error: lCError });
           this.setFlag(font, false);
           Alert.error(`${font.familyName} installing failed!.`);
           return;
@@ -107,17 +97,16 @@ class AppContainer extends React.Component {
           installedFonts: [...this.state.installedFonts, font]
         });
         this.setFlag(font, false);
-
         Alert.success(`${font.familyName} installed successfully!.`);
       });
     });
   };
 
-  uninstallFont = font => {
+  uninstall = font => {
     this.setFlag(font, true);
     uninstallFont(font, error => {
       if (error) {
-        this.setState({ error });
+        // this.setState({ error });
         this.setFlag(font, false);
         return;
       }
@@ -125,7 +114,7 @@ class AppContainer extends React.Component {
       // Update localCache
       removeUninstalledFontFromLocalCache(font, lCError => {
         if (lCError) {
-          this.setState({ error });
+          this.setState({ error: lCError });
           this.setFlag(font, false);
           Alert.error(`${font.familyName} uninstalling failed!.`);
           return;
@@ -139,8 +128,7 @@ class AppContainer extends React.Component {
           )
         });
         this.setFlag(font, false);
-
-        Alert.success(`${font.familyName} unstalled successfully!.`);
+        Alert.success(`${font.familyName} uninstalled successfully!.`);
       });
     });
   };
@@ -150,8 +138,8 @@ class AppContainer extends React.Component {
       <App
         {...this.state}
         registerUser={this.registerUser}
-        installFont={this.installFont}
-        uninstallFont={this.uninstallFont}
+        installFont={this.install}
+        uninstallFont={this.uninstall}
       />
     );
   }

@@ -21,7 +21,7 @@ const init = async (cb = () => {}) => {
 
     const flags = {};
     each(resourceJson.fonts, ({ id }) => {
-      flags[id] = true;
+      flags[id] = null;
     });
 
     cb(null, {

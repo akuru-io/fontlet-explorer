@@ -1,4 +1,4 @@
-import { appUserDir } from "../../../config";
+import { appUserDir, localFontsDirPaths } from "../../../config";
 
 const sudo = window.require("sudo-prompt");
 const fs = window.require("fs");
@@ -21,7 +21,7 @@ const linuxInstaller = async (font, cb) => {
 
   Promise.all(fontInstallingQueue).then(paths => {
     const fontsFilePath = paths.join(" ");
-    const localFontsDirPath = "~/.fonts";
+    const localFontsDirPath = localFontsDirPaths.linux;
 
     const options = {
       name: "fontcase",

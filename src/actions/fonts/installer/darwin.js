@@ -1,4 +1,4 @@
-import { appUserDir } from "../../../config";
+import { appUserDir, localFontsDirPaths } from "../../../config";
 
 const sudo = window.require("sudo-prompt");
 const fs = window.require("fs");
@@ -20,7 +20,7 @@ const darwinInstaller = async (font, cb) => {
 
   Promise.all(fontInstallingQueue).then(paths => {
     const fontsFilePath = paths.map(path => path.replace(" ", "\\ ")).join(" ");
-    const localFontsDirPath = "~/Library/Fonts/";
+    const localFontsDirPath = localFontsDirPaths.darwin;
 
     const options = {
       name: "fontcase",
