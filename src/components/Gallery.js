@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Switch, Card, Elevation } from "@blueprintjs/core";
 import find from "lodash/find";
 
+import Loading from "./common/Loading";
+
 // Styles
 const Wrapper = styled.div`
   height: 100vh;
@@ -119,11 +121,7 @@ class Gallery extends Component {
     return (
       <CardContent className="card-style" key={id}>
         <Content elevation={Elevation.TWO}>
-          {flags[id] && (
-            <div className="bp3-progress-bar bp3-intent-primary">
-              <div className="bp3-progress-meter" />
-            </div>
-          )}
+          {flags[id] && <Loading />}
 
           <FontImage src={coverImageUrl} />
           <SettingsContent>
