@@ -1,19 +1,17 @@
-import React from "react";
+import React, { Fragment } from "react";
+
+import Loading from "./common/Loading";
+import ErrorView from "./common/ErrorView";
+import InfoView from "./common/InfoView";
 import Welcome from "./Welcome";
 import Gallery from "./Gallery";
-
-const Loading = () => (
-  <div className="bp3-progress-bar bp3-intent-primary">
-    <div className="bp3-progress-meter" />
-  </div>
-);
-const ErrorView = error => <div>{error}</div>;
 
 const App = ({
   fonts,
   flags,
   installedFonts,
   error,
+  announcement,
   isUserRegistered,
   registerUser,
   installFont,
@@ -21,21 +19,29 @@ const App = ({
   registering,
   loading
 }) => {
-  if (error) return <ErrorView error={error} />;
   if (loading) return <Loading />;
 
   if (isUserRegistered)
     return (
-      <Gallery
-        loading={loading}
-        fonts={fonts}
-        flags={flags}
-        installedFonts={installedFonts}
-        installFont={installFont}
-        uninstallFont={uninstallFont}
-      />
+      <Fragment>
+        <ErrorView error={error} />
+        <InfoView announcement={announcement} />
+        <Gallery
+          fonts={fonts}
+          flags={flags}
+          installedFonts={installedFonts}
+          installFont={installFont}
+          uninstallFont={uninstallFont}
+        />
+      </Fragment>
     );
-  return <Welcome registering={registering} registerUser={registerUser} />;
+  return (
+    <Fragment>
+      <ErrorView error={error} />
+      <InfoView announcement={announcement} />
+      <Welcome registering={registering} registerUser={registerUser} />
+    </Fragment>
+  );
 };
 
 export default App;
