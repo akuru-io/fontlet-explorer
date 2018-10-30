@@ -20,6 +20,7 @@ const init = async (cb = () => {}) => {
       installedFonts = await localCache.find({ type: "INSTALLED" });
     }
 
+    // Flags
     const flags = {};
     each(resourceJson.fonts, ({ id }) => {
       flags[id] = null;
@@ -29,6 +30,7 @@ const init = async (cb = () => {}) => {
     const fonts = resourceJson.fonts.map(font => {
       const fontInstalled = find(installedFonts || [], f => f.id === font.id);
       if (!fontInstalled) return { ...font, isUpdateAvailable: false };
+
       return {
         ...font,
         isUpdateAvailable: font.version !== fontInstalled.version
