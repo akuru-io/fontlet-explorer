@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Switch, Card, Elevation } from "@blueprintjs/core";
+import { Button, Switch, Card, Elevation } from "@blueprintjs/core";
 import find from "lodash/find";
 
 import Loading from "./common/Loading";
@@ -95,6 +95,14 @@ const ToggleButtonWrapper = styled.div`
   align-items: center;
 `;
 
+const UpdateButtonWrapper = styled.div`
+font-size: 17px;
+color: #867f7f;
+margin-left: 20px;
+margin-bottom: 0px;
+
+`;
+
 class Gallery extends Component {
   handleSwitchAction = (font, installed) => {
     const { installFont, uninstallFont } = this.props;
@@ -105,6 +113,11 @@ class Gallery extends Component {
     installFont(font);
   };
 
+  handleUpdateAction = font => {
+    const { updateFont } = this.props;
+    updateFont(font);
+  };
+
   renderFontItem = font => {
     const {
       familyName,
@@ -112,11 +125,13 @@ class Gallery extends Component {
       foundry,
       coverImageUrl,
       version,
-      fontStyles
+      fontStyles,
+      isUpdateAvailable
     } = font;
     const { installedFonts, flags } = this.props;
     const installedFont = find(installedFonts, f => f.id === id);
     const installed = !!installedFont;
+    const showUpdateBtn = installed && isUpdateAvailable;
 
     return (
       <CardContent className="card-style" key={id}>
@@ -129,8 +144,19 @@ class Gallery extends Component {
               <VersionDetails>
                 <Name>{familyName}</Name>
                 <Foundry>from {foundry}</Foundry>
-                <Version>v {version}</Version>
                 <Variant>{fontStyles.length} fonts in family</Variant>
+                <Version>v {version}</Version>
+                {showUpdateBtn && (
+                  <UpdateButtonWrapper>
+                  <Button 
+                    className="bp3-button" 
+                    icon="refresh"
+                    text="Update"
+                    active="true"
+                    onClick={() => this.handleUpdateAction(font)}
+                    />
+                </UpdateButtonWrapper>
+                )}
               </VersionDetails>
             </VersionContent>
 
@@ -141,6 +167,7 @@ class Gallery extends Component {
                 large
                 onChange={() => this.handleSwitchAction(font, installed)}
               />
+              
             </ToggleButtonWrapper>
           </SettingsContent>
         </Content>

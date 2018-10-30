@@ -12,10 +12,16 @@ export const getLocalCacheInstance = () =>
 export const fetchResourceJSON = () => get(FL_RESOURCE_URL);
 
 export const getPlatformInfo = () => {
-  const osTypeMap = { Windows_NT: "win", Darwin: "darwin", Linux: "linux" };
-  const osType = os.type();
-  const type = includes(Object.keys(osTypeMap), osType) ? osType : "linux";
-  return { type: osTypeMap[type] };
+  const platformTypeMap = {
+    Windows_NT: "win",
+    Darwin: "darwin",
+    Linux: "linux"
+  };
+  const platformType = os.type();
+  const type = includes(Object.keys(platformTypeMap), platformType)
+    ? platformType
+    : "linux";
+  return { type: platformTypeMap[type] };
 };
 
 // Url remove last part of.
