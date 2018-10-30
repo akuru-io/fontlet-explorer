@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Switch, Card, Elevation } from "@blueprintjs/core";
+import { Button, Switch, Card, Elevation } from "@blueprintjs/core";
 import find from "lodash/find";
 
 // Styles
@@ -93,6 +93,14 @@ const ToggleButtonWrapper = styled.div`
   align-items: center;
 `;
 
+const UpdateButtonWrapper = styled.div`
+font-size: 17px;
+color: #867f7f;
+margin-left: 20px;
+margin-bottom: 0px;
+
+`;
+
 class Gallery extends Component {
   handleSwitchAction = (font, installed) => {
     const { installFont, uninstallFont } = this.props;
@@ -138,14 +146,18 @@ class Gallery extends Component {
               <VersionDetails>
                 <Name>{familyName}</Name>
                 <Foundry>from {foundry}</Foundry>
-                <Version>v {version}</Version>
                 <Variant>{fontStyles.length} fonts in family</Variant>
+                <Version>v {version}</Version>
                 {showUpdateBtn && (
-                  <input
-                    type="button"
+                  <UpdateButtonWrapper>
+                  <Button 
+                    className="bp3-button" 
+                    icon="refresh"
+                    text="Update"
+                    active="true"
                     onClick={() => this.handleUpdateAction(font)}
-                    value="Update"
-                  />
+                    />
+                </UpdateButtonWrapper>
                 )}
               </VersionDetails>
             </VersionContent>
@@ -157,6 +169,7 @@ class Gallery extends Component {
                 large
                 onChange={() => this.handleSwitchAction(font, installed)}
               />
+              
             </ToggleButtonWrapper>
           </SettingsContent>
         </Content>
