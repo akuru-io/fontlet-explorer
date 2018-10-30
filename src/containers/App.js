@@ -34,7 +34,7 @@ class AppContainer extends React.Component {
       (
         error,
         {
-          announcement,
+          announcements,
           fonts,
           installedFonts,
           flags,
@@ -44,7 +44,7 @@ class AppContainer extends React.Component {
         }
       ) => {
         this.setState(() => ({
-          announcement,
+          announcement: announcements && announcements[0],
           fonts,
           installedFonts,
           flags,
