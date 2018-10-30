@@ -136,9 +136,16 @@ class AppContainer extends React.Component {
         // Update new version
         installedFonts.push(font);
         this.setState({
-          installedFonts
+          installedFonts, // eslint-disable-next-line
+          fonts: this.state.fonts.map(f => {
+            return {
+              ...f,
+              isUpdateAvailable: f.id === font.id ? false : f.isUpdateAvailable
+            };
+          })
         });
         this.setFlag(font, false);
+
         Alert.success(`${font.familyName} updated successfully!.`);
       });
     });

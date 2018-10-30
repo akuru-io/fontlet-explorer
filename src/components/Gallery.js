@@ -96,11 +96,10 @@ const ToggleButtonWrapper = styled.div`
 `;
 
 const UpdateButtonWrapper = styled.div`
-font-size: 17px;
-color: #867f7f;
-margin-left: 20px;
-margin-bottom: 0px;
-
+  font-size: 17px;
+  color: #867f7f;
+  margin-left: 20px;
+  margin-bottom: 0px;
 `;
 
 class Gallery extends Component {
@@ -148,14 +147,14 @@ class Gallery extends Component {
                 <Version>v {version}</Version>
                 {showUpdateBtn && (
                   <UpdateButtonWrapper>
-                  <Button 
-                    className="bp3-button" 
-                    icon="refresh"
-                    text="Update"
-                    active="true"
-                    onClick={() => this.handleUpdateAction(font)}
+                    <Button
+                      className="bp3-button"
+                      icon="refresh"
+                      text="Update"
+                      active="true"
+                      onClick={() => this.handleUpdateAction(font)}
                     />
-                </UpdateButtonWrapper>
+                  </UpdateButtonWrapper>
                 )}
               </VersionDetails>
             </VersionContent>
@@ -167,7 +166,6 @@ class Gallery extends Component {
                 large
                 onChange={() => this.handleSwitchAction(font, installed)}
               />
-              
             </ToggleButtonWrapper>
           </SettingsContent>
         </Content>
