@@ -2,3 +2,7 @@ The project is run on Github, in the [typical](http://producingoss.com) free sof
 
 
 ## How to Contribute
+
+## External Resources
+
+- https://chris.beams.io/posts/git-commit/
