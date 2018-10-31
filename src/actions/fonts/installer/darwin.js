@@ -1,4 +1,5 @@
 import { appUserDir, localFontsDirPaths } from "../../../config";
+import { addInstalledFontToLocalCache } from "../_utils";
 
 const sudo = window.require("sudo-prompt");
 const fs = window.require("fs");
@@ -26,18 +27,39 @@ const darwinInstaller = async (font, cb) => {
       name: "fontlet",
       cachePassword: true
     };
-    sudo.exec(
-      `cp ${fontsFilePath} ${localFontsDirPath}`,
-      options,
-      (error, stdout) => {
-        if (error) {
-          cb({ message: "Installing failed!", params: error }, null);
+    sudo.exec(`cp ${fontsFilePath} ${localFontsDirPath}`, options, error => {
+      if (error) {
+        cb(null, {
+          ...font,
+          installed: false,
+          installing: false,
+          error: {
+            message: `${font.familyName} installing failed!.`,
+            params: error
+          }
+        });
+        return;
+      }
+
+      // Update localCache
+      addInstalledFontToLocalCache(font, lcError => {
+        if (lcError) {
+          cb(null, {
+            ...font,
+            installed: false,
+            installing: false,
+            error: lcError
+          });
           return;
         }
-
-        cb(null, { stdout });
-      }
-    );
+        cb(null, {
+          ...font,
+          installed: true,
+          installing: false,
+          error: null
+        });
+      });
+    });
   });
 };
 

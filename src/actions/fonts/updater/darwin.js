@@ -3,20 +3,35 @@ import install from "../installer/darwin";
 
 const darwinUpdater = async (font, cb) => {
   // Uninstall font first
-  uninstall(font, uninsErr => {
-    if (uninsErr) {
-      cb({ message: "Updating failed!", params: uninsErr }, null);
+  uninstall(font, (uninsErr, uninsResp) => {
+    if (uninsErr || uninsResp.error) {
+      cb(null, {
+        ...font,
+        ...uninsResp,
+        updating: false,
+        error: { message: "Updating failed!", params: uninsErr }
+      });
       return;
     }
 
     // Update new version
-    install(font, insErr => {
-      if (insErr) {
-        cb({ message: "Updating failed!", params: insErr }, null);
+    install(font, (insErr, insResp) => {
+      if (insErr || insResp.error) {
+        cb(null, {
+          ...font,
+          ...insResp,
+          updating: false,
+          error: { message: "Updating failed!", params: insErr }
+        });
         return;
       }
 
-      cb(null, font);
+      cb(null, {
+        ...font,
+        ...insResp,
+        updating: false,
+        isUpdateAvailable: false
+      });
     });
   });
 };

@@ -1,5 +1,6 @@
 import { appUserDir, appRoot } from "../../../config";
 import { removeLastDirPartOf } from "../../_utils";
+import { addInstalledFontToLocalCache } from "../_utils";
 
 // const sudo = window.require("sudo-prompt");
 const fs = window.require("fs");
@@ -41,16 +42,49 @@ const winInstaller = async (font, cb) => {
   const { spawn } = window.require("child_process");
   const ls = spawn("cmd.exe", ["/c", addFont, fileNameOrfolder]); // run script font add bat script
 
-  ls.stdout.on("data", data => {
-    cb(null, data);
+  ls.stdout.on("data", () => {
+    // Update localCache
+    addInstalledFontToLocalCache(font, lcError => {
+      if (lcError) {
+        cb(null, {
+          ...font,
+          installed: false,
+          installing: false,
+          error: lcError
+        });
+        return;
+      }
+      cb(null, {
+        ...font,
+        installed: true,
+        installing: false,
+        error: null
+      });
+    });
   });
 
   ls.stderr.on("data", data => {
-    cb({ message: "Installing failed!", params: data }, null);
+    cb(null, {
+      ...font,
+      installed: false,
+      installing: false,
+      error: {
+        message: `${font.familyName} installing failed!.`,
+        params: data
+      }
+    });
   });
 
   ls.on("exit", code => {
-    cb({ message: "Installing failed!", params: code }, null);
+    cb(null, {
+      ...font,
+      installed: false,
+      installing: false,
+      error: {
+        message: `${font.familyName} installing failed!.`,
+        params: code
+      }
+    });
   });
 };
 

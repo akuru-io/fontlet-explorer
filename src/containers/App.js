@@ -1,186 +1,99 @@
 import React from "react";
-import filter from "lodash/filter";
+import each from "lodash/each";
 
 import App from "../components/App";
 
 import init from "../actions/init";
 import { registerUser } from "../actions/user";
-import {
-  installFont,
-  uninstallFont,
-  updateFont,
-  addInstalledFontToLocalCache,
-  removeUninstalledFontFromLocalCache,
-  updateInstalledFontToLocalCache
-} from "../actions/fonts/index";
+import { installFont, uninstallFont, updateFont } from "../actions/fonts/index";
 
-import Alert from "../libs/alert";
+import Alert from "../utils/alert";
 
 class AppContainer extends React.Component {
   state = {
-    isUserRegistered: false,
-    announcement: null,
     fonts: [],
-    installedFonts: [],
     user: null,
+    announcement: null,
     error: null,
-    flags: {},
     loading: true,
     registering: null
   };
 
-  componentDidMount() {
-    init(
-      (
-        error,
-        {
-          announcements,
-          fonts,
-          installedFonts,
-          flags,
-          user,
-          lastUpdated,
-          isUserRegistered
-        }
-      ) => {
-        this.setState(() => ({
-          announcement: announcements && announcements[0],
-          fonts,
-          installedFonts,
-          flags,
-          user,
-          lastUpdated,
-          isUserRegistered,
-          error,
-          loading: false
-        }));
-      }
-    );
-  }
-
-  setFlag = ({ id }, status) => {
-    const { flags } = this.state;
-    flags[id] = status;
-    this.setState(flags);
-  };
-
-  registerUser = userObj => {
-    this.setState({ registering: true });
-    registerUser(userObj, (error, { isUserRegistered, user }) => {
+  componentDidMount = async () => {
+    try {
+      const { announcements, fonts, user, lastUpdated } = await init();
       this.setState(() => ({
-        // eslint-disable-next-line
-        user: { ...this.state.user, ...user },
-        isUserRegistered,
-        error,
-        registering: false
+        announcement: announcements && announcements[0],
+        fonts,
+        user,
+        lastUpdated,
+        loading: false
       }));
-    });
+    } catch (error) {
+      this.setState(() => ({ error, loading: false }));
+    }
   };
 
-  install = font => {
-    this.setFlag(font, true);
-    installFont(font, error => {
-      if (error) {
-        // this.setState({ error });
-        this.setFlag(font, false);
-        return;
-      }
-
-      // Update localCache
-      addInstalledFontToLocalCache(font, lCError => {
-        if (lCError) {
-          this.setState({ error: lCError });
-          this.setFlag(font, false);
-          Alert.error(`${font.familyName} installing failed!.`);
-          return;
-        }
-
-        this.setState({
-          // eslint-disable-next-line
-          installedFonts: [...this.state.installedFonts, font]
+  setFontState = ({ id }, state) => {
+    const { fonts } = this.state;
+    each(fonts, (font, index) => {
+      if (font.id === id) {
+        each(Object.keys(state), key => {
+          fonts[index][key] = state[key];
         });
-        this.setFlag(font, false);
-        Alert.success(`${font.familyName} installed successfully!.`);
-      });
+      }
     });
+    this.setState(() => ({ fonts }));
   };
 
-  update = font => {
-    this.setFlag(font, true);
-    // Uninstall the font first.
-    updateFont(font, error => {
-      if (error) {
-        // this.setState({ error });
-        this.setFlag(font, false);
-        Alert.error(`${font.familyName} updating failed!.`);
-        return;
-      }
-
-      // Update localCache
-      updateInstalledFontToLocalCache(font, lCError => {
-        if (lCError) {
-          this.setState({
-            error: lCError
-          });
-          this.setFlag(font, false);
-          Alert.error(`${font.familyName} updating failed!.`);
-          return;
-        }
-
-        // Remove older version
-        const installedFonts = filter(
-          // eslint-disable-next-line
-          this.state.installedFonts,
-          f => f.id !== font.id
-        );
-        // Update new version
-        installedFonts.push(font);
-        this.setState({
-          installedFonts, // eslint-disable-next-line
-          fonts: this.state.fonts.map(f => {
-            return {
-              ...f,
-              isUpdateAvailable: f.id === font.id ? false : f.isUpdateAvailable
-            };
-          })
-        });
-        this.setFlag(font, false);
-
-        Alert.success(`${font.familyName} updated successfully!.`);
-      });
-    });
+  registerUser = async userToBeRegister => {
+    this.setState(() => ({ registering: true }));
+    try {
+      const user = await registerUser(userToBeRegister);
+      this.setState(() => ({ user, registering: false }));
+    } catch (error) {
+      this.setState(() => ({ error, registering: false }));
+    }
   };
 
-  uninstall = font => {
-    this.setFlag(font, true);
-    uninstallFont(font, error => {
-      if (error) {
-        // this.setState({ error });
-        this.setFlag(font, false);
-        Alert.error(`${font.familyName} uninstalling failed!.`);
-        return;
-      }
+  installFont = async fontToBeInstalled => {
+    this.setFontState(fontToBeInstalled, { installing: true });
+    try {
+      const font = await installFont(fontToBeInstalled);
+      const { id, installing, installed, error } = font;
+      this.setFontState({ id }, { id, installing, installed });
+      if (!error) Alert.success(`${font.familyName} installed successfully!.`);
+    } catch (error) {
+      this.setFontState(fontToBeInstalled, { installing: false });
+      Alert.error(`${fontToBeInstalled.familyName} installing failed!.`);
+    }
+  };
 
-      // Update localCache
-      removeUninstalledFontFromLocalCache(font, lCError => {
-        if (lCError) {
-          this.setState({ error: lCError });
-          this.setFlag(font, false);
-          Alert.error(`${font.familyName} uninstalling failed!.`);
-          return;
-        }
-
-        this.setState({
-          installedFonts: filter(
-            // eslint-disable-next-line
-            this.state.installedFonts,
-            f => f.id !== font.id
-          )
-        });
-        this.setFlag(font, false);
+  uninstallFont = async fontToBeRemoved => {
+    this.setFontState(fontToBeRemoved, { uninstalling: true });
+    try {
+      const font = await uninstallFont(fontToBeRemoved);
+      const { id, uninstalling, installed, error } = font;
+      this.setFontState({ id }, { id, uninstalling, installed });
+      if (!error)
         Alert.success(`${font.familyName} uninstalled successfully!.`);
-      });
-    });
+    } catch (error) {
+      this.setFontState(fontToBeRemoved, { uninstalling: false });
+      Alert.error(`${fontToBeRemoved.familyName} uninstalling failed!.`);
+    }
+  };
+
+  updateFont = async fontToBeUpdate => {
+    this.setFontState(fontToBeUpdate, { updating: true });
+    try {
+      const font = await updateFont(fontToBeUpdate);
+      const { id, updating, installed, isUpdateAvailable, error } = font;
+      this.setFontState({ id }, { id, updating, installed, isUpdateAvailable });
+      if (!error) Alert.success(`${font.familyName} updated successfully!.`);
+    } catch (error) {
+      this.setFontState(fontToBeUpdate, { updating: false });
+      Alert.error(`${fontToBeUpdate.familyName} updating failed!.`);
+    }
   };
 
   render() {
@@ -188,9 +101,9 @@ class AppContainer extends React.Component {
       <App
         {...this.state}
         registerUser={this.registerUser}
-        installFont={this.install}
-        uninstallFont={this.uninstall}
-        updateFont={this.update}
+        installFont={this.installFont}
+        uninstallFont={this.uninstallFont}
+        updateFont={this.updateFont}
       />
     );
   }

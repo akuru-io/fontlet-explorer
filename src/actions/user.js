@@ -2,7 +2,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../config";
 import { getLocalCacheInstance } from "./_utils";
 
-const updateUserEmail = async ({ email }) => {
+const sendUserStats = async ({ email }) => {
   try {
     const response = await axios({
       method: "POST",
@@ -17,23 +17,20 @@ const updateUserEmail = async ({ email }) => {
   }
 };
 
-export const registerUser = async (user, cb = () => {}) => {
+export const registerUser = async user => {
   try {
-    // Create User on localCache
+    // Create the user on localCache
     const localCache = getLocalCacheInstance();
-    const userUpdated = await localCache.update(
+    await localCache.update(
       { type: "INIT" },
       { type: "INIT", lastSeen: new Date(), ...user },
       { upsert: true, returnUpdatedDocs: true }
     );
-    cb(null, {
-      isUserRegistered: true,
-      user: userUpdated
-    });
 
-    // Send User Data
-    updateUserEmail(user);
+    await sendUserStats(user);
+
+    return { ...user };
   } catch (error) {
-    cb({ message: "Error registering..", params: error }, null);
+    throw Error({ message: "User registration failed!.", params: error });
   }
 };

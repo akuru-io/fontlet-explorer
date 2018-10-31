@@ -1,55 +1,16 @@
 import React from "react";
-import styled from "styled-components";
 import ReactSVG from "react-svg";
 
+import {
+  Wrapper,
+  Content,
+  MainTitle,
+  Description,
+  DiscriptionWrapper,
+  Title
+} from "./styles";
+import Input from "./Input/index";
 import fontletLogo from "../../assets/images/fontCase_round_background_animated.svg";
-import Input from "./Input";
-
-const Wrapper = styled.div`
-  height: 100vh;
-  background-color: #ffffff;
-  overflow-y: hidden;
-`;
-
-const Content = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: 100%;
-  margin-top: 20px;
-`;
-
-const MainTitle = styled.p`
-  font-size: 30px;
-  margin-bottom: 22px;
-`;
-
-const Description = styled.p`
-  font-size: 17px;
-  text-align: center;
-  color: #6d6d6d;
-
-  @media (max-width: 1000px) {
-    font-size: 15.5px;
-  }
-`;
-
-const DiscriptionWrapper = styled.div`
-  margin-top: 20px;
-  width: 40%;
-
-  @media (max-width: 1000px) {
-    width: 60%;
-  }
-`;
-
-const Title = styled.p`
-  font-size: 17px;
-  margin-top: 20px;
-  text-align: center;
-  color: #6d6d6d;
-`;
 
 const animateLogo = () => {
   const fontlet = document.getElementById("Fontlet");

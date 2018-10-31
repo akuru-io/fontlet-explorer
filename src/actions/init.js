@@ -1,52 +1,52 @@
-import each from "lodash/each";
 import find from "lodash/find";
 import { getLocalCacheInstance, fetchResourceJSON } from "./_utils";
 
-const init = async (cb = () => {}) => {
+const init = async () => {
   try {
-    const localCache = getLocalCacheInstance();
-
     // Check for existing user in localCache
-    const resourceJson = await fetchResourceJSON();
+    const localCache = getLocalCacheInstance();
     const user = await localCache.findOne({ type: "INIT" });
     const userModifed = { ...user, lastSeen: new Date() };
+
     let installedFonts = null;
 
     // If the user already registered;
     if (user) {
-      // Update lastSeen
       localCache.update({ type: "INIT" }, userModifed);
+
       // Fetch Installed fonts
       installedFonts = await localCache.find({ type: "INSTALLED" });
     }
 
-    // Flags
-    const flags = {};
-    each(resourceJson.fonts, ({ id }) => {
-      flags[id] = null;
-    });
+    // Fetch resourceJson
+    const resourceJson = await fetchResourceJSON();
 
-    // set isUpdateAvailable flag
+    // Set flags
     const fonts = resourceJson.fonts.map(font => {
+      const fontModified = {
+        ...font,
+        installing: null,
+        uninstalling: null,
+        updating: null,
+        installed: false,
+        isUpdateAvailable: false
+      };
+
       const fontInstalled = find(installedFonts || [], f => f.id === font.id);
-      if (!fontInstalled) return { ...font, isUpdateAvailable: false };
+      const installed = !!fontInstalled;
+      const isUpdateAvailable =
+        (fontInstalled && fontInstalled.version !== font.version) || false;
 
       return {
-        ...font,
-        isUpdateAvailable: font.version !== fontInstalled.version
+        ...fontModified,
+        installed,
+        isUpdateAvailable
       };
     });
 
-    cb(null, {
-      ...resourceJson,
-      fonts,
-      user,
-      installedFonts: installedFonts || [],
-      flags,
-      isUserRegistered: !!user
-    });
+    return { ...resourceJson, fonts, user };
   } catch (error) {
-    cb({ message: "Initializing failed.", params: error }, null);
+    throw Error({ message: "Initializing failed.", params: error });
   }
 };
 

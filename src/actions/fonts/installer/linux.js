@@ -1,4 +1,5 @@
 import { appUserDir, localFontsDirPaths } from "../../../config";
+import { addInstalledFontToLocalCache } from "../_utils";
 
 const sudo = window.require("sudo-prompt");
 const fs = window.require("fs");
@@ -28,7 +29,15 @@ const linuxInstaller = async (font, cb) => {
     // TODO: xx
     exec(`mkdir -p ${localFontsDirPath}`, {}, error => {
       if (error) {
-        cb({ message: "Installing failed!", params: error }, null);
+        cb(null, {
+          ...font,
+          installed: false,
+          installing: false,
+          error: {
+            message: `${font.familyName} installing failed!.`,
+            params: error
+          }
+        });
         return;
       }
 
@@ -37,16 +46,50 @@ const linuxInstaller = async (font, cb) => {
         options,
         fontCopyError => {
           if (fontCopyError) {
-            cb({ message: "Installing failed!", params: fontCopyError }, null);
+            cb(null, {
+              ...font,
+              installed: false,
+              installing: false,
+              error: {
+                message: `${font.familyName} installing failed!.`,
+                params: fontCopyError
+              }
+            });
             return;
           }
 
           sudo.exec(`fc-cache -f -v`, options, (fCacheError, fCacheStdout) => {
             if (fCacheError) {
-              cb({ message: "Installing failed!", params: fCacheError }, null);
+              cb(null, {
+                ...font,
+                installed: false,
+                installing: false,
+                error: {
+                  message: `${font.familyName} installing failed!.`,
+                  params: fCacheStdout
+                }
+              });
               return;
             }
-            cb(null, fCacheStdout);
+
+            // Update localCache
+            addInstalledFontToLocalCache(font, lcError => {
+              if (lcError) {
+                cb(null, {
+                  ...font,
+                  installed: false,
+                  installing: false,
+                  error: lcError
+                });
+                return;
+              }
+              cb(null, {
+                ...font,
+                installed: true,
+                installing: false,
+                error: null
+              });
+            });
           });
         }
       );

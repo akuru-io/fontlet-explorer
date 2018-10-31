@@ -4,15 +4,13 @@ import Loading from "./common/Loading";
 import ErrorView from "./common/ErrorView";
 import InfoView from "./common/InfoView";
 import Welcome from "./Welcome";
-import Gallery from "./Gallery";
+import Gallery from "./Gallery/index";
 
 const App = ({
   fonts,
-  flags,
-  installedFonts,
+  user,
   error,
   announcement,
-  isUserRegistered,
   registerUser,
   installFont,
   uninstallFont,
@@ -22,21 +20,20 @@ const App = ({
 }) => {
   if (loading) return <Loading />;
 
-  if (isUserRegistered)
+  if (user)
     return (
       <Fragment>
         <ErrorView error={error} />
         <InfoView announcement={announcement} />
         <Gallery
           fonts={fonts}
-          flags={flags}
-          installedFonts={installedFonts}
           installFont={installFont}
           updateFont={updateFont}
           uninstallFont={uninstallFont}
         />
       </Fragment>
     );
+
   return (
     <Fragment>
       <ErrorView error={error} />

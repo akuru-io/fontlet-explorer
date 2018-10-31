@@ -1,3 +1,6 @@
+import { localFontsDirPaths } from "../../../config";
+import { removeUninstalledFontFromLocalCache } from "../_utils";
+
 const sudo = window.require("sudo-prompt");
 
 const darwinUninstaller = async (font, cb) => {
@@ -10,19 +13,44 @@ const darwinUninstaller = async (font, cb) => {
 
   const filePaths = filesNames
     .map(fileName => {
-      const localFontsDirPath = "~/Library/Fonts/";
+      const localFontsDirPath = localFontsDirPaths.darwin;
       return `${localFontsDirPath}/${fileName}`;
     })
     .join(" ");
 
   const options = { name: "fontlet", cachePassword: true };
-  sudo.exec(`rm -rf ${filePaths}`, options, (error, stdout) => {
+  sudo.exec(`rm -rf ${filePaths}`, options, error => {
     if (error) {
-      cb({ message: "Uninstalling failed!", params: error }, null);
+      cb(null, {
+        ...font,
+        installed: true,
+        uninstalling: false,
+        error: {
+          message: `${font.familyName} uninstalling failed!.`,
+          params: error
+        }
+      });
       return;
     }
 
-    cb(null, { stdout });
+    // Update localCache
+    removeUninstalledFontFromLocalCache(font, lcError => {
+      if (lcError) {
+        cb(null, {
+          ...font,
+          installed: true,
+          uninstalling: false,
+          error: lcError
+        });
+        return;
+      }
+      cb(null, {
+        ...font,
+        installed: false,
+        uninstalling: false,
+        error: null
+      });
+    });
   });
 };
 

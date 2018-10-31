@@ -1,3 +1,6 @@
+import { localFontsDirPaths } from "../../../config";
+import { removeUninstalledFontFromLocalCache } from "../_utils";
+
 const sudo = window.require("sudo-prompt");
 
 const linuxUninstaller = async (font, cb) => {
@@ -10,7 +13,7 @@ const linuxUninstaller = async (font, cb) => {
 
   const filePaths = filesNames
     .map(fileName => {
-      const localFontsDirPath = "~/.fonts";
+      const localFontsDirPath = localFontsDirPaths.linux;
       return `${localFontsDirPath}/${fileName}`;
     })
     .join(" ");
@@ -18,7 +21,15 @@ const linuxUninstaller = async (font, cb) => {
   const options = { name: "fontlet", cachePassword: true };
   sudo.exec(`rm -rf ${filePaths}`, options, (error /* , stdout */) => {
     if (error) {
-      cb({ message: "Uninstalling failed!", params: error }, null);
+      cb(null, {
+        ...font,
+        installed: true,
+        uninstalling: false,
+        error: {
+          message: `${font.familyName} uninstalling failed!.`,
+          params: error
+        }
+      });
       return;
     }
 
@@ -27,7 +38,25 @@ const linuxUninstaller = async (font, cb) => {
       //   cb(fCacheError, null);
       //   return;
       // }
-      cb(null, true);
+
+      // Update localCache
+      removeUninstalledFontFromLocalCache(font, lcError => {
+        if (lcError) {
+          cb(null, {
+            ...font,
+            installed: true,
+            uninstalling: false,
+            error: lcError
+          });
+          return;
+        }
+        cb(null, {
+          ...font,
+          installed: false,
+          uninstalling: false,
+          error: null
+        });
+      });
     });
   });
 };
