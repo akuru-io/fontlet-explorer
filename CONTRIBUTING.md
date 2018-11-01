@@ -39,6 +39,18 @@ We use following technolgies and tools,
 
 As of now we have no direct communcation forum such as IRC Channel or Slack. We are hope to setup something soon. Menawhile we use the Github issue tracker for all communications.
 
+### Code Style
+<TODO>
+  
+### Rules
+
+There are a few basic ground-rules for contributors:
+
+1. **No `--force` pushes to master** or modifying history in any way. Rebasing and force pushing your own PR branch is fine.
+2. **Non-master branches** should be used for ongoing work.
+3. **Significant modifications** like API changes should be subject to a **pull request** to solicit feedback from other contributors.
+4. **Pull requests** are *encouraged* for all contributions to solicit feedback, but left to the discretion of the contributor.
+
 ### Developing features and fixing bugs
 
 Please search issues and pull requests before adding something new to avoid duplicating efforts and conversations. Please create an issue (if not one already created) when you start working on a feature/bug. Also, put a comment that mentioning you are working on that to avoid duplicate efforts.
