@@ -1,5 +1,7 @@
 # Fontlet Desktop App
 
+[![Riot.im](https://img.shields.io/badge/chat-Riot.im-lightgrey.svg)](https://riot.im/app/#/group/+fontlet-im:matrix.org)
+
 Fontlet is a cross platform font installer and sync application for the desktop. Fontlet is a free software project which aims to build a subscription revenue model for libre/free and open source fonts.
 
 
