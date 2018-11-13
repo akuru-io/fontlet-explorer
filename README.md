@@ -26,7 +26,9 @@ Run the app;
 npm run dev
 ```
 
-### Packaging the app
+### Build
+
+`npm run dist`
 
 ## License
 Fontlet is a free software licensed under GNU GPL V3. See the LICENSE for more details.
