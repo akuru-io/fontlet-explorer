@@ -38,7 +38,7 @@ We use the following technologies and tools,
 - BlueprintJS
 - ESLint/ Prettier
 
-As of now, we have no direct communication forum such as IRC Channel or Slack. We are hoping to set up something soon. Meanwhile, we use the GitHub issue tracker for all communications.
+We use GitHub Issue Tracker for most of the developmente related communications. You can also join our [Riot.im Community](https://github.com/fontlet/fontlet-explorer/blob/master/CONTRIBUTING.md) as well.
 
 ### Code Style
 
