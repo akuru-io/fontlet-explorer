@@ -38,7 +38,7 @@ We use the following technologies and tools,
 - BlueprintJS
 - ESLint/ Prettier
 
-We use GitHub Issue Tracker for most of the developmente related communications. You can also join our [Riot.im Community](https://github.com/fontlet/fontlet-explorer/blob/master/CONTRIBUTING.md) as well.
+We use GitHub Issue Tracker for most of the developmente related communications. You can also join our [Riot.im Community](https://riot.im/app/#/room/!ZAweBlRCmLHmHrgZek:matrix.org) as well.
 
 ### Code Style
 
