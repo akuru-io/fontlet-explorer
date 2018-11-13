@@ -8,7 +8,7 @@ Fontlet is a cross platform font installer and sync application for the desktop.
 
 ### Install
 
-Latest releases are listed on the [Fontlet](fontlet.app) website.
+Fontlet is still in early ALPHA. Latest releases [here](https://github.com/fontlet/fontlet-explorer).
 
 ### Run from source
 
