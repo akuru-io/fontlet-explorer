@@ -15,7 +15,8 @@ export const resourceDirPath = `${appUserDir}\\resources`;
 
 export const localFontsDirPaths = {
   darwin: "~/Library/Fonts/",
-  linux: "~/.fonts"
+  linux: "~/.fonts",
+  windows: "~/Windows/Fonts/"
 };
 
 export default {
