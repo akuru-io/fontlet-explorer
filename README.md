@@ -15,7 +15,7 @@ Fontlet is still in early ALPHA. Latest releases [here](https://github.com/fontl
 Get the code;
 
 ```
-git clone git@github.com:fontlet/fontlet-explorer.git
+git clone https://github.com/fontlet/fontlet-explorer.git
 cd fontlet-explorer
 npm install // or yarn install
 ```
