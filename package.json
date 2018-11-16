@@ -74,7 +74,8 @@
     },
     "extraFiles": [
       "src/lib/**",
-      "src/resources/**"
+      "src/resources/**",
+      "src/etc/**"
     ],
     "publish": {
       "provider": "github",
