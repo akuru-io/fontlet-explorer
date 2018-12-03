@@ -12,7 +12,7 @@ const Error = styled.div`
 
 const ErrorView = ({ error }) => {
   if (!error) return null;
-  return <Error>{error}</Error>;
+  return <Error>{error.message}</Error>;
 };
 
 export default ErrorView;
