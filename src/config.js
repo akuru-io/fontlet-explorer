@@ -18,9 +18,13 @@ export const localFontsDirPaths = {
   linux: "~/.fonts"
 };
 
+// localStore name
+export const localStoreName = "localCache";
+
 export default {
   API_BASE_URL,
   FL_RESOURCE_URL,
   appRoot,
-  appUserDir
+  appUserDir,
+  localStoreName
 };
