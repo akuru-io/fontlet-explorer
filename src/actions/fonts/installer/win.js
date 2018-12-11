@@ -1,7 +1,7 @@
 import { appUserDir, appRoot } from "../../../config";
 import { removeLastDirPartOf } from "../../_utils";
 
-// const sudo = window.require("sudo-prompt");
+const sudo = window.require("sudo-prompt");
 const fs = window.require("fs");
 const request = window.require("request");
 // const { exec } = window.require("child_process");
@@ -38,20 +38,31 @@ const winInstaller = async (font, cb) => {
   const fileNameOrfolder = pathToBeDownload;
 
   // Install
-  const { spawn } = window.require("child_process");
-  const ls = spawn("cmd.exe", ["/c", addFont, fileNameOrfolder]); // run script font add bat script
 
-  ls.stdout.on("data", data => {
-    cb(null, data);
-  });
+ 
 
-  ls.stderr.on("data", data => {
-    cb({ message: "Installing failed!", params: data }, null);
-  });
+  //const { spawn } = window.require("child_process");
+  //const ls = spawn("cmd.exe", ["/c", addFont, fileNameOrfolder]); // run script font add bat script
 
-  ls.on("exit", code => {
-    cb({ message: "Installing failed!", params: code }, null);
-  });
+  var options = {
+    name: 'Fontlet'
+  };
+
+  sudo.exec(("cmd.exe /c "+ addFont + " " +  fileNameOrfolder), options, 
+  function(error, stdout, stderr) {
+    if (error) throw error;
+
+  //  if(stderr) console.log('stderr: ' + stderr);
+   // console.log('stdout: ' + stdout);
+
+   
+   if(stderr) cb({ message: "Installing failed!", params: stderr }, null);
+   if(stdout) cb(null, stdout);
+    
+   console.log(stderr);
+   console.log(stdout);
+  }
+); 
 };
 
 export default winInstaller;
