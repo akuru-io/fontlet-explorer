@@ -7,7 +7,8 @@ const init = async (cb = () => {}) => {
     const localCache = getLocalCacheInstance();
 
     // Check for existing user in localCache
-    const resourceJson = await fetchResourceJSON();
+    const resourceJsonData = await fetchResourceJSON();
+    const resourceJson = resourceJsonData.message;
     const user = await localCache.findOne({ type: "INIT" });
     const userModifed = { ...user, lastSeen: new Date() };
     let installedFonts = null;
@@ -20,26 +21,28 @@ const init = async (cb = () => {}) => {
       installedFonts = await localCache.find({ type: "INSTALLED" });
     }
 
-    // Flags
+    const fonts = [];
     const flags = {};
-    each(resourceJson.fonts, ({ id }) => {
-      flags[id] = null;
-    });
+    each(resourceJson.fonts, font => {
+      if (font.free) {
+        const { id } = font;
+        flags[id] = null;
 
-    // set isUpdateAvailable flag
-    const fonts = resourceJson.fonts.map(font => {
-      const fontInstalled = find(installedFonts || [], f => f.id === font.id);
-      if (!fontInstalled) return { ...font, isUpdateAvailable: false };
-
-      return {
-        ...font,
-        isUpdateAvailable: font.version !== fontInstalled.version
-      };
+        const fontInstalled = find(installedFonts || [], f => f.id === font.id);
+        if (!fontInstalled) {
+          fonts.push({ ...font, isUpdateAvailable: false });
+        } else {
+          fonts.push({
+            ...font,
+            isUpdateAvailable: font.version !== fontInstalled.version
+          });
+        }
+      }
     });
 
     cb(null, {
       ...resourceJson,
-      fonts,
+      fonts: fonts.reverse(),
       user,
       installedFonts: installedFonts || [],
       flags,
