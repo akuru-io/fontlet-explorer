@@ -23,7 +23,7 @@ const init = async (cb = () => {}) => {
     const fonts = [];
     const flags = {};
     each(resourceJson.fonts, font => {
-      if (!font.private) {
+      if (font.free) {
         const { id } = font;
         flags[id] = null;
 
