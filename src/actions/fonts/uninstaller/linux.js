@@ -1,3 +1,5 @@
+import { localFontsDirPaths } from "../../../config";
+
 const sudo = window.require("sudo-prompt");
 
 const linuxUninstaller = async (font, cb) => {
@@ -10,7 +12,7 @@ const linuxUninstaller = async (font, cb) => {
 
   const filePaths = filesNames
     .map(fileName => {
-      const localFontsDirPath = "~/.fonts";
+      const localFontsDirPath = localFontsDirPaths.linux;
       return `${localFontsDirPath}/${fileName}`;
     })
     .join(" ");
