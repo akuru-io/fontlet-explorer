@@ -7,7 +7,8 @@ const init = async (cb = () => {}) => {
     const localCache = getLocalCacheInstance();
 
     // Check for existing user in localCache
-    const resourceJson = await fetchResourceJSON();
+    const resourceJsonData = await fetchResourceJSON();
+    const resourceJson = resourceJsonData.message;
     const user = await localCache.findOne({ type: "INIT" });
     const userModifed = { ...user, lastSeen: new Date() };
     let installedFonts = null;
