@@ -1,106 +1,23 @@
 import React, { Component } from "react";
-import styled from "styled-components";
-import { Button, Switch, Card, Elevation } from "@blueprintjs/core";
 import find from "lodash/find";
+import { Button, Switch, Elevation } from "@blueprintjs/core";
 
-import Loading from "./common/Loading";
-
-// Styles
-const Wrapper = styled.div`
-  height: 100vh;
-  padding: 15px;
-`;
-
-const Content = styled(Card)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-`;
-const CardContent = styled.div`
-  margin-top: 10px;
-  margin-bottom: 20px;
-`;
-
-const VersionDetails = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding-right: 15px;
-`;
-
-const VersionContent = styled.div`
-  display: flex;
-  flex: 1;
-`;
-
-const Name = styled.p`
-  font-size: 17px;
-  color: #000000;
-  margin-left: 20px;
-  margin-bottom: 0px;
-  @media (max-width: 1000px) {
-    font-size: 14px;
-  }
-`;
-
-const Version = styled.p`
-  font-size: 17px;
-  color: #867f7f;
-  margin-left: 20px;
-  margin-bottom: 0px;
-  @media (max-width: 1000px) {
-    font-size: 14px;
-  }
-`;
-
-const Variant = styled.p`
-  font-size: 17px;
-  color: #867f7f;
-  margin-left: 20px;
-  margin-bottom: 0px;
-  @media (max-width: 1000px) {
-    font-size: 14px;
-  }
-`;
-
-const Foundry = styled.p`
-  font-size: 17px;
-  color: #867f7f;
-  margin-left: 20px;
-  margin-bottom: 0px;
-  @media (max-width: 1000px) {
-    font-size: 14px;
-  }
-`;
-
-const SettingsContent = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  background-color: #f7f7f7;
-  padding: 20px;
-`;
-
-const FontImage = styled.img`
-  width: 100%;
-  height: 100%;
-`;
-
-const ToggleButtonWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const UpdateButtonWrapper = styled.div`
-  font-size: 17px;
-  color: #867f7f;
-  margin-left: 20px;
-  margin-bottom: 0px;
-`;
+import {
+  Wrapper,
+  Content,
+  CardContent,
+  VersionDetails,
+  VersionContent,
+  Name,
+  Version,
+  Variant,
+  Foundry,
+  SettingsContent,
+  FontImage,
+  ToggleButtonWrapper,
+  UpdateButtonWrapper
+} from "./styles";
+import Loading from "../common/Loading";
 
 class Gallery extends Component {
   handleSwitchAction = (font, installed) => {

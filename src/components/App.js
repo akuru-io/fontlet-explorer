@@ -4,7 +4,7 @@ import Loading from "./common/Loading";
 import ErrorView from "./common/ErrorView";
 import InfoView from "./common/InfoView";
 import Welcome from "./Welcome";
-import Gallery from "./Gallery";
+import Gallery from "./Gallery/index";
 
 const App = ({
   fonts,
