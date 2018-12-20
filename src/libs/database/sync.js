@@ -1,13 +1,19 @@
 const DataSource = window.require("nedb-promises");
+let instance = null;
 
 class Database {
   datastore = null;
 
   constructor(dbPath) {
+    if (instance) {
+      return instance;
+    }
+
     this.datastore = DataSource.create({
       filename: dbPath,
       autoload: true
     });
+    instance = this;
   }
 
   insert = doc => this.datastore.insert(doc);

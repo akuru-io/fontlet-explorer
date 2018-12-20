@@ -15,8 +15,8 @@ export const localStoreName = "localCache";
 // Local app paths
 export const appRoot = app.getAppPath();
 export const appUserDir = app.getPath("userData");
-export const resourceDirPath = path.join(appRoot, "recources");
-export const localStorePath = path.join(appRoot, "recources", localStoreName);
+export const resourceDirPath = path.join(appRoot, "resources");
+export const localStorePath = path.join(appRoot, "resources", localStoreName);
 
 const getWindowsFontDir = () => {
   const platformType = os.type();
@@ -36,7 +36,7 @@ export const localFontsDirPaths = {
 // FontReg Exec path
 const ARCH_MAP = {x64: "bin.x86-64", x86: "bin.x86-32"};
 const osArch = os.arch();
-export const fontRegExecPath = path.join(appRoot, "recources", "fontreg", ARCH_MAP[osArch]);
+export const fontRegExecPath = path.join(appRoot, "resources", "fontreg", ARCH_MAP[osArch]);
 
 export default {
   API_BASE_URL,

@@ -9,8 +9,6 @@
 # production
 /build
 /dist
-/resources/*
-resources/store
 
 # misc
 .DS_Store

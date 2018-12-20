@@ -9,7 +9,6 @@ const request = window.require("request");
 const winInstaller = async (font, cb) => {
   // TODO: IMPLEMENTS MULTI_FONTS INSTALL MECHANISM like in Mac/Lin methods ***
   const fontStyles = font.fontStyles || [];
-  console.log(fontStyles)
   const { fontUrl } = fontStyles[0];
 
   // get filename
