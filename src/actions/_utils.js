@@ -2,12 +2,12 @@ import includes from "lodash/includes";
 
 import Database from "../libs/database/sync";
 import { get } from "../libs/request";
-import { resourceDirPath, FL_RESOURCE_URL, localStoreName } from "../config";
+import { FL_RESOURCE_URL, localStorePath } from "../config";
 
 const os = window.require("os");
 
 export const getLocalCacheInstance = () =>
-  new Database(`${resourceDirPath}\\${localStoreName}`);
+  new Database(localStorePath);
 
 export const fetchResourceJSON = () => get(FL_RESOURCE_URL);
 
