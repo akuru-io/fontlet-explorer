@@ -5,9 +5,9 @@ import { get } from "../libs/request";
 import { FL_RESOURCE_URL, localStorePath } from "../config";
 
 const os = window.require("os");
+const sudo = window.require("sudo-prompt");
 
-export const getLocalCacheInstance = () =>
-  new Database(localStorePath);
+export const getLocalCacheInstance = () => new Database(localStorePath);
 
 export const fetchResourceJSON = () => get(FL_RESOURCE_URL);
 
@@ -23,6 +23,18 @@ export const getPlatformInfo = () => {
     : "linux";
   return { type: platformTypeMap[type] };
 };
+
+export const runCmd = cmd =>
+  new Promise((resolve, reject) => {
+    const options = {
+      name: "Fontlet",
+      cachePassword: true
+    };
+    sudo.exec(cmd, options, (error, stdout) => {
+      if (error) reject(error);
+      resolve(stdout);
+    });
+  });
 
 // Url remove last part of.
 export const removeLastDirPartOf = url => {
