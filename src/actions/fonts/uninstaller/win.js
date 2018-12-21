@@ -11,11 +11,12 @@ const uninstall = async font => {
     const filePaths = filesNames
       .map(fileName => {
         const localFontsDirPath = localFontsDirPaths.win;
-        return `${localFontsDirPath}/${fileName}`;
+        return `${localFontsDirPath}\\${fileName}`;
       })
       .join(" ");
 
-    await runCmd(`rm -rf ${filePaths} && ${fontRegExecPath}/FontReg.exe`);
+    const cmd = `del /f /q ${filePaths} && ${fontRegExecPath}\\FontReg.exe`;
+    await runCmd(cmd);
     return font;
   } catch (error) {
     throw new Error(error);

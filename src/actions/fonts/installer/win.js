@@ -10,7 +10,7 @@ const install = async font => {
     const tmpFontPaths = [];
     const fontInstallingQueue = fontStyles.map(async ({ fontUrl }) => {
       const fileName = fontUrl.substr(fontUrl.lastIndexOf("/") + 1);
-      const pathToBeDownload = `${appUserDir}/${fileName}`;
+      const pathToBeDownload = `${appUserDir}\\${fileName}`;
       tmpFontPaths.push(pathToBeDownload);
       await new Promise(resolve =>
         request(fontUrl)
@@ -21,7 +21,7 @@ const install = async font => {
 
     await Promise.all(fontInstallingQueue);
 
-    const cmd = `cp ${fontRegExecPath}/FontReg.exe ${appUserDir}/ && ${appUserDir}FontReg.exe /move`;
+    const cmd = `xcopy /s /h /i /q /y ${fontRegExecPath}\\FontReg.exe ${appUserDir}\\ && ${appUserDir}\\FontReg.exe /move`;
     await runCmd(cmd);
     return font;
   } catch (error) {

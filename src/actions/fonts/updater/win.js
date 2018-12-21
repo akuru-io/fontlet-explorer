@@ -18,7 +18,7 @@ const update = async font => {
       filesNames.push(splittedUrl[0]);
 
       const fileName = fontUrl.substr(fontUrl.lastIndexOf("/") + 1);
-      const pathToBeDownload = `${appUserDir}/${fileName}`;
+      const pathToBeDownload = `${appUserDir}\\${fileName}`;
       tmpFontPaths.push(pathToBeDownload);
       await new Promise(resolve =>
         request(fontUrl)
@@ -30,10 +30,10 @@ const update = async font => {
     await Promise.all(fontInstallingQueue);
 
     const filePaths = filesNames
-      .map(fileName => `${localFontsDirPath}/${fileName}`)
+      .map(fileName => `${localFontsDirPath}\\${fileName}`)
       .join(" ");
 
-    const cmd = `rm -rf ${filePaths} && ${fontRegExecPath}/FontReg.exe && cp ${fontRegExecPath}/FontReg.exe ${appUserDir}/ && ${appUserDir}FontReg.exe /move`;
+    const cmd = `del /f /q ${filePaths} && ${fontRegExecPath}\\FontReg.exe && xcopy /s /h /i /q /y ${fontRegExecPath}\\FontReg.exe ${appUserDir}\\ && ${appUserDir}\\FontReg.exe /move`;
     await runCmd(cmd);
     return font;
   } catch (error) {
