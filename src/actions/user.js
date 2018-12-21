@@ -1,12 +1,12 @@
 import axios from "axios";
-import { API_BASE_URL } from "../config";
+import { WT_API_BASE_URL } from "../config";
 import { getLocalCacheInstance } from "./_utils";
 
 const updateUserEmail = async ({ email }) => {
   try {
     const response = await axios({
       method: "POST",
-      url: `${API_BASE_URL}registeruser`,
+      url: `${WT_API_BASE_URL}/registeruser`,
       data: {
         email
       }
