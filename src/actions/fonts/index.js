@@ -69,7 +69,7 @@ export const uninstallFont = async font => {
 
 export const updateFont = async font => {
   try {
-    const a = await update[platformType](font);
+    await update[platformType](font);
     await updateInstalledFontToLocalCache(font);
     return font;
   } catch (error) {

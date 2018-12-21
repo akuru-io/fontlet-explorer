@@ -2,14 +2,14 @@ import includes from "lodash/includes";
 
 import Database from "../libs/database/sync";
 import { get } from "../libs/request";
-import { FL_RESOURCE_URL, localStorePath } from "../config";
+import { API_BASE_URL, localStorePath } from "../config";
 
 const os = window.require("os");
 const sudo = window.require("sudo-prompt");
 
 export const getLocalCacheInstance = () => new Database(localStorePath);
 
-export const fetchResourceJSON = () => get(FL_RESOURCE_URL);
+export const fetchResourceJSON = () => get(`${API_BASE_URL}/fonts`);
 
 export const getPlatformInfo = () => {
   const platformTypeMap = {
