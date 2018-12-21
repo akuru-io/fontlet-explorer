@@ -18,14 +18,22 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 900,
     height: 680,
+    backgroundColor: "#fff",
     resizable: false,
-    icon: path.join(__dirname, "/about/about-icon.png")
+    show: false,
+    icon: path.join(__dirname, "assets", "64x64.png")
   });
+
   mainWindow.loadURL(
     isDev
       ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
+
+  mainWindow.once("ready-to-show", () => {
+    mainWindow.show();
+  });
+
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
