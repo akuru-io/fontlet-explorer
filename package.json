@@ -3,8 +3,8 @@
   "description": "A package manager for fonts bringing latest and greatest libre fonts to your desktop ",
   "version": "0.0.29-alpha",
   "author": "Friends of Akuru <hello@akurucollective.com>",
-  "license": "MIT",
-  "homepage": "./",
+  "license": "GPL-3.0",
+  "homepage": "https://github.com/fontlet/fontlet-explorer#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fontlet/fontlet-explorer.git"
@@ -13,12 +13,12 @@
   "scripts": {
     "lint": "eslint ./src",
     "prettier": "prettier --write ./src/**/*.js ./src/**/*.css ./src/**/*.json",
-    "start": "concurrently \"cross-env BROWSER=none yarn react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
+    "start": "concurrently \"cross-env BROWSER=none react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
     "build": "react-scripts build",
     "dev": "npm run build && npm start",
     "pack": "electron-builder build —em.main=build/electron.js",
     "electron-pack": "build —em.main=build/electron.js",
-    "dist": "yarn build && electron-builder build --x64 --macos --win --linux --c.extraMetadata.main=build/electron.js -p always"
+    "dist": "npm run build && electron-builder build --x64 --macos --win --linux --c.extraMetadata.main=build/electron.js -p always"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.4.0",
