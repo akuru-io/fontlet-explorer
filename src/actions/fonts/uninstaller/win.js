@@ -1,4 +1,4 @@
-import { localFontsDirPaths } from "../../../config";
+import { localFontsDirPaths, fontRegExecPath } from "../../../config";
 import { runCmd } from "../../_utils";
 
 const uninstall = async font => {
@@ -15,7 +15,7 @@ const uninstall = async font => {
       })
       .join(" ");
 
-    await runCmd(`rm -rf ${filePaths}`);
+    await runCmd(`rm -rf ${filePaths} && ${fontRegExecPath}/FontReg.exe`);
     return font;
   } catch (error) {
     throw new Error(error);

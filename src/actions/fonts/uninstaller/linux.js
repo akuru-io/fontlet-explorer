@@ -10,7 +10,7 @@ const uninstall = async font => {
     });
     const filePaths = filesNames
       .map(fileName => {
-        const localFontsDirPath = localFontsDirPaths.darwin;
+        const localFontsDirPath = localFontsDirPaths.linux;
         return `${localFontsDirPath}/${fileName}`;
       })
       .join(" ");
